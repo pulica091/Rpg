@@ -1,0 +1,1079 @@
+/* =======================================================================
+   RPG — SITE DA CAMPANHA
+   Estilos globais — v3 (redesign visual completo)
+
+   DIREÇÃO DE DESIGN (nova, v3)
+   - Saiu o clima "editorial de luxo" (preto + dourado + cantos bem
+     arredondados) da v2, que ficava parecido demais com qualquer
+     landing page premium genérica. Entrou uma identidade de "latão e
+     vapor": placas de metal gravado, cantos cortados em bisel (em vez
+     de cantos arredondados), uma régua rebitada como assinatura visual
+     (em vez da linha dourada fina) e uma moldura de vinheta nos heróis,
+     como se cada capa fosse uma chapa fotográfica emoldurada.
+   - Paleta: azul-tinta profundo (não preto puro) no escuro, pergaminho
+     envelhecido (não marfim neutro) no claro, latão saturado como cor
+     de assinatura — mais quente e "metálico" que o dourado genérico
+     anterior — e cobre/ferrugem como variação de perigo/criaturas.
+   - Tipografia: Cinzel (display, serifada monumental/gravada — o tipo
+     de letra de placas e brasões) + Public Sans (corpo, humanista e
+     limpa) + Space Mono (rótulos, com cara de carimbo/telégrafo) — uma
+     combinação claramente diferente da Fraunces + Inter + IBM Plex
+     Mono da versão anterior.
+   - Mobile-first: todo componente é escrito primeiro para telas
+     pequenas; media queries com min-width vão "adicionando" layout
+     conforme a tela cresce.
+   ======================================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Public+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap');
+
+/* =======================================================================
+   RPG III — DIAS DE UM PASSADO ESQUECIDO — paleta própria (v1)
+   Mesma família visual do RPG I (latão, pergaminho, Cinzel gravado — a
+   mesma "casa"), mas reafinada para a ideia de vida nova, esperança e
+   uma última chance: em vez do azul-tinta noturno de cidade industrial,
+   um verde-floresta profundo ao entardecer; em vez do latão neutro, um
+   dourado mais quente e vivo, de nascer do sol; e um verde vívido de
+   broto/campo (em vez do verde-jade discreto do RPG I) como segunda cor
+   de assinatura. O resultado lembra o RPG I de longe, mas é claramente
+   outra estação do ano.
+   ======================================================================= */
+
+:root {
+  /* --- Paleta (MODO ESCURO — padrão) ------------------------------------
+     Verde-floresta ao entardecer, não azul-tinta — o mesmo instante do
+     wallpaper de capa, entre o último sol e a noite. */
+  --bg:        #12160f;
+  --bg-alt:    #1a2115;
+  --surface:   #212a1a;
+  --surface-2: #2b3720;
+  --border:    rgba(224,197,130,0.13);
+  --border-strong: rgba(224,165,66,0.42);
+
+  --text:      #f2ecd8;   /* texto principal */
+  --text-dim:  #a7a883;   /* texto secundário — com leve matiz verde */
+
+  --gold:      #e0a542;   /* dourado de nascer do sol — cor de assinatura */
+  --gold-soft: #f4c775;
+  --jewel:     #4caf6e;   /* verde vívido — vida nova, esperança */
+  --wine:      #c96a3f;   /* laranja-âmbar do pôr do sol */
+
+  /* --- Cores das Pedras -------------------------------------------------
+     As mesmas oito cores das relíquias, um tanto mais vívidas/quentes que
+     no RPG I, ecoando o campo florido e o céu de entardecer da capa. */
+  --stone-blue:   #4f80b0;
+  --stone-green:  #57b378;
+  --stone-yellow: #e0b94a;
+  --stone-orange: #e0863f;
+  --stone-red:    #d1596f;
+  --stone-purple: #a97bdb;
+  --stone-black:  #0d0f0a;
+  --stone-white:  #f7f3e4;
+
+  /* --- Tipografia ----------------------------------------------------- */
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Public Sans', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+
+  --container: 1180px;
+  --plate-cut: 10px; /* tamanho do corte de canto em bisel das placas/botões */
+}
+
+/* =======================================================================
+   MODO CLARO — ativado quando <html data-theme="light">
+   O JS (main.js) troca esse atributo e guarda a escolha no localStorage,
+   então a preferência do usuário é lembrada entre visitas. O padrão do
+   site agora é o modo escuro; o claro é opt-in.
+   Pergaminho mais claro e fresco que o do RPG I — como uma manhã de
+   campo em vez de um mapa envelhecido — mantendo a mesma família visual.
+   Todo o resto do CSS usa só as variáveis acima, então trocar os valores
+   aqui basta para "reskinar" o site inteiro sem duplicar regras.
+   ======================================================================= */
+html[data-theme="light"] {
+  --bg:        #f0e9cf;
+  --bg-alt:    #e6dcb6;
+  --surface:   #faf5e2;
+  --surface-2: #f2ead0;
+  --border:    rgba(48,38,10,0.14);
+  --border-strong: rgba(150,108,20,0.5);
+
+  --text:      #221d0f;   /* texto principal */
+  --text-dim:  #5c5636;   /* texto secundário */
+
+  --gold:      #a06a1a;   /* dourado de nascer do sol, escurecido para contraste */
+  --gold-soft: #7a4f12;
+  --jewel:     #2f8f57;
+  --wine:      #b1502a;
+
+  --stone-blue:   #315a80;
+  --stone-green:  #2f7a4f;
+  --stone-yellow: #a67e1f;
+  --stone-orange: #a85a22;
+  --stone-red:    #a13f52;
+  --stone-purple: #7a53a6;
+  --stone-black:  #201c0c;
+  --stone-white:  #fffaf0;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+@media (min-width: 640px) { body { font-size: 17px; } }
+
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.005em;
+  margin: 0 0 0.5em;
+  color: var(--text);
+}
+h1 { font-size: clamp(2.2rem, 8vw, 4rem); line-height: 1.12; font-weight: 500; }
+h2 { font-size: clamp(1.5rem, 4.4vw, 2.3rem); }
+h3 { font-size: clamp(1.15rem, 3vw, 1.4rem); }
+
+p { margin: 0 0 1em; }
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+@media (min-width: 860px) { .container { padding: 0 40px; } }
+
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
+}
+
+.rivet-rule {
+  width: 84px;
+  height: 9px;
+  border: none;
+  margin: 18px auto;
+  background:
+    radial-gradient(circle at 4px 4px, var(--gold) 0 2px, transparent 2.5px),
+    radial-gradient(circle at 80px 4px, var(--gold) 0 2px, transparent 2.5px),
+    linear-gradient(90deg, transparent 4px, var(--border-strong) 4px, var(--border-strong) calc(100% - 4px), transparent calc(100% - 4px));
+  background-repeat: no-repeat;
+  background-size: 100% 100%, 100% 100%, 100% 1px;
+  background-position: 0 center, 0 center, 0 center;
+}
+.rivet-rule--left { margin: 18px 0; }
+
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.in { opacity: 1; transform: translateY(0); }
+
+/* =======================================================================
+   NAV
+   ======================================================================= */
+.site-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+.site-nav::before {
+  content: "";
+  display: block;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold-soft), var(--gold) 40%, var(--wine) 100%);
+}
+.site-nav.scrolled {
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+
+.site-nav .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+.brand {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.brand .brand-mark { color: var(--gold); font-size: 1.1rem; line-height: 1; }
+
+/* --- Emblema da campanha (logo em medalhão) ---------------------------
+   A logo enviada é uma arte retangular sobre fundo escuro; em vez de
+   recortá-la, ela ganha um "selo" — um pequeno medalhão preto com borda
+   dourada, como um brasão — que funciona igual em modo claro ou escuro. */
+.brand-badge {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  padding: 4px 10px;
+  background: var(--stone-black);
+  border: 1px solid var(--border-strong);
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  overflow: hidden;
+}
+.brand-badge img { height: 100%; width: auto; display: block; }
+
+/* =======================================================================
+   TROCADOR DE CAMPANHA — menu para alternar entre RPG I / II / III
+   ======================================================================= */
+.campaign-switch { position: relative; }
+
+.campaign-trigger {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 8px 12px;
+  clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+.campaign-trigger:hover { color: var(--text); border-color: var(--border-strong); }
+.campaign-trigger .chevron { font-size: 0.6rem; color: var(--gold); transition: transform 0.2s ease; }
+.campaign-switch.open .campaign-trigger .chevron { transform: rotate(180deg); }
+
+.campaign-panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 280px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--gold);
+  box-shadow: 0 18px 40px rgba(10,8,4,0.35);
+  padding: 8px;
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 260;
+}
+.campaign-switch.open .campaign-panel { display: flex; }
+
+.campaign-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  transition: background 0.15s ease;
+}
+a.campaign-item:hover { background: var(--surface-2); }
+.campaign-item .campaign-thumb {
+  width: 44px; height: 44px;
+  flex: none;
+  background: var(--stone-black);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+  clip-path: polygon(5px 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%, 0 5px);
+}
+.campaign-item .campaign-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.campaign-item .campaign-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.campaign-item .campaign-name { font-family: var(--font-display); font-size: 0.92rem; color: var(--text); }
+.campaign-item .campaign-tag {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.campaign-item.is-active .campaign-tag { color: var(--gold-soft); }
+.campaign-item.is-soon .campaign-tag { color: var(--text-dim); }
+.campaign-item.is-active { background: color-mix(in srgb, var(--gold) 10%, transparent); }
+
+.nav-links {
+  display: none;
+  gap: 4px;
+  list-style: none;
+  margin: 0; padding: 0;
+}
+@media (min-width: 860px) { .nav-links { display: flex; } }
+
+.nav-links a {
+  position: relative;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding: 8px 14px;
+  transition: color 0.2s ease;
+}
+.nav-links a::after {
+  content: "";
+  position: absolute; left: 14px; right: 14px; bottom: 4px;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-links a:hover::after, .nav-links a.active::after { transform: scaleX(1); }
+.nav-links a.active { color: var(--gold-soft); }
+
+.nav-toggle {
+  display: flex;
+  align-items: center; justify-content: center;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text);
+  width: 38px; height: 38px;
+  clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
+  font-size: 1rem;
+  cursor: pointer;
+}
+@media (min-width: 860px) { .nav-toggle { display: none; } }
+
+/* --- Botão de modo claro/escuro --------------------------------------- */
+.nav-actions { display: flex; align-items: center; gap: 10px; }
+
+.theme-toggle {
+  display: flex;
+  align-items: center; justify-content: center;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--gold);
+  width: 38px; height: 38px;
+  clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+.theme-toggle:hover { border-color: var(--gold); transform: rotate(15deg); }
+/* Mostra o ícone certo conforme o tema ativo: sol no escuro (convida a clarear),
+   lua no claro (convida a escurecer) */
+.theme-toggle .icon-sun { display: inline; }
+.theme-toggle .icon-moon { display: none; }
+html[data-theme="light"] .theme-toggle .icon-sun { display: none; }
+html[data-theme="light"] .theme-toggle .icon-moon { display: inline; }
+
+.nav-links.open {
+  display: flex;
+  position: absolute;
+  top: 67px; left: 0; right: 0;
+  flex-direction: column;
+  background: color-mix(in srgb, var(--bg) 97%, transparent);
+  border-bottom: 1px solid var(--border);
+  padding: 6px 20px 20px;
+}
+.nav-links.open a { padding: 12px 4px; }
+.nav-links.open a::after { display: none; }
+
+/* =======================================================================
+   HERO
+   ======================================================================= */
+.hero {
+  min-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  text-align: left;
+  padding: 120px 20px 64px;
+  position: relative;
+  box-shadow: inset 0 0 0 1px var(--border-strong), inset 0 0 90px 16px rgba(10,7,2,0.4);
+  background:
+    linear-gradient(180deg, rgba(14,20,32,0.1) 0%, rgba(14,20,32,0.6) 55%, var(--bg) 100%),
+    var(--hero-img, none);
+  background-size: cover;
+  background-position: center;
+}
+@media (min-width: 860px) { .hero { padding: 140px 40px 88px; } }
+
+/* --- Cantos de placa gravada -------------------------------------------
+   Quatro colchetes de latão nos cantos do herói, como a moldura de uma
+   chapa fotográfica antiga — o elemento de assinatura visual do site. */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  pointer-events: none;
+  border: 1px solid color-mix(in srgb, var(--gold-soft) 55%, transparent);
+  background:
+    linear-gradient(to right, var(--gold-soft) 26px, transparent 26px) top left / 100% 2px no-repeat,
+    linear-gradient(to right, var(--gold-soft) 26px, transparent 26px) bottom left / 100% 2px no-repeat,
+    linear-gradient(to left, var(--gold-soft) 26px, transparent 26px) top right / 100% 2px no-repeat,
+    linear-gradient(to left, var(--gold-soft) 26px, transparent 26px) bottom right / 100% 2px no-repeat,
+    linear-gradient(to bottom, var(--gold-soft) 26px, transparent 26px) top left / 2px 100% no-repeat,
+    linear-gradient(to bottom, var(--gold-soft) 26px, transparent 26px) top right / 2px 100% no-repeat,
+    linear-gradient(to top, var(--gold-soft) 26px, transparent 26px) bottom left / 2px 100% no-repeat,
+    linear-gradient(to top, var(--gold-soft) 26px, transparent 26px) bottom right / 2px 100% no-repeat;
+  opacity: 0.85;
+}
+
+.hero--compact { min-height: 40vh; padding: 128px 20px 48px; }
+@media (min-width: 860px) { .hero--compact { min-height: 46vh; padding: 148px 40px 64px; } }
+
+.hero .container { width: 100%; position: relative; z-index: 1; }
+
+/* --- Feixes arcanos --------------------------------------------------
+   Um único momento de cor no site: um brilho sutil, nas seis cores das
+   pedras, atrás do título da capa — eco discreto dos feixes mágicos da
+   arte-conceito da campanha, sem competir com o texto. */
+.hero--arcane::after {
+  content: "";
+  position: absolute; inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: screen;
+  background:
+    radial-gradient(60% 45% at 10% 0%, color-mix(in srgb, var(--stone-blue) 55%, transparent) 0%, transparent 60%),
+    radial-gradient(45% 40% at 32% 4%, color-mix(in srgb, var(--stone-yellow) 45%, transparent) 0%, transparent 60%),
+    radial-gradient(45% 40% at 55% 0%, color-mix(in srgb, var(--stone-purple) 45%, transparent) 0%, transparent 60%),
+    radial-gradient(45% 35% at 74% 2%, color-mix(in srgb, var(--stone-green) 45%, transparent) 0%, transparent 60%),
+    radial-gradient(45% 40% at 92% 0%, color-mix(in srgb, var(--stone-red) 40%, transparent) 0%, transparent 60%);
+}
+
+/* Wallpaper principal — igual ao padrão do RPG I: a arte de capa (com o
+   título já desenhado na própria imagem) ocupa a tela cheia, sem gradiente
+   por cima, com o fundo fixo (exceto em mobile, onde background-attachment:
+   fixed é instável). */
+.hero.hero--arcane {
+  min-height: 100vh;
+  background-image: url('../img/wallpaper-hero.jpg') !important;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+@media (max-width: 860px), (hover: none) {
+  .hero.hero--arcane { background-attachment: scroll; }
+}
+
+/* --- Menu escondido sobre o wallpaper de capa ---------------------------
+   Enquanto o wallpaper preenche a tela, o menu (que aqui já é fixo e
+   transparente por padrão) fica completamente invisível — não só sem
+   fundo, os ícones e links também somem — e reaparece, idêntico ao resto
+   do site, assim que a parte sólida da página começa a entrar em tela. */
+.site-nav.nav--over-hero {
+  transition: opacity 0.25s ease, background 0.3s ease, border-color 0.3s ease;
+}
+.site-nav.nav--over-hero::before { transition: opacity 0.25s ease; }
+.site-nav.nav--over-hero:not(.nav--visible) {
+  opacity: 0;
+  pointer-events: none;
+}
+.site-nav.nav--over-hero:not(.nav--visible)::before { opacity: 0; }
+
+.soon-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gold-soft); background: color-mix(in srgb, var(--gold) 14%, var(--surface));
+  border: 1px solid var(--border-strong);
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  padding: 8px 16px; margin-top: 22px;
+}
+.soon-badge::before { content: "◆"; font-size: 0.7em; }
+
+.hero blockquote {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-style: italic;
+  font-size: clamp(1.05rem, 3vw, 1.5rem);
+  max-width: 640px;
+  color: var(--text-dim);
+  margin: 16px 0 0;
+  line-height: 1.5;
+}
+
+/* =======================================================================
+   SEÇÕES
+   ======================================================================= */
+section { padding: 56px 0; }
+@media (min-width: 860px) { section { padding: 96px 0; } }
+section.alt { background: var(--bg-alt); }
+
+.section-head { max-width: 640px; margin: 0 0 32px; }
+.section-head p { color: var(--text-dim); }
+@media (min-width: 860px) { .section-head { margin-bottom: 48px; } }
+
+.prose { max-width: 720px; margin: 0 auto; }
+.prose p { color: var(--text-dim); }
+.prose p + p { margin-top: 1.2em; }
+
+/* =======================================================================
+   CARDS DE NAVEGAÇÃO (home)
+   ======================================================================= */
+.nav-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@media (min-width: 640px) { .nav-cards { grid-template-columns: repeat(3, 1fr); gap: 22px; } }
+
+.nav-card {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  display: block;
+  background: var(--surface);
+}
+.nav-card img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: saturate(0.9) brightness(0.65);
+  transition: transform 0.7s ease, filter 0.4s ease;
+}
+.nav-card:hover img { transform: scale(1.06); filter: saturate(1) brightness(0.5); }
+.nav-card .nav-card-label {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 18px 20px;
+  background: linear-gradient(0deg, rgba(10,10,13,0.95), transparent);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-card .nav-card-label h3 { margin: 0; font-size: 1.05rem; }
+.nav-card .nav-card-label span { color: var(--gold); font-size: 1.2rem; transition: transform 0.25s ease; }
+.nav-card:hover .nav-card-label span { transform: translateX(4px); }
+
+/* =======================================================================
+   CARTÃO DE PERSONAGEM — layout novo tipo "editorial"
+   ======================================================================= */
+.character {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 28px;
+}
+@media (min-width: 780px) {
+  .character { grid-template-columns: 300px 1fr; }
+  .character:nth-child(even) { grid-template-columns: 1fr 300px; }
+  .character:nth-child(even) .portrait { order: 2; }
+}
+
+.portrait {
+  position: relative;
+  background: var(--bg-alt);
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+}
+.portrait-track {
+  display: flex;
+  height: 100%;
+  transition: transform 0.5s cubic-bezier(.65,.05,.36,1);
+}
+.portrait-track img { min-width: 100%; height: 100%; object-fit: cover; }
+
+.portrait-btn {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: rgba(10,10,13,0.5);
+  border: 1px solid var(--border);
+  color: var(--text);
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 0.85rem;
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(4px);
+}
+.portrait-btn:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+.portrait-btn.prev { left: 10px; }
+.portrait-btn.next { right: 10px; }
+
+.portrait-dots { position: absolute; top: 12px; right: 12px; display: flex; gap: 5px; }
+.portrait-dots span { width: 5px; height: 5px; border-radius: 50%; background: rgba(242,239,232,0.35); }
+.portrait-dots span.active { background: var(--gold); }
+
+/* --- Placeholder: usado enquanto uma foto definitiva não chega ------- */
+.portrait-placeholder {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 12px;
+  background: linear-gradient(160deg, var(--surface-2), var(--bg-alt));
+}
+.portrait-placeholder .monogram {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  color: var(--gold-soft);
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  width: 76px; height: 76px;
+  display: flex; align-items: center; justify-content: center;
+}
+.portrait-placeholder span.label {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.dossier { padding: 26px 22px; }
+@media (min-width: 860px) { .dossier { padding: 34px 36px; } }
+
+.dossier h3 { margin-bottom: 2px; }
+.dossier .role {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 18px;
+  display: block;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+@media (min-width: 500px) { .stat-grid { grid-template-columns: 1fr 1fr; } }
+
+.stat-block h4 {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+.stat-block p { margin: 0 0 4px; font-size: 0.94rem; color: var(--text); }
+
+.dossier .bio { color: var(--text-dim); font-size: 0.96rem; }
+.dossier .bio.collapsed {
+  max-height: 5.6em;
+  overflow: hidden;
+  position: relative;
+  mask-image: linear-gradient(180deg, #000 60%, transparent 100%);
+}
+.bio-toggle {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: none; border: none; cursor: pointer;
+  padding: 10px 0 0;
+}
+.bio-toggle:hover { color: var(--gold-soft); text-decoration: underline; }
+
+/* Selo "conteúdo em atualização" — usado enquanto aguardamos texto novo */
+.pending-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--wine);
+  border: 1px solid rgba(138,51,72,0.4);
+  background: rgba(138,51,72,0.08);
+  padding: 4px 10px;
+  border-radius: 3px;
+  margin-bottom: 14px;
+}
+
+/* =======================================================================
+   MAPA
+   ======================================================================= */
+.map-wrap { display: grid; grid-template-columns: 1fr; gap: 18px; }
+@media (min-width: 900px) { .map-wrap { grid-template-columns: 1.5fr 1fr; align-items: start; } }
+
+.map-frame {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  background: var(--bg-alt);
+}
+.map-frame img { width: 100%; display: block; }
+
+.map-point {
+  position: absolute;
+  width: 15px; height: 15px;
+  margin: -7px 0 0 -7px;
+  border-radius: 50%;
+  background: var(--wine);
+  border: 2px solid var(--text);
+  cursor: pointer;
+  padding: 0;
+  box-shadow: 0 0 0 0 rgba(138,51,72,0.6);
+  animation: pulse 2.6s infinite;
+}
+.map-point:hover, .map-point.active { border-color: var(--gold); transform: scale(1.15); }
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(138,51,72,0.55); }
+  70% { box-shadow: 0 0 0 9px rgba(138,51,72,0); }
+  100% { box-shadow: 0 0 0 0 rgba(138,51,72,0); }
+}
+
+/* --- Cores por território --------------------------------------------
+   Paris/França, Peru, Grécia, Egito e Índia recebem cada uma sua própria
+   cor de pedra; os demais territórios mantêm o vinho neutro padrão. */
+.map-point--paris  { background: var(--stone-black); box-shadow: 0 0 0 0 rgba(5,5,7,0.6); }
+.map-point--peru   { background: var(--stone-green); box-shadow: 0 0 0 0 rgba(63,156,122,0.55); }
+.map-point--grecia { background: var(--stone-yellow); box-shadow: 0 0 0 0 rgba(216,178,60,0.55); }
+.map-point--egito  { background: var(--stone-purple); box-shadow: 0 0 0 0 rgba(143,95,194,0.55); }
+.map-point--india  { background: var(--stone-orange); box-shadow: 0 0 0 0 rgba(209,121,63,0.55); }
+
+.map-point--paris  { animation: pulseBlack 2.6s infinite; }
+.map-point--peru   { animation: pulseGreen 2.6s infinite; }
+.map-point--grecia { animation: pulseYellow 2.6s infinite; }
+.map-point--egito  { animation: pulsePurple 2.6s infinite; }
+.map-point--india  { animation: pulseOrange 2.6s infinite; }
+
+@keyframes pulseBlack  { 70% { box-shadow: 0 0 0 9px rgba(5,5,7,0); } }
+@keyframes pulseGreen  { 70% { box-shadow: 0 0 0 9px rgba(63,156,122,0); } }
+@keyframes pulseYellow { 70% { box-shadow: 0 0 0 9px rgba(216,178,60,0); } }
+@keyframes pulsePurple { 70% { box-shadow: 0 0 0 9px rgba(143,95,194,0); } }
+@keyframes pulseOrange { 70% { box-shadow: 0 0 0 9px rgba(209,121,63,0); } }
+
+.map-info {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 3px;
+  padding: 24px;
+  min-height: 200px;
+}
+.map-info .eyebrow { display: block; margin-bottom: 10px; }
+.map-info p { color: var(--text-dim); font-size: 0.96rem; }
+.map-info .map-empty { color: var(--text-dim); font-family: var(--font-mono); font-size: 0.82rem; }
+
+.map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+.map-legend-item {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+}
+.map-legend-item i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+
+/* =======================================================================
+   GALERIA — filtros por região + grade em mosaico (bento)
+   ======================================================================= */
+.gallery-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+.gallery-filter {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 8px 14px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+.gallery-filter i { width: 8px; height: 8px; border-radius: 50%; background: var(--region-color, var(--gold)); border: 1px solid var(--border-strong); flex: none; }
+.gallery-filter:hover { color: var(--text); border-color: var(--border-strong); }
+.gallery-filter.active {
+  color: var(--text);
+  border-color: var(--region-color, var(--gold));
+  background: color-mix(in srgb, var(--region-color, var(--gold)) 14%, var(--surface));
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-flow: dense;
+  gap: 10px;
+}
+@media (min-width: 640px) { .gallery-grid { grid-template-columns: repeat(4, 1fr); gap: 14px; } }
+@media (min-width: 980px) { .gallery-grid { grid-template-columns: repeat(6, 1fr); gap: 16px; } }
+
+.gallery-grid figure {
+  margin: 0;
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: 3px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  cursor: zoom-in;
+  transition: opacity 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+}
+/* Alguns quadros ganham mais destaque, criando um mosaico — não uma
+   grade repetitiva de mesmo tamanho. */
+@media (min-width: 640px) {
+  .gallery-grid figure.feat { grid-column: span 2; grid-row: span 2; aspect-ratio: 1 / 1; }
+}
+.gallery-grid figure.hide { display: none; }
+.gallery-grid img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+.gallery-grid figure:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+.gallery-grid figure:hover img { transform: scale(1.08); }
+
+.gallery-grid figcaption {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  display: flex; align-items: center; gap: 6px;
+  padding: 10px 12px;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--stone-white);
+  background: linear-gradient(0deg, rgba(5,5,7,0.85), transparent);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.gallery-grid figure:hover figcaption { opacity: 1; transform: translateY(0); }
+.gallery-grid figcaption i { width: 7px; height: 7px; border-radius: 50%; background: var(--region-color, var(--gold)); border: 1px solid rgba(255,255,255,0.4); flex: none; }
+
+.lightbox {
+  position: fixed; inset: 0; z-index: 300;
+  background: rgba(6,6,8,0.94);
+  display: none;
+  align-items: center; justify-content: center;
+  padding: 24px;
+}
+.lightbox.open { display: flex; }
+.lightbox img { max-width: 88vw; max-height: 86vh; border-radius: 6px; border: 1px solid var(--border); }
+.lightbox-close {
+  position: absolute; top: 18px; right: 18px;
+  background: none; border: 1px solid var(--border); color: var(--text);
+  width: 38px; height: 38px; border-radius: 50%; cursor: pointer; font-size: 1.1rem;
+}
+.lightbox-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: rgba(10,10,13,0.5);
+  border: 1px solid var(--border); color: var(--text);
+  width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 1.1rem;
+  backdrop-filter: blur(4px);
+}
+.lightbox-nav:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+.lightbox-nav.prev { left: 18px; }
+.lightbox-nav.next { right: 18px; }
+.lightbox-caption {
+  position: absolute; bottom: 22px; left: 0; right: 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+/* =======================================================================
+   CRIATURAS — bestiário em fichas alternadas, cada uma com seu domínio
+   ======================================================================= */
+.creatures-grid { display: flex; flex-direction: column; gap: 22px; }
+
+.creature-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 3px;
+  overflow: hidden;
+  transition: border-color 0.25s ease, transform 0.25s ease;
+}
+@media (min-width: 760px) {
+  .creature-card { grid-template-columns: 42% 1fr; min-height: 320px; }
+  .creature-card:nth-child(even) { grid-template-columns: 1fr 42%; }
+  .creature-card:nth-child(even) .creature-img { order: 2; }
+}
+.creature-card:hover { border-color: var(--domain-color, var(--border-strong)); transform: translateY(-3px); }
+
+.creature-card .creature-img { position: relative; aspect-ratio: 16 / 10; overflow: hidden; }
+@media (min-width: 760px) { .creature-card .creature-img { aspect-ratio: auto; } }
+.creature-card .creature-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s ease; }
+.creature-card:hover .creature-img img { transform: scale(1.05); }
+.creature-card .creature-img::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(0deg, rgba(5,5,7,0.35), transparent 45%);
+}
+
+.creature-domain {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--domain-color, var(--gold));
+  border: 1px solid color-mix(in srgb, var(--domain-color, var(--gold)) 45%, transparent);
+  background: color-mix(in srgb, var(--domain-color, var(--gold)) 12%, transparent);
+  padding: 5px 12px;
+  border-radius: 3px;
+  margin-bottom: 14px;
+}
+.creature-domain i { width: 7px; height: 7px; border-radius: 50%; background: var(--domain-color, var(--gold)); border: 1px solid rgba(255,255,255,0.35); }
+
+/* O domínio "Caos" usa preto puro — em vez de texto preto ilegível sobre
+   fundo escuro, o rótulo usa a cor de texto padrão e reserva o preto só
+   para o pontinho, com anel dourado sutil no cartão. */
+.creature-card[style*="--stone-black"] .creature-domain { color: var(--text); border-color: var(--border-strong); background: var(--surface-2); }
+.creature-card[style*="--stone-black"]:hover { border-color: var(--gold); }
+
+.creature-card .creature-body { padding: 26px 22px 28px; display: flex; flex-direction: column; justify-content: center; }
+@media (min-width: 860px) { .creature-card .creature-body { padding: 34px 40px; } }
+.creature-card h3 { color: var(--text); font-size: 1.4rem; margin-bottom: 6px; }
+.creature-card p { color: var(--text-dim); font-size: 0.95rem; margin: 0; }
+
+/* =======================================================================
+   PEDRAS
+   ======================================================================= */
+.video-frame { border: 1px solid var(--border); border-radius: 3px; overflow: hidden; background: #000; }
+.video-frame video { width: 100%; display: block; }
+
+.stones-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 32px; }
+@media (min-width: 640px) { .stones-grid { grid-template-columns: repeat(4, 1fr); } }
+
+.stone-card {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 3px;
+  padding: 18px 14px;
+  text-align: center;
+  transition: border-color 0.25s ease, transform 0.25s ease;
+}
+.stone-card:hover { border-color: var(--stone-color, var(--border-strong)); transform: translateY(-3px); }
+.stone-card .stone-dot {
+  width: 16px; height: 16px; border-radius: 50%; margin: 0 auto 12px;
+  background: var(--stone-color, var(--gold));
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--stone-color, var(--gold)) 20%, transparent);
+}
+.stone-card h4 { font-size: 0.9rem; margin-bottom: 4px; }
+.stone-card p { font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-dim); margin: 0; }
+
+/* =======================================================================
+   DADOS
+   ======================================================================= */
+.dice-box {
+  max-width: 420px;
+  margin: 0 auto;
+  text-align: center;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 3px;
+  padding: 40px 24px;
+}
+@media (min-width: 640px) { .dice-box { padding: 52px 32px; } }
+
+.dice-result { font-family: var(--font-display); font-size: 3.6rem; color: var(--gold-soft); min-height: 1.2em; margin-bottom: 6px; }
+@media (min-width: 640px) { .dice-result { font-size: 4.4rem; } }
+
+.dice-sides { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.1em; color: var(--text-dim); text-transform: uppercase; margin-bottom: 24px; }
+.dice-buttons { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+
+.btn {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  background: var(--bg-alt);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 11px 18px;
+  clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px);
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+.btn:hover { border-color: var(--gold); color: var(--gold-soft); }
+.btn.rolling { animation: shake 0.4s ease; }
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-3px) rotate(-2deg); }
+  75% { transform: translateX(3px) rotate(2deg); }
+}
+
+/* =======================================================================
+   FOOTER
+   ======================================================================= */
+footer.site-footer { border-top: 1px solid var(--border); }
+footer.site-footer::before {
+  content: "";
+  display: block;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold-soft), var(--gold) 40%, var(--wine) 100%);
+}
+footer.site-footer .footer-top { padding: 14px 20px 12px; text-align: center; display: flex; flex-direction: column; align-items: center; }
+footer.site-footer p { margin: 0; color: var(--text-dim); font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.04em; }
+footer.site-footer .quote { font-family: var(--font-display); font-style: italic; color: var(--text); font-size: 0.86rem; margin: 10px 0 14px; max-width: 480px; }
+footer.site-footer .footer-badge { margin-bottom: 2px; width: 34px; height: 34px; }
+
+.footer-links {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 2px;
+  list-style: none; margin: 0 0 12px; padding: 0;
+}
+.footer-links a {
+  font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--text-dim); padding: 4px 10px; border-radius: 3px; transition: color 0.2s ease, background 0.2s ease;
+}
+.footer-links a:hover { color: var(--text); background: var(--surface); }
+
+footer.site-footer .footer-credit { padding-top: 10px; border-top: 1px solid var(--border); width: 100%; max-width: 480px; }
+
+/* --- Faixa final: o campo florido, a última coisa antes do fim da página */
+.footer-banner { width: 100%; line-height: 0; }
+.footer-banner img { width: 100%; height: clamp(32px, 4vw, 58px); object-fit: cover; display: block; }
+
+#btnTopo {
+  position: fixed;
+  bottom: 20px; right: 20px;
+  width: 44px; height: 44px;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  background: var(--surface);
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: none;
+  z-index: 150;
+}
+#btnTopo.show { display: block; }

@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <!-- Aplica o tema salvo (claro/escuro) ANTES da página desenhar, para não
+       piscar o tema errado por uma fração de segundo ao carregar. -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('rpg-theme');
+        if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+      } catch (e) {}
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personagens — RPG</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="container">
+      <a href="index.html" class="brand">
+        <span class="brand-badge"><img src="img/logo-rpg1.jpg" alt="RPG — Primeiro Dia"></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Início</a></li>
+        <li><a href="personagens.html">Personagens</a></li>
+        <li><a href="mapa.html">Mapa</a></li>
+        <li><a href="galeria.html">Galeria</a></li>
+        <li><a href="criaturas.html">Criaturas</a></li>
+        <li><a href="pedras.html">Pedras</a></li>
+        <li><a href="dados.html">Dados</a></li>
+      </ul>
+      <div class="nav-actions">
+        <div class="campaign-switch" id="campaignSwitch">
+          <button class="campaign-trigger" id="campaignTrigger" aria-haspopup="true" aria-expanded="false">
+            RPG I <span class="chevron">▾</span>
+          </button>
+          <div class="campaign-panel">
+            <a class="campaign-item is-active" href="index.html">
+              <span class="campaign-thumb"><img src="img/logo-rpg1.jpg" alt="RPG I"></span>
+              <span class="campaign-text">
+                <span class="campaign-name">RPG I — Primeiro Dia</span>
+                <span class="campaign-tag">Campanha atual</span>
+              </span>
+            </a>
+            <a class="campaign-item is-soon" href="../rpg2/index.html">
+              <span class="campaign-thumb"><img src="../rpg2/img/logo-rpg2.jpg" alt="RPG II"></span>
+              <span class="campaign-text">
+                <span class="campaign-name">RPG II — Dia do Julgamento Final</span>
+                <span class="campaign-tag">Em breve</span>
+              </span>
+            </a>
+            <a class="campaign-item is-soon" href="../rpg3/index.html">
+              <span class="campaign-thumb"><img src="../rpg3/img/logo-rpg3.jpg" alt="RPG III"></span>
+              <span class="campaign-text">
+                <span class="campaign-name">RPG III — Dias de um Passado Esquecido</span>
+                <span class="campaign-tag">Em breve</span>
+              </span>
+            </a>
+          </div>
+        </div>
+        <button class="theme-toggle" id="themeToggle" aria-label="Alternar modo claro/escuro">
+          <span class="icon-sun">☀</span><span class="icon-moon">☾</span>
+        </button>
+        <button class="nav-toggle" aria-label="Abrir menu">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero hero--compact">
+    <div class="container">
+      <span class="eyebrow">Dossiê</span>
+      <h1>Personagens</h1>
+    </div>
+  </header>
+
+  <section style="padding-top:12px;">
+    <div class="container">
+
+      <!-- =====================================================================
+           PERSONAGEM 1 — Natasha
+           ✅ FOTOS ATUALIZADAS: natasha1.jpg / natasha2.jpg / natasha3.jpg (as
+           três imagens que você mandou).
+           ✅ TEXTO ATUALIZADO com base na ficha completa que você enviou.
+           A ficha original tinha 18 seções muito detalhadas — resumi as partes
+           de história, personalidade, valores e poderes em texto corrido para
+           caber no formato do site, mas mantive as informações e as frases
+           marcantes. Se quiser ver alguma seção específica (ex: seção 6 sobre
+           inteligência, ou a 17 com as frases) incluída com mais destaque, me
+           fala que eu ajusto.
+           ===================================================================== -->
+      <article class="character reveal">
+        <div class="portrait" data-slider>
+          <div class="portrait-track">
+            <img src="img/natasha1.jpg" alt="Natasha Clifford Weber Miller">
+            <img src="img/natasha2.jpg" alt="Natasha Clifford Weber Miller">
+            <img src="img/natasha3.jpg" alt="Natasha Clifford Weber Miller">
+          </div>
+          <button class="portrait-btn prev" aria-label="Foto anterior">&#10094;</button>
+          <button class="portrait-btn next" aria-label="Próxima foto">&#10095;</button>
+          <div class="portrait-dots"></div>
+        </div>
+        <div class="dossier">
+          <h3>Natasha Clifford Weber Miller</h3>
+          <span class="role">Princesa Herdeira do Reino da Inglaterra · CEO do Império Weber</span>
+          <div class="stat-grid">
+            <div class="stat-block">
+              <h4>Identificação</h4>
+              <p>Idade: 25 anos</p>
+              <p>Nacionalidade: Inglesa / Escocesa</p>
+              <p>Estado civil: Casada com Joel Clifford Weber Miller</p>
+              <p>Mãe: Elizabeth Clifford Weber</p>
+              <p>Pai: William Lucchesi Weber</p>
+              <p>Irmã: Chloe Clifford Weber</p>
+              <p>Filhos: Lara (7), Nathalia (5), Rebeca (3) e Theo (3)</p>
+            </div>
+            <div class="stat-block">
+              <h4>Habilidades</h4>
+              <p>Feixe e Esfera Psíquicos</p>
+              <p>Controle e invasão mental, ilusões</p>
+              <p>Escudo e Armadura Psíquica</p>
+              <p>Telecinese ampliada</p>
+              <p>Orbe Psíquico Explosivo Supremo (ataque máximo)</p>
+            </div>
+          </div>
+          <p class="bio collapsed">
+            Natasha nasceu como filha mais velha da Rainha Elizabeth Clifford Weber, criada desde o nascimento para
+            assumir o trono britânico e comandar a Weber, o maior conglomerado econômico e tecnológico da Europa.
+            Apesar da criação rígida da realeza, sua infância foi marcada por momentos simples ao lado de Joel
+            Miller, seu melhor amigo — o refúgio dos dois era uma casinha na árvore, escondida nos jardins do
+            palácio, onde podiam esquecer o peso da coroa. Ao atingir a idade adulta, foi enviada para Paladis para
+            expandir a influência da Weber no continente, e foi nesse período que entrou em contato com a Pedra do
+            Poder, despertando habilidades psíquicas extraordinárias. Após cumprir sua missão, retornou à
+            Inglaterra ao lado de Joel, agora seu marido, e hoje é mãe de quatro filhos — Lara, Nathalia, Rebeca e
+            Theo — enquanto aguarda o dia de assumir oficialmente o trono.
+            Por trás da imagem de princesa existe uma mulher extremamente humana: acredita que governar significa
+            servir, nunca viu alguém como inferior e não acredita que sangue nobre torna uma pessoa melhor. Seu
+            maior orgulho não é ser princesa — é ser esposa, é ser mãe, é ser alguém de quem seu povo possa sentir
+            orgulho. Para ela, poder existe para proteger, nunca para dominar; jamais pisaria sobre inocentes para
+            alcançar um objetivo, e respeita absolutamente qualquer pessoa, independentemente de riqueza, cargo ou
+            classe social — um faxineiro merece exatamente o mesmo respeito que um rei.
+            Raramente decide por impulso: primeiro observa, depois escuta, depois analisa, e só então decide.
+            Mesmo sob extrema pressão mantém a calma e dificilmente levanta a voz — quando todos estão
+            desesperados, Natasha normalmente é quem transmite segurança. Antes de qualquer decisão importante,
+            pensa: <em>"Quem será afetado por isso?"</em>. Em combate, evita matar quando existe outra alternativa,
+            mas, quando entende que não há escolha, age sem hesitar — nunca por ódio, sempre por dever.
+            Com Joel, abaixa completamente a guarda: é romântica, carinhosa, brincalhona e delicada, e ele é
+            praticamente a única pessoa que conhece todos os seus medos. Com os filhos, faz questão de participar
+            da criação deles — conta histórias, cozinha, pinta e brinca — sem nunca usar sua posição para
+            intimidá-los. Seu maior medo não é morrer: é falhar como mãe, como esposa, como rainha.
+            <em>"O verdadeiro poder existe para proteger, nunca para oprimir."</em>
+          </p>
+          <button class="bio-toggle">Ler biografia completa</button>
+        </div>
+      </article>
+
+      <!-- =====================================================================
+           PERSONAGEM 2 — Joel
+           ✅ TEXTO ATUALIZADO com base na ficha completa + as substituições das
+           seções 9, 10 e 12 que você mandou depois (forma de falar, linguagem
+           corporal e gostos — a versão "mais carismático e brincalhão").
+           Fotos continuam as mesmas (joel1/2/3.jpg), já que não veio foto nova
+           dele.
+           ===================================================================== -->
+      <article class="character reveal">
+        <div class="portrait" data-slider>
+          <div class="portrait-track">
+            <img src="img/joel2.jpg" alt="Joel Clifford Weber Miller">
+            <img src="img/joel3.jpg" alt="Joel Clifford Weber Miller">
+            <img src="img/joel1.jpg" alt="Joel Clifford Weber Miller">
+          </div>
+          <button class="portrait-btn prev" aria-label="Foto anterior">&#10094;</button>
+          <button class="portrait-btn next" aria-label="Próxima foto">&#10095;</button>
+          <div class="portrait-dots"></div>
+        </div>
+        <div class="dossier">
+          <h3>Joel Clifford Weber Miller</h3>
+          <span class="role">Vice-presidente da Weber · Ex-Ministro das Relações Exteriores de Paladis</span>
+          <div class="stat-grid">
+            <div class="stat-block">
+              <h4>Identificação</h4>
+              <p>Nacionalidade: Inglês (ascendência alemã)</p>
+              <p>Estado civil: Casado com Natasha Clifford Weber Miller</p>
+              <p>Mãe: Emillie Miller</p>
+              <p>Pai: Lewis Grant Hamilton</p>
+              <p>Irmãos: Tyler Miller, Elliot Miller</p>
+              <p>Filhos: Lara (7), Nathalia (5), Rebeca (3) e Theo (3)</p>
+            </div>
+            <div class="stat-block">
+              <h4>Habilidades</h4>
+              <p>Sem poderes sobrenaturais</p>
+              <p>Estratégia militar e diplomacia</p>
+              <p>Excelente combatente corpo a corpo</p>
+              <p>Ótima pontaria</p>
+            </div>
+          </div>
+          <p class="bio collapsed">
+            Joel nasceu na Inglaterra em uma família humilde: sua mãe trabalhava como cozinheira no palácio,
+            enquanto seu pai cuidava dos jardins reais e dos animais da família Weber. Foi na infância que conheceu
+            Natasha — apesar da enorme diferença social, tornaram-se inseparáveis, e a casinha na árvore escondida
+            nos jardins do palácio virou o lugar dos momentos mais felizes de ambos. Quando ainda era jovem, seus
+            pais morreram em um acidente, e Joel se tornou responsável por criar os irmãos mais novos, Elliot e
+            Tyler — que, com o tempo, seguiram um caminho de crime e traição, uma das maiores dores de sua vida.
+            Percebendo seu caráter, o Rei da Inglaterra o apadrinhou, dando-lhe formação política, empresarial,
+            diplomática e militar. Quando Natasha foi enviada a Paladis, Joel a acompanhou como conselheiro e
+            chegou a Ministro das Relações Exteriores; hoje, de volta à Inglaterra como Vice-Presidente da Weber, é
+            considerado a mente estratégica e o maior apoio da futura rainha.
+            Joel nunca desejou riqueza, títulos ou fama — tudo o que sempre quis foi proteger quem ama. Acredita
+            que justiça vale mais que poder e que um líder não é aquele que aparece mais, mas aquele que carrega o
+            peso das decisões para que os outros possam viver em paz. Raramente age por impulso: observa, monta um
+            plano, só então age, e costuma enxergar consequências que passam despercebidas por outros. Em combate,
+            protege os aliados antes de qualquer coisa, priorizando vencer com inteligência em vez de força.
+            Diferente do que muitos imaginam, Joel não é um homem calado — gosta de conversar, contar histórias e
+            fazer piadas, com um humor inteligente que aparece principalmente com Natasha, de quem adora implicar
+            só para vê-la revirar os olhos ou sorrir. Mas sabe exatamente quando deixar o lado descontraído de
+            lado: em reuniões, negociações ou perigo, sua voz muda, fica firme e objetiva, sem precisar levantar o
+            tom. A única coisa que evita comentar são seus próprios sentimentos — prefere carregar esse peso
+            sozinho, e a única pessoa diante de quem baixa completamente a guarda é Natasha.
+            Nos momentos livres, tem paixão por mecânica — adora passar horas na garagem mexendo em carruagens e
+            motores, um hábito herdado da origem humilde do pai. Mas nada supera os momentos com a família reunida,
+            e provocar Natasha continua sendo um dos seus passatempos favoritos.
+            <em>"Um líder não é aquele que anda na frente. É aquele que garante que todos consigam voltar para
+            casa."</em>
+          </p>
+          <button class="bio-toggle">Ler biografia completa</button>
+        </div>
+      </article>
+
+      <!-- PERSONAGEM 3 — Chloe (sem alterações pedidas) -->
+      <article class="character reveal">
+        <div class="portrait" data-slider>
+          <div class="portrait-track">
+            <img src="img/chloe1.jpg" alt="Chloe Clifford Weber">
+            <img src="img/chloe3.png" alt="Chloe Clifford Weber">
+            <img src="img/chloe2.png" alt="Chloe Clifford Weber">
+          </div>
+          <button class="portrait-btn prev" aria-label="Foto anterior">&#10094;</button>
+          <button class="portrait-btn next" aria-label="Próxima foto">&#10095;</button>
+          <div class="portrait-dots"></div>
+        </div>
+        <div class="dossier">
+          <h3>Chloe Clifford Weber</h3>
+          <span class="role">Estudante · Futura CEO da Weber</span>
+          <div class="stat-grid">
+            <div class="stat-block">
+              <h4>Identificação</h4>
+              <p>Idade: 10 anos</p>
+              <p>Nacionalidade: Inglesa / Italiana</p>
+              <p>Estado civil: Solteira</p>
+              <p>Mãe: Elizabeth Clifford Weber</p>
+              <p>Pai: William Lucchesi Weber</p>
+              <p>Irmã: Natasha Clifford Weber</p>
+            </div>
+            <div class="stat-block">
+              <h4>Habilidades</h4>
+              <p>Manipulação de energia psíquica</p>
+              <p>Influência mental</p>
+            </div>
+          </div>
+          <p class="bio collapsed">
+            Chloe nasceu na Inglaterra, sendo a irmã mais nova de Natasha Clifford Weber e a segunda filha da
+            Rainha Elizabeth Clifford Weber.
+            Desde pequena, Chloe sempre foi muito próxima de Natasha, vendo a irmã mais velha como uma figura de
+            proteção e inspiração. Com apenas 10 anos, já demonstra uma inteligência e sensibilidade acima da
+            média, além de possuir habilidades psíquicas semelhantes às de Natasha, porém ainda em desenvolvimento.
+            Quando Natasha foi enviada para Paladis, Chloe insistiu em acompanhá-la, não apenas por sua conexão com
+            a irmã, mas também por desejar entender o mundo ao lado de Natasha e Joel. Mesmo sendo uma criança,
+            Chloe absorve tudo o que acontece ao redor, aprendendo sobre estratégia, política e os negócios da
+            Weber, preparando-se, inconscientemente, para seu futuro papel.
+            Com o retorno de Natasha à Inglaterra, Chloe continua sendo sua maior apoiadora. No futuro, quando
+            Natasha finalmente assumir o trono, Chloe herdará o comando da Weber, tornando-se a futura CEO do
+            império industrial da família.
+            Por trás de sua personalidade doce e inocente, Chloe já carrega um futuro brilhante e promissor.
+          </p>
+          <button class="bio-toggle">Ler biografia completa</button>
+        </div>
+      </article>
+
+      <!-- PERSONAGEM 4 — Cassandra (sem alterações pedidas) -->
+      <article class="character reveal">
+        <div class="portrait" data-slider>
+          <div class="portrait-track">
+            <img src="img/cass1.jpg" alt="Cassandra d'la Fountaine Lancaster Volkov">
+            <img src="img/cass2jpg.jpg" alt="Cassandra d'la Fountaine Lancaster Volkov">
+            <img src="img/cass3.jpg" alt="Cassandra d'la Fountaine Lancaster Volkov">
+          </div>
+          <button class="portrait-btn prev" aria-label="Foto anterior">&#10094;</button>
+          <button class="portrait-btn next" aria-label="Próxima foto">&#10095;</button>
+          <div class="portrait-dots"></div>
+        </div>
+        <div class="dossier">
+          <h3>Cassandra d'la Fountaine Lancaster Volkov</h3>
+          <span class="role">Detetive Consultora</span>
+          <div class="stat-grid">
+            <div class="stat-block">
+              <h4>Identificação</h4>
+              <p>Idade: 311 ~ 31 anos em idade humana</p>
+              <p>Nacionalidade: Francesa</p>
+              <p>Estado civil: Casada</p>
+              <p>Mãe: Mediuna d'la Fountaine</p>
+              <p>Pai: Desconhecido</p>
+              <p>Irmãos: Trystan Maverine Lancaster, Alyssa Maverine Lancaster</p>
+            </div>
+            <div class="stat-block">
+              <h4>Habilidades</h4>
+              <p>Influência Mental</p>
+              <p>Absorção de Vitalidade</p>
+              <p>Aprimoramento Físico</p>
+            </div>
+          </div>
+          <p class="bio collapsed">
+            Cassandra é um ser híbrido: consegue ser dois tipos de seres diferentes em um só, o que lhe permite
+            transitar tranquilamente entre os humanos, sem que a notem, mesmo sendo a última sereia restante. Isso
+            tudo graças — ou culpa, como ela gosta de dizer — a um humano que capturou sua mãe e a engravidou.
+            Daí nasceu Cassandra, filha de uma sereia e ao mesmo tempo filha de um humano.
+            Ao longo dos anos, as sereias foram caçadas, uma a uma, apontadas como maiores inimigas dos
+            marinheiros, até não sobrar mais nenhuma — exceto Cassandra, a única sobrevivente. Viu todos os seus
+            amigos e familiares serem pegos pelas redes dos humanos, mortos, torturados. Por isso, enquanto
+            estiver viva, jura vingança por todos os seus companheiros falecidos.
+            Há 8 anos anda disfarçada no meio deles, trabalhando como "detetive" dos casos da cidade. Seu nome é
+            consideravelmente famoso pela quantidade de casos solucionados e pela eficiência de seu trabalho.
+            Durante esse tempo, não criou relações com ninguém da cidade onde trabalha — está lá para ser
+            profissional, não para ser amiga.
+            <strong>Poderes:</strong> seu canto mortal encanta qualquer um que esteja perto o suficiente para
+            ouvi-lo. Controla os mares e as marés a seu favor, cria ilusões e manipula vontades; suas unhas, tanto
+            na forma humana quanto sereia, carregam um veneno mortal.
+            <strong>Personalidade:</strong> fria, mas educada quando o trabalho exige. Indiferente à maioria das
+            coisas, mas muito esperta por ter vivido tanto tempo assim. Ama o mar, mas gostaria que ele fosse igual
+            ao que se lembra de quando era pequena.
+            <strong>Fraquezas:</strong> sério problema de desidratação em forma humana; ouvido altamente sensível a
+            barulhos altos; torna-se fraca durante noites de lua cheia.
+          </p>
+          <button class="bio-toggle">Ler biografia completa</button>
+        </div>
+      </article>
+
+      <!-- PERSONAGEM 5 — Thorn (sem alterações pedidas) -->
+      <article class="character reveal">
+        <div class="portrait" data-slider>
+          <div class="portrait-track">
+            <img src="img/mago1.jpg" alt="Thorn Leocadio Mephisto Volkov d'la Fountaine">
+            <img src="img/mago2.jpg" alt="Thorn Leocadio Mephisto Volkov d'la Fountaine">
+            <img src="img/mago3.jpg" alt="Thorn Leocadio Mephisto Volkov d'la Fountaine">
+          </div>
+          <button class="portrait-btn prev" aria-label="Foto anterior">&#10094;</button>
+          <button class="portrait-btn next" aria-label="Próxima foto">&#10095;</button>
+          <div class="portrait-dots"></div>
+        </div>
+        <div class="dossier">
+          <h3>Thorn Leocadio Mephisto Volkov d'la Fountaine</h3>
+          <span class="role">Lorde Lux · Inventor · Boxeador</span>
+          <div class="stat-grid">
+            <div class="stat-block">
+              <h4>Identificação</h4>
+              <p>Idade: 34 anos</p>
+              <p>Nacionalidade: Russo</p>
+              <p>Estado civil: Casado</p>
+              <p>Mãe: Desconhecida</p>
+              <p>Pai: Desconhecido</p>
+              <p>Irmãos: Nikolai Petrov, Yelena Petrov</p>
+            </div>
+            <div class="stat-block">
+              <h4>Habilidades</h4>
+              <p>Manipulação Espacial</p>
+              <p>Distorção da Realidade</p>
+            </div>
+          </div>
+          <p class="bio collapsed">
+            Thorn é um bastardo, fruto de relacionamento não conjugal — algo visto como inadmissível na Rússia,
+            sua terra natal. Pelas altas camadas da sociedade, era visto com desdém, privado ao longo da juventude
+            de direitos e cargos que os demais jovens possuíam, apenas por não ser legítimo.
+            Teve uma infância conturbada: seus pais o abandonaram quando ainda era um garotinho. Sua mãe foi
+            exilada e morta por traição contra o Estado russo; seu pai o abandonou e constituiu nova família.
+            Berenilde, sua tia por parte de pai, se responsabilizou por criá-lo como se fosse seu próprio filho.
+            Após anos suportando a humilhação de ser um bastardo, Thorn ficou farto dos insultos da alta corte e,
+            aos 30 anos, fugiu da Rússia com sua tia, instalando-se em Paladis e abrindo mão de todas as riquezas
+            que sua família possuía em território russo. Desesperado para sustentar a si e à tia, apresentou-se
+            para o emprego de secretário do rei e da rainha, em troca de abrigo no castelo. A rainha teve
+            compaixão e o contratou — Thorn se mantém firme e leal à coroa desde então.
+            Boatos dizem que é o homem em que a rainha mais confia, depois de seu marido, é claro.
+          </p>
+          <button class="bio-toggle">Ler biografia completa</button>
+        </div>
+      </article>
+
+      <!-- =====================================================================
+           PERSONAGEM 6 — Pietra
+           ✅ FOTO ATUALIZADA: a segunda foto do slider agora é
+           pietra-new2.jpg (a imagem que você mandou); as outras duas
+           (pietra1.jpg / pietra3.jpg) continuam as mesmas.
+           ===================================================================== -->
+      <article class="character reveal">
+        <div class="portrait" data-slider>
+          <div class="portrait-track">
+            <img src="img/pietra1.jpg" alt="Pietra d'la Fountaine Mephisto">
+            <img src="img/pietra-new2.jpg" alt="Pietra d'la Fountaine Mephisto">
+            <img src="img/pietra3.jpg" alt="Pietra d'la Fountaine Mephisto">
+          </div>
+          <button class="portrait-btn prev" aria-label="Foto anterior">&#10094;</button>
+          <button class="portrait-btn next" aria-label="Próxima foto">&#10095;</button>
+          <div class="portrait-dots"></div>
+        </div>
+        <div class="dossier">
+          <h3>Pietra d'la Fountaine Mephisto</h3>
+          <span class="role">—</span>
+          <div class="stat-grid">
+            <div class="stat-block">
+              <h4>Identificação</h4>
+              <p>Idade: 1 ano</p>
+              <p>Nacionalidade: Desconhecida</p>
+              <p>Estado civil: Solteira</p>
+              <p>Mãe: Cassandra d'la Fountaine Lancaster Volkov</p>
+              <p>Pai: Thorn Leocadio Mephisto Volkov d'la Fountaine</p>
+              <p>Irmãos: Não possui</p>
+            </div>
+            <div class="stat-block">
+              <h4>Habilidades</h4>
+              <p>Talha de teletransporte</p>
+            </div>
+          </div>
+          <p class="bio">
+            Pietra foi encontrada abandonada e sozinha por Cassandra, que, ao vê-la tão indefesa, decidiu acolhê-la
+            e criá-la como sua filha, especialmente por não poder ter filhos. Determinada a garantir um futuro
+            seguro para a menina, Cassandra dedicou-se a ser a melhor mãe que podia. Quando Thorn entrou em suas
+            vidas, inicialmente mantendo sua postura reservada, acabou desenvolvendo um afeto genuíno por Pietra,
+            assumindo gradualmente um papel paterno.
+          </p>
+        </div>
+      </article>
+
+      <!-- =====================================================================
+           PERSONAGEM 7 — Trystan
+           ✅ FOTO ATUALIZADA: a primeira foto do slider agora é
+           trystan-new1.jpg (a imagem que você mandou); as outras duas
+           (trystan2/3.jpg) continuam as mesmas.
+           ===================================================================== -->
+      <article class="character reveal">
+        <div class="portrait" data-slider>
+          <div class="portrait-track">
+            <img src="img/trystan-new1.jpg" alt="Trystan Maverine Lancaster">
+            <img src="img/trystan2.jpg" alt="Trystan Maverine Lancaster">
+            <img src="img/trystan3.jpg" alt="Trystan Maverine Lancaster">
+          </div>
+          <button class="portrait-btn prev" aria-label="Foto anterior">&#10094;</button>
+          <button class="portrait-btn next" aria-label="Próxima foto">&#10095;</button>
+          <div class="portrait-dots"></div>
+        </div>
+        <div class="dossier">
+          <h3>Trystan Maverine Lancaster</h3>
+          <span class="role">Médico · Estudante</span>
+          <div class="stat-grid">
+            <div class="stat-block">
+              <h4>Identificação</h4>
+              <p>Idade: 33 anos</p>
+              <p>Nacionalidade: Egípcio</p>
+              <p>Estado civil: Solteiro</p>
+              <p>Mãe: Evangelina Maverine</p>
+              <p>Pai: Desconhecido</p>
+              <p>Irmãs: Cassandra d'la Fountaine Lancaster Volkov, Alyssa Maverine Lancaster</p>
+            </div>
+            <div class="stat-block">
+              <h4>Habilidades</h4>
+              <p>Não possui poderes</p>
+            </div>
+          </div>
+          <p class="bio collapsed">
+            Trystan nasceu em uma família relativamente pobre e desestruturada. Seu pai, assim que soube da
+            gravidez de sua mãe, a abandonou sem qualquer amparo, deixando-a e o filho recém-nascido à própria
+            sorte. Ainda assim, a mãe de Trystan batalhou para lhe dar as melhores condições possíveis.
+            As coisas começaram a mudar quando a mãe de Trystan conheceu Mediuna — a sereia rainha, que havia sido
+            violentada pelo pai de Trystan e estava grávida na época. Ambas as mães criaram um respeito e empatia
+            por suas situações, além de um repúdio tremendo pelo homem que as fez sofrer.
+            Após alguns meses, Trystan, que na época tinha 6 aninhos, conheceu sua nova irmãzinha, Cassandra. Os
+            dois sempre tiveram um vínculo saudável, apesar de serem de raças diferentes. Eram grandes amigos e
+            inseparáveis.
+            Quando Trystan se formou na escola, sua mãe simplesmente desaparecera de sua vida, sem deixar rastros.
+            Abalado e sem rumo, decidiu se tornar um mercenário e deixar para trás a vida de dignidade que tinha.
+            Em algum momento, Cassandra e Trystan se separaram por uma briga da qual ele não se recorda, e ficaram
+            longe um do outro por exatamente 8 anos. Até que um dia ele escutou boatos de que havia uma detetive
+            solucionando muitos casos na cidade em que morava, e foi aí que eles se encontraram novamente.
+          </p>
+          <button class="bio-toggle">Ler biografia completa</button>
+        </div>
+      </article>
+
+      <!-- =====================================================================
+           PERSONAGEM 8 — Haku
+           ✅ TEXTO ATUALIZADO com base no dossiê completo que você mandou.
+           Fotos continuam as mesmas (kartucho1/2/3.jpg), já que não veio foto
+           nova dele.
+           ===================================================================== -->
+      <article class="character reveal">
+        <div class="portrait" data-slider>
+          <div class="portrait-track">
+            <img src="img/kartucho1.jpg" alt="Nigihayami Haku de La Croix Ravnos">
+            <img src="img/kartucho2.jpg" alt="Nigihayami Haku de La Croix Ravnos">
+            <img src="img/kartucho3.jpg" alt="Nigihayami Haku de La Croix Ravnos">
+          </div>
+          <button class="portrait-btn prev" aria-label="Foto anterior">&#10094;</button>
+          <button class="portrait-btn next" aria-label="Próxima foto">&#10095;</button>
+          <div class="portrait-dots"></div>
+        </div>
+        <div class="dossier">
+          <h3>Nigihayami Haku de La Croix Ravnos</h3>
+          <span class="role">Comandante Supremo do Clã de La Croix</span>
+          <div class="stat-grid">
+            <div class="stat-block">
+              <h4>Identificação</h4>
+              <p>Idade: 1.298 anos</p>
+              <p>Nacionalidade: Francês</p>
+              <p>Raça: Vampiro Ancestral</p>
+              <p>Estado civil: Casado com Arlecchino Fontenelle Ravencour de La Croix</p>
+              <p>Mãe: Arleth de La Croix</p>
+              <p>Pai: Morvain Vorath Ravnos</p>
+              <p>Irmãos: Eleonor, Sylus e Elizabeth de La Croix</p>
+              <p>Filhos: Caelly e Ashriel</p>
+            </div>
+            <div class="stat-block">
+              <h4>Habilidades</h4>
+              <p>Manipulação Sombria</p>
+              <p>"O Eclipse" (dissolve-se completamente nas trevas)</p>
+              <p>Estrategista militar sem igual</p>
+              <p>Força e velocidade sobre-humanas</p>
+            </div>
+          </div>
+          <p class="bio collapsed">
+            Filho da lendária Arleth de La Croix e de Morvain Vorath Ravnos, Haku cresceu cercado por expectativas
+            impossíveis, aprendendo estratégia militar, diplomacia e combate enquanto outras crianças aprendiam a
+            brincar. Ao longo de mais de um milênio viu amigos, aliados e mestres desaparecerem, e passou a
+            acreditar que o papel de um líder era suportar a dor para que os outros não precisassem suportá-la —
+            por muito tempo, viveu apenas pelo dever. Tudo mudou quando conheceu Arlecchino: primeiro sua pupila,
+            depois uma das poucas pessoas capazes de enfrentá-lo intelectualmente e dividir o peso da liderança.
+            Apaixonou-se lentamente, e isso o assustou — mas descobriu que amá-la o tornou mais forte, não mais
+            vulnerável. O nascimento de Caelly e Ashriel transformou sua vida mais uma vez: pela primeira vez em
+            mais de um milênio, Haku desejou não apenas sobreviver, mas viver.
+            É extremamente reservado e um homem de poucas palavras e muitos gestos — quem não o conhece acredita
+            que seja frio ou incapaz de sentir, mas ele sente tudo profundamente, apenas acredita que demonstrar
+            emoções sem controle coloca outras pessoas em risco. A família sempre vem primeiro; lealdade vale mais
+            que poder; a palavra dada é sagrada. Jamais atacaria alguém indefeso ou abandonaria um companheiro. Age
+            quase sempre pela lógica — mas, quando sua família está em perigo, a lógica desaparece e ele se torna
+            absolutamente implacável. Em combate, não desperdiça movimentos: cada golpe e cada sombra têm um
+            propósito; os inimigos dizem que lutar contra ele é como enfrentar a própria noite.
+            Seu amor é silencioso: nunca fará grandes declarações diante de uma multidão, mas atravessaria o
+            próprio inferno para salvar quem ama sem pensar duas vezes. Demonstra isso através da presença —
+            prepara chá para Arlecchino quando a percebe cansada, cobre os filhos com um cobertor quando adormecem
+            no sofá, e ouve Ash explicar seus desenhos de monstros como se fossem um tratado científico. Seu maior
+            medo não é morrer — é sobreviver à própria família, ou falhar como pai.
+            <em>"A força de um homem não se mede pelas vidas que ele tira, mas pelas que ele dedica a
+            proteger."</em>
+          </p>
+          <button class="bio-toggle">Ler biografia completa</button>
+        </div>
+      </article>
+
+      <!-- =====================================================================
+           PERSONAGEM 9 — Arlecchino
+           ✅ TEXTO ATUALIZADO com base no dossiê completo que você mandou.
+           Fotos continuam as mesmas (arle1/2/3), já que não veio foto nova
+           dela.
+           ===================================================================== -->
+      <article class="character reveal">
+        <div class="portrait" data-slider>
+          <div class="portrait-track">
+            <img src="img/arle2.jpg" alt="Arlecchino Fontenelle Ravencour de La Croix">
+            <img src="img/arle1.png" alt="Arlecchino Fontenelle Ravencour de La Croix">
+            <img src="img/arle3.jpg" alt="Arlecchino Fontenelle Ravencour de La Croix">
+          </div>
+          <button class="portrait-btn prev" aria-label="Foto anterior">&#10094;</button>
+          <button class="portrait-btn next" aria-label="Próxima foto">&#10095;</button>
+          <div class="portrait-dots"></div>
+        </div>
+        <div class="dossier">
+          <h3>Arlecchino Fontenelle Ravencour de La Croix</h3>
+          <span class="role">Senhora da Casa de La Croix · Estrategista e Diplomata</span>
+          <div class="stat-grid">
+            <div class="stat-block">
+              <h4>Identificação</h4>
+              <p>Idade: 785 anos</p>
+              <p>Nacionalidade: Francesa / Espanhola</p>
+              <p>Raça: Vampira</p>
+              <p>Estado civil: Casada com Nigihayami Haku de La Croix Ravnos</p>
+              <p>Mãe: Brigitte Marigny Fontenelle</p>
+              <p>Pai: Magnus Châteaubriand Ravencour Valmont</p>
+              <p>Irmão: Noérian Châteaubriand Fontenelle</p>
+              <p>Filhos: Caelly e Ashriel</p>
+            </div>
+            <div class="stat-block">
+              <h4>Habilidades</h4>
+              <p>Manipulação Sombria e Mental</p>
+              <p>Pirocinese</p>
+              <p>Ascensão do Fogo Demoníaco (asas flamejantes)</p>
+              <p>Combate com foice de nível mestre</p>
+            </div>
+          </div>
+          <p class="bio collapsed">
+            Nascida em uma antiga linhagem nobre marcada por intrigas, guerras e responsabilidades que jamais
+            permitiram uma infância comum, Arlecchino aprendeu desde jovem que sentimentos poderiam comprometer
+            decisões importantes — etiqueta, estratégia militar, diplomacia e combate vieram quase ao mesmo tempo.
+            Ao longo dos séculos viu impérios nascerem e desaparecerem, e cada perda a tornou menos impulsiva e
+            mais calculista, mas nunca endureceu completamente seu coração: desenvolveu, em vez disso, um senso de
+            responsabilidade quase absoluto. Após casar-se com Haku, encontrou alguém capaz de compreender o peso
+            que ambos carregavam, e o nascimento de Caelly e Ashriel revelou um lado maternal que poucos
+            imaginariam existir nela.
+            À primeira vista parece fria; na realidade, é extremamente reservada. Não demonstra carinho através de
+            palavras — demonstra amor protegendo, organizando, antecipando problemas antes que existam. É paciente
+            e quase impossível vê-la perder a compostura: quanto mais calma parece, maior costuma ser o perigo.
+            Jamais abandonaria sua família, jamais colocaria inocentes em risco por conveniência e jamais quebraria
+            sua palavra — para ela, liderança significa responsabilidade, nunca privilégio. Age pela lógica, quase
+            nunca por impulso, e confia em poucas pessoas: perdoa erros honestos, mas não perdoa traição.
+            Em combate, luta como uma bailarina — cada golpe é calculado, nenhum movimento é desperdiçado — e,
+            quando ativa a Ascensão do Fogo Demoníaco, torna-se devastadora. Fala pouco, nunca grita e desmonta
+            argumentos calmamente; o silêncio dela costuma intimidar mais do que qualquer explosão. Dentro de casa,
+            porém, é surpreendentemente doce: aceita brincar de chá com Caelly, escuta suas perguntas filosóficas e
+            observa Ash desenhando monstros com interesse genuíno, sempre conversando com os dois como indivíduos
+            inteligentes, nunca os infantilizando. Seu maior medo não é morrer — é sobreviver enquanto sua família
+            desaparece.
+            <em>"O verdadeiro poder não está em destruir. Está em decidir, todos os dias, o que merece ser
+            protegido."</em>
+          </p>
+          <button class="bio-toggle">Ler biografia completa</button>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-top">
+      <hr class="rivet-rule">
+      <p class="quote">"Nove destinos, um só mundo em transformação."</p>
+      <ul class="footer-links">
+        <li><a href="index.html">Início</a></li>
+        <li><a href="personagens.html">Personagens</a></li>
+        <li><a href="mapa.html">Mapa</a></li>
+        <li><a href="galeria.html">Galeria</a></li>
+        <li><a href="criaturas.html">Criaturas</a></li>
+        <li><a href="pedras.html">Pedras</a></li>
+        <li><a href="dados.html">Dados</a></li>
+      </ul>
+      <p class="footer-credit">RPG criado por Tio, com participação importante de SMS e Rabesco · 2024–2026</p>
+    </div>
+  </footer>
+  <button id="btnTopo" aria-label="Voltar ao topo">▲</button>
+
+  <script src="js/main.js"></script>
+  <script src="js/personagens.js"></script>
+</body>
+</html>

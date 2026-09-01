@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <!-- Aplica o tema salvo (claro/escuro) ANTES da página desenhar, para não
+       piscar o tema errado por uma fração de segundo ao carregar. -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('rpg-theme');
+        if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+      } catch (e) {}
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RPG III — Dias de um Passado Esquecido</title>
+  <meta name="description" content="RPG III — Dias de um Passado Esquecido. Em breve.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="container">
+      <a href="index.html" class="brand">
+        <span class="brand-badge"><img src="img/logo-rpg3.jpg" alt="RPG III — Dias de um Passado Esquecido"></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Início</a></li>
+      </ul>
+      <div class="nav-actions">
+        <div class="campaign-switch" id="campaignSwitch">
+          <button class="campaign-trigger" id="campaignTrigger" aria-haspopup="true" aria-expanded="false">
+            RPG III <span class="chevron">▾</span>
+          </button>
+          <div class="campaign-panel">
+            <a class="campaign-item" href="../rpg1/index.html">
+              <span class="campaign-thumb"><img src="../rpg1/img/logo-rpg1.jpg" alt="RPG I"></span>
+              <span class="campaign-text">
+                <span class="campaign-name">RPG I — Primeiro Dia</span>
+                <span class="campaign-tag">Disponível</span>
+              </span>
+            </a>
+            <a class="campaign-item is-soon" href="../rpg2/index.html">
+              <span class="campaign-thumb"><img src="../rpg2/img/logo-rpg2.jpg" alt="RPG II"></span>
+              <span class="campaign-text">
+                <span class="campaign-name">RPG II — Dia do Julgamento Final</span>
+                <span class="campaign-tag">Em breve</span>
+              </span>
+            </a>
+            <a class="campaign-item is-active" href="index.html">
+              <span class="campaign-thumb"><img src="img/logo-rpg3.jpg" alt="RPG III"></span>
+              <span class="campaign-text">
+                <span class="campaign-name">RPG III — Dias de um Passado Esquecido</span>
+                <span class="campaign-tag">Em breve</span>
+              </span>
+            </a>
+          </div>
+        </div>
+        <button class="theme-toggle" id="themeToggle" aria-label="Alternar modo claro/escuro">
+          <span class="icon-sun">☀</span><span class="icon-moon">☾</span>
+        </button>
+        <button class="nav-toggle" aria-label="Abrir menu">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero hero--arcane" aria-label="RPG III — Dias de um Passado Esquecido"></header>
+
+  <section>
+    <div class="container" style="text-align:center;">
+      <div class="section-head reveal" style="text-align:center; margin-left:auto; margin-right:auto;">
+        <span class="eyebrow">RPG III</span>
+        <h2>Dias de um Passado Esquecido</h2>
+        <p>"Quando tudo o que existia encontra um único lugar, heróis despertam em um mundo que parece inteiro — mas onde cada memória, cada rosto e cada verdade pode esconder algo que jamais deveria existir."</p>
+        <span class="soon-badge">Em breve</span>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-top">
+      <p class="quote">"Dias de um Passado Esquecido — a próxima campanha, em construção."</p>
+      <ul class="footer-links">
+        <li><a href="../rpg1/index.html">RPG I</a></li>
+        <li><a href="../rpg2/index.html">RPG II</a></li>
+        <li><a href="index.html">RPG III</a></li>
+      </ul>
+      <p class="footer-credit">RPG criado por Tio, com participação importante de SMS e Rabesco · 2024–2026</p>
+    </div>
+    <div class="footer-banner">
+      <img src="../rpg1/img/campo-florido.jpg" alt="Campo florido" loading="lazy">
+    </div>
+  </footer>
+  <button id="btnTopo" aria-label="Voltar ao topo">▲</button>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

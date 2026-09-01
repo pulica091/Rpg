@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <!-- Aplica o tema salvo (claro/escuro) ANTES da página desenhar, para não
+       piscar o tema errado por uma fração de segundo ao carregar. -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('rpg-theme');
+        if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+      } catch (e) {}
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RPG — Início</title>
+  <meta name="description" content="Um século XVII alternativo onde a Revolução Industrial e a magia caminham lado a lado.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ======================= MENU FIXO (igual em todas as páginas) =======================
+       Obs.: a marca no menu é só "RPG" (a campanha não tem nome definido ainda).
+       "Paladis" continua existindo dentro da história como o nome do reino — isso é
+       conteúdo do mundo, não o nome do site, então foi mantido no texto abaixo. -->
+  <nav class="site-nav">
+    <div class="container">
+      <a href="index.html" class="brand">
+        <span class="brand-badge"><img src="img/logo-rpg1.jpg" alt="RPG — Primeiro Dia"></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Início</a></li>
+        <li><a href="personagens.html">Personagens</a></li>
+        <li><a href="mapa.html">Mapa</a></li>
+        <li><a href="galeria.html">Galeria</a></li>
+        <li><a href="criaturas.html">Criaturas</a></li>
+        <li><a href="pedras.html">Pedras</a></li>
+        <li><a href="dados.html">Dados</a></li>
+      </ul>
+      <div class="nav-actions">
+        <div class="campaign-switch" id="campaignSwitch">
+          <button class="campaign-trigger" id="campaignTrigger" aria-haspopup="true" aria-expanded="false">
+            RPG I <span class="chevron">▾</span>
+          </button>
+          <div class="campaign-panel">
+            <a class="campaign-item is-active" href="index.html">
+              <span class="campaign-thumb"><img src="img/logo-rpg1.jpg" alt="RPG I"></span>
+              <span class="campaign-text">
+                <span class="campaign-name">RPG I — Primeiro Dia</span>
+                <span class="campaign-tag">Campanha atual</span>
+              </span>
+            </a>
+            <a class="campaign-item is-soon" href="../rpg2/index.html">
+              <span class="campaign-thumb"><img src="../rpg2/img/logo-rpg2.jpg" alt="RPG II"></span>
+              <span class="campaign-text">
+                <span class="campaign-name">RPG II — Dia do Julgamento Final</span>
+                <span class="campaign-tag">Em breve</span>
+              </span>
+            </a>
+            <a class="campaign-item is-soon" href="../rpg3/index.html">
+              <span class="campaign-thumb"><img src="../rpg3/img/logo-rpg3.jpg" alt="RPG III"></span>
+              <span class="campaign-text">
+                <span class="campaign-name">RPG III — Dias de um Passado Esquecido</span>
+                <span class="campaign-tag">Em breve</span>
+              </span>
+            </a>
+          </div>
+        </div>
+        <button class="theme-toggle" id="themeToggle" aria-label="Alternar modo claro/escuro">
+          <span class="icon-sun">☀</span><span class="icon-moon">☾</span>
+        </button>
+        <button class="nav-toggle" aria-label="Abrir menu">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ======================= HERO — nova arte de capa (wallpaper enviado) ======================= -->
+  <header class="hero hero--arcane" aria-label="RPG I — Primeiro Dia"></header>
+
+  <!-- ======================= NOSSO MUNDO ======================= -->
+  <section>
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Explore</span>
+        <h2>Nosso Mundo</h2>
+        <p>Três portas de entrada para o cenário da campanha.</p>
+      </div>
+
+      <div class="nav-cards reveal">
+        <a class="nav-card nav-card--themed" href="mapa.html">
+          <img class="img-dark" src="img/mapamundi-escuro.jpg" alt="Mapa do mundo">
+          <img class="img-light" src="img/mapamundi-claro.jpg" alt="Mapa do mundo">
+          <div class="nav-card-label"><h3>Mapa</h3><span>→</span></div>
+        </a>
+        <a class="nav-card nav-card--themed" href="galeria.html">
+          <img class="img-dark" src="img/galeria-escuro.jpg" alt="Galeria de cenários">
+          <img class="img-light" src="img/galeria-claro.jpg" alt="Galeria de cenários">
+          <div class="nav-card-label"><h3>Galeria</h3><span>→</span></div>
+        </a>
+        <a class="nav-card nav-card--themed" href="criaturas.html">
+          <img class="img-dark" src="img/criaturas-escuro.jpg" alt="Criaturas catalogadas">
+          <img class="img-light" src="img/criaturas-claro.jpg" alt="Criaturas catalogadas">
+          <div class="nav-card-label"><h3>Criaturas</h3><span>→</span></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt history-section star-sky">
+    <div class="history-stones" aria-hidden="true">
+      <i class="stone-star blue"></i><i class="stone-star yellow"></i><i class="stone-star green"></i><i class="stone-star red"></i>
+      <i class="stone-star orange"></i><i class="stone-star purple"></i><i class="stone-star black"></i><i class="stone-star white"></i>
+    </div>
+    <div class="container prose reveal">
+      <hr class="rivet-rule">
+      <!-- Texto de ambientação — conteúdo original, mantido -->
+      <p>
+        O mundo do RPG se passa em um século XVII alternativo, onde a Revolução Industrial está a todo vapor,
+        impulsionada por mentes visionárias e avanços tecnológicos sem precedentes. O surgimento de máquinas a
+        vapor, ferrovias primitivas e indústrias têxteis de alto padrão transforma as cidades, que agora fervilham
+        com o barulho ensurdecedor das fábricas e o brilho incessante das lâmpadas encantadas, alimentadas por
+        fontes de energia tanto naturais quanto místicas. O progresso avança a passos largos, redefinindo a
+        economia, a política e até mesmo o modo de vida das pessoas, criando uma nova ordem mundial onde o
+        conhecimento é a maior moeda de poder.
+      </p>
+      <p>
+        A magia, longe de ser um segredo ou tabu, está profundamente enraizada na sociedade e faz parte do
+        cotidiano de reis, camponeses e mercadores. Seu uso se estende da engenharia à medicina, permitindo a
+        criação de edificações monumentais, curas milagrosas e aprimoramentos em máquinas antes inimagináveis.
+        Nas grandes universidades e guildas, cientistas e arcanistas trabalham juntos, combinando lógica e
+        feitiçaria para expandir os limites do conhecimento.
+      </p>
+      <p>
+        Enquanto a Inglaterra se ergue como a maior potência econômica, liderando a expansão industrial e o
+        comércio global com mão de ferro, Paladis, uma nação francesa de tradição e glória, passa por um intenso
+        processo de reestruturação política. O reino busca recuperar sua estabilidade e influência, apostando não
+        apenas em novas tecnologias e na modernização de suas cidades, mas também no estudo e no domínio de
+        antigas energias místicas que podem restaurar seu prestígio no cenário mundial.
+      </p>
+      <p>
+        Nesse mundo em constante transformação, onde o choque entre tradição e inovação é inevitável, alianças
+        improváveis são forjadas, e segredos há muito enterrados começam a vir à tona. Antigas ruínas escondem
+        verdades que podem reescrever a história, e o destino das nações depende da coragem daqueles que ousam
+        desafiar o desconhecido.
+      </p>
+      <p>
+        As armas, reflexo dessa era de transição, ainda são primitivas em comparação ao que a posteridade
+        conhecerá, mas letais em suas mãos certas. Pistolas de pederneira aprimoradas e rifles de repetição,
+        alimentados tanto por pólvora quanto por aprimoramentos arcanos, garantem que um único disparo bem
+        calculado possa significar o fim de qualquer adversário. Sejam empunhadas por soldados de elite, caçadores
+        de recompensas ou mercenários sem lealdade, essas armas redefinem a arte do combate, tornando o campo de
+        batalha um espetáculo de faíscas, aço e magia.
+      </p>
+    </div>
+  </section>
+
+  <!-- ======================= RODAPÉ (igual em todas as páginas) ======================= -->
+  <footer class="site-footer">
+    <div class="container footer-top">
+      <hr class="rivet-rule">
+      <p class="quote">"Entre o tilintar das espadas e o silvo das locomotivas a vapor..."</p>
+      <ul class="footer-links">
+        <li><a href="index.html">Início</a></li>
+        <li><a href="personagens.html">Personagens</a></li>
+        <li><a href="mapa.html">Mapa</a></li>
+        <li><a href="galeria.html">Galeria</a></li>
+        <li><a href="criaturas.html">Criaturas</a></li>
+        <li><a href="pedras.html">Pedras</a></li>
+        <li><a href="dados.html">Dados</a></li>
+      </ul>
+      <p class="footer-credit">RPG criado por Tio, com participação importante de SMS e Rabesco · 2024–2026</p>
+    </div>
+  </footer>
+  <button id="btnTopo" aria-label="Voltar ao topo">▲</button>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

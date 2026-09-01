@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <!-- Aplica o tema salvo (claro/escuro) ANTES da página desenhar, para não
+       piscar o tema errado por uma fração de segundo ao carregar. -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('rpg-theme');
+        if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+      } catch (e) {}
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Criaturas — RPG</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="container">
+      <a href="index.html" class="brand">
+        <span class="brand-badge"><img src="img/logo-rpg1.jpg" alt="RPG — Primeiro Dia"></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Início</a></li>
+        <li><a href="personagens.html">Personagens</a></li>
+        <li><a href="mapa.html">Mapa</a></li>
+        <li><a href="galeria.html">Galeria</a></li>
+        <li><a href="criaturas.html">Criaturas</a></li>
+        <li><a href="pedras.html">Pedras</a></li>
+        <li><a href="dados.html">Dados</a></li>
+      </ul>
+      <div class="nav-actions">
+        <div class="campaign-switch" id="campaignSwitch">
+          <button class="campaign-trigger" id="campaignTrigger" aria-haspopup="true" aria-expanded="false">
+            RPG I <span class="chevron">▾</span>
+          </button>
+          <div class="campaign-panel">
+            <a class="campaign-item is-active" href="index.html">
+              <span class="campaign-thumb"><img src="img/logo-rpg1.jpg" alt="RPG I"></span>
+              <span class="campaign-text">
+                <span class="campaign-name">RPG I — Primeiro Dia</span>
+                <span class="campaign-tag">Campanha atual</span>
+              </span>
+            </a>
+            <a class="campaign-item is-soon" href="../rpg2/index.html">
+              <span class="campaign-thumb"><img src="../rpg2/img/logo-rpg2.jpg" alt="RPG II"></span>
+              <span class="campaign-text">
+                <span class="campaign-name">RPG II — Dia do Julgamento Final</span>
+                <span class="campaign-tag">Em breve</span>
+              </span>
+            </a>
+            <a class="campaign-item is-soon" href="../rpg3/index.html">
+              <span class="campaign-thumb"><img src="../rpg3/img/logo-rpg3.jpg" alt="RPG III"></span>
+              <span class="campaign-text">
+                <span class="campaign-name">RPG III — Dias de um Passado Esquecido</span>
+                <span class="campaign-tag">Em breve</span>
+              </span>
+            </a>
+          </div>
+        </div>
+        <button class="theme-toggle" id="themeToggle" aria-label="Alternar modo claro/escuro">
+          <span class="icon-sun">☀</span><span class="icon-moon">☾</span>
+        </button>
+        <button class="nav-toggle" aria-label="Abrir menu">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero hero--compact">
+    <div class="container">
+      <span class="eyebrow">Bestiário</span>
+      <h1>Criaturas Catalogadas</h1>
+    </div>
+  </header>
+
+  <section style="padding-top:12px;">
+    <div class="container">
+      <!-- Layout novo: fichas alternadas em largura total, cada uma marcada
+           por uma cor de "domínio" — mar, sombra, sangue, abismo, caos. -->
+      <div class="creatures-grid reveal">
+
+        <div class="creature-card" style="--domain-color:var(--stone-blue);">
+          <div class="creature-img"><img src="img/sereia.jpg" alt="Sereia"></div>
+          <div class="creature-body">
+            <span class="creature-domain"><i></i>Domínio: Mar</span>
+            <h3>Sereias</h3>
+            <p>
+              As sereias, criaturas enigmáticas dos oceanos, habitam as profundezas dos mares, onde sua beleza
+              hipnotizante esconde uma natureza tão fascinante quanto perigosa. Dizem que suas vozes encantadoras
+              são capazes de atrair até os navegadores mais experientes para as águas traiçoeiras, onde poucos
+              sobrevivem para contar a história. Algumas lendas falam de sereias sábias, guardiãs de segredos
+              antigos, enquanto outras descrevem seres cruéis que se deleitam com o desespero daqueles que
+              sucumbem ao seu chamado. Seja como aliadas ou inimigas, as sereias permanecem um mistério envolto
+              nas brumas do oceano.
+            </p>
+          </div>
+        </div>
+
+        <div class="creature-card" style="--domain-color:var(--stone-purple);">
+          <div class="creature-img"><img src="img/dragao.jpg" alt="Fúria da Noite"></div>
+          <div class="creature-body">
+            <span class="creature-domain"><i></i>Domínio: Sombra</span>
+            <h3>Fúria da Noite</h3>
+            <p>
+              O Fúria da Noite é uma criatura envolta em mistério e temor, mais do que uma simples besta alada —
+              uma entidade que se funde à própria escuridão, tornando-se invisível sob o véu noturno. Seu voo é
+              silencioso, ágil e letal, fazendo qualquer tentativa de fuga inútil para aqueles que cruzam seu
+              caminho. Alguns acreditam que é uma força da natureza, um predador supremo que caça nas sombras,
+              enquanto outros sussurram que é um ser amaldiçoado. Seja mito ou realidade, todos concordam: quando
+              o Fúria da Noite é avistado, poucos vivem para contar a história.
+            </p>
+          </div>
+        </div>
+
+        <div class="creature-card" style="--domain-color:var(--stone-red);">
+          <div class="creature-img"><img src="img/vampiro.jpg" alt="Vampiro"></div>
+          <div class="creature-body">
+            <span class="creature-domain"><i></i>Domínio: Sangue</span>
+            <h3>Vampiros</h3>
+            <p>
+              Os vampiros, outrora temidos por sua imortalidade absoluta, agora carregam o fardo da mortalidade,
+              mas sem perder sua essência predatória. Ainda dotados de força, velocidade e sentidos aguçados além
+              da compreensão humana, caminham na linha tênue entre predadores e sobreviventes. O sangue ainda é
+              sua fonte de poder, mas agora também é sua ruína — sem ele, enfraquecem, envelhecem e,
+              eventualmente, perecem. Movendo-se entre sombras e sociedades secretas, persistem não mais como
+              divindades eternas da noite, mas como predadores mortais que lutam para preservar sua linhagem.
+            </p>
+          </div>
+        </div>
+
+        <div class="creature-card" style="--domain-color:var(--stone-green);">
+          <div class="creature-img"><img src="img/kraken.jpg" alt="Kraken"></div>
+          <div class="creature-body">
+            <span class="creature-domain"><i></i>Domínio: Abismo</span>
+            <h3>Kraken</h3>
+            <p>
+              O Kraken é uma lenda viva dos mares, um colosso abissal que habita as profundezas insondáveis dos
+              oceanos. Suas gigantescas tentáculos emergem das trevas abaixo, capazes de despedaçar embarcações
+              como se fossem cascas vazias. Marinheiros sussurram histórias sobre olhos tão profundos quanto o
+              próprio oceano e uma inteligência fria que espreita aqueles que ousam desafiar seu domínio. Nos
+              dias de tormenta, alguns dizem que não é a natureza em fúria, mas o despertar do Kraken.
+            </p>
+          </div>
+        </div>
+
+        <div class="creature-card" style="--domain-color:var(--stone-black);">
+          <div class="creature-img"><img src="img/cutulo.jpg" alt="Cthulhu"></div>
+          <div class="creature-body">
+            <span class="creature-domain"><i></i>Domínio: Caos</span>
+            <h3>Cthulhu</h3>
+            <p>
+              Cthulhu é uma entidade primordial, um horror cósmico que habita além da compreensão mortal. Seu
+              corpo colossal jaz adormecido nas ruínas submersas de R'lyeh, onde sua presença distorce a própria
+              realidade. Diz-se que ele não está morto, apenas sonha, e que seus sussurros ecoam nos pesadelos
+              dos mais sensíveis. Há quem acredite que sua ascensão é inevitável, e quando isso acontecer, o
+              mundo mergulhará no caos absoluto.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-top">
+      <hr class="rivet-rule">
+      <p class="quote">"Nem tudo o que espreita nas sombras deveria ser encontrado."</p>
+      <ul class="footer-links">
+        <li><a href="index.html">Início</a></li>
+        <li><a href="personagens.html">Personagens</a></li>
+        <li><a href="mapa.html">Mapa</a></li>
+        <li><a href="galeria.html">Galeria</a></li>
+        <li><a href="criaturas.html">Criaturas</a></li>
+        <li><a href="pedras.html">Pedras</a></li>
+        <li><a href="dados.html">Dados</a></li>
+      </ul>
+      <p class="footer-credit">RPG criado por Tio, com participação importante de SMS e Rabesco · 2024–2026</p>
+    </div>
+  </footer>
+  <button id="btnTopo" aria-label="Voltar ao topo">▲</button>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

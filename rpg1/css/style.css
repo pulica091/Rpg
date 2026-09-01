@@ -1,0 +1,1389 @@
+/* =======================================================================
+   RPG — SITE DA CAMPANHA
+   Estilos globais — v3 (redesign visual completo)
+
+   DIREÇÃO DE DESIGN (nova, v3)
+   - Saiu o clima "editorial de luxo" (preto + dourado + cantos bem
+     arredondados) da v2, que ficava parecido demais com qualquer
+     landing page premium genérica. Entrou uma identidade de "latão e
+     vapor": placas de metal gravado, cantos cortados em bisel (em vez
+     de cantos arredondados), uma régua rebitada como assinatura visual
+     (em vez da linha dourada fina) e uma moldura de vinheta nos heróis,
+     como se cada capa fosse uma chapa fotográfica emoldurada.
+   - Paleta: azul-tinta profundo (não preto puro) no escuro, pergaminho
+     envelhecido (não marfim neutro) no claro, latão saturado como cor
+     de assinatura — mais quente e "metálico" que o dourado genérico
+     anterior — e cobre/ferrugem como variação de perigo/criaturas.
+   - Tipografia: Cinzel (display, serifada monumental/gravada — o tipo
+     de letra de placas e brasões) + Public Sans (corpo, humanista e
+     limpa) + Space Mono (rótulos, com cara de carimbo/telégrafo) — uma
+     combinação claramente diferente da Fraunces + Inter + IBM Plex
+     Mono da versão anterior.
+   - Mobile-first: todo componente é escrito primeiro para telas
+     pequenas; media queries com min-width vão "adicionando" layout
+     conforme a tela cresce.
+   ======================================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Public+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap');
+
+:root {
+  /* --- Paleta (MODO ESCURO — agora o padrão do site) ------------------
+     Azul-tinta profundo, não preto puro, como o céu noturno de uma
+     cidade a vapor. */
+  --bg:        #0e1420;
+  --bg-alt:    #141c2c;
+  --surface:   #182234;
+  --surface-2: #202d43;
+  --border:    rgba(226,196,140,0.12);
+  --border-strong: rgba(214,157,66,0.4);
+
+  --text:      #f1e9d6;   /* texto principal */
+  --text-dim:  #a99d84;   /* texto secundário */
+
+  --gold:      #d6994e;   /* latão iluminado — cor de assinatura */
+  --gold-soft: #eab876;
+  --jewel:     #3f8f6c;
+  --wine:      #b1533f;
+
+  /* --- Cores das Pedras -------------------------------------------------
+     As oito cores das relíquias (poder, espaço, realidade, alma, tempo,
+     mente, vida, morte), usadas com moderação em pontos específicos
+     (mapa, pedras, criaturas, galeria) — nunca no metal latão/tinta que
+     carrega a identidade principal do site. */
+  --stone-blue:   #4a86c9;
+  --stone-green:  #47a67c;
+  --stone-yellow: #dbab3f;
+  --stone-orange: #d97e3f;
+  --stone-red:    #c4506a;
+  --stone-purple: #9a6bcf;
+  --stone-black:  #05070c;
+  --stone-white:  #f5f2ea;
+
+  /* --- Tipografia ----------------------------------------------------- */
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Public Sans', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+
+  --container: 1180px;
+  --plate-cut: 10px; /* tamanho do corte de canto em bisel das placas/botões */
+}
+
+/* =======================================================================
+   MODO CLARO — ativado quando <html data-theme="light">
+   O JS (main.js) troca esse atributo e guarda a escolha no localStorage,
+   então a preferência do usuário é lembrada entre visitas. O padrão do
+   site agora é o modo escuro; o claro é opt-in.
+   Pergaminho envelhecido, não marfim neutro — mais amarelado, com
+   textura de "papel de mapa velho".
+   Todo o resto do CSS usa só as variáveis acima, então trocar os valores
+   aqui basta para "reskinar" o site inteiro sem duplicar regras.
+   ======================================================================= */
+html[data-theme="light"] {
+  --bg:        #ece1c4;
+  --bg-alt:    #e2d4ac;
+  --surface:   #f6efd9;
+  --surface-2: #efe4c4;
+  --border:    rgba(43,30,10,0.16);
+  --border-strong: rgba(139,90,20,0.55);
+
+  --text:      #241a0d;   /* texto principal */
+  --text-dim:  #5f5138;   /* texto secundário */
+
+  --gold:      #8a5a1c;   /* latão escurecido para contraste no claro */
+  --gold-soft: #6e4614;
+  --jewel:     #2c6b4f;
+  --wine:      #8a2e28;
+
+  --stone-blue:   #2c5a86;
+  --stone-green:  #256a4c;
+  --stone-yellow: #9c711b;
+  --stone-orange: #a1541f;
+  --stone-red:    #86293a;
+  --stone-purple: #653c8c;
+  --stone-black:  #201709;
+  --stone-white:  #fffaea;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+@media (min-width: 640px) { body { font-size: 17px; } }
+
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.005em;
+  margin: 0 0 0.5em;
+  color: var(--text);
+}
+h1 { font-size: clamp(2.2rem, 8vw, 4rem); line-height: 1.12; font-weight: 500; }
+h2 { font-size: clamp(1.5rem, 4.4vw, 2.3rem); }
+h3 { font-size: clamp(1.15rem, 3vw, 1.4rem); }
+
+p { margin: 0 0 1em; }
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+@media (min-width: 860px) { .container { padding: 0 40px; } }
+
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
+}
+
+.rivet-rule {
+  width: 84px;
+  height: 9px;
+  border: none;
+  margin: 18px auto;
+  background:
+    radial-gradient(circle at 4px 4px, var(--gold) 0 2px, transparent 2.5px),
+    radial-gradient(circle at 80px 4px, var(--gold) 0 2px, transparent 2.5px),
+    linear-gradient(90deg, transparent 4px, var(--border-strong) 4px, var(--border-strong) calc(100% - 4px), transparent calc(100% - 4px));
+  background-repeat: no-repeat;
+  background-size: 100% 100%, 100% 100%, 100% 1px;
+  background-position: 0 center, 0 center, 0 center;
+}
+.rivet-rule--left { margin: 18px 0; }
+
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.in { opacity: 1; transform: translateY(0); }
+
+/* =======================================================================
+   NAV
+   ======================================================================= */
+.site-nav {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+.site-nav::before {
+  content: "";
+  display: block;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold-soft), var(--gold) 40%, var(--wine) 100%);
+}
+.site-nav.scrolled {
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+
+.site-nav .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+.brand {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.brand .brand-mark { color: var(--gold); font-size: 1.1rem; line-height: 1; }
+
+/* --- Emblema da campanha (logo em medalhão) ---------------------------
+   A logo enviada é uma arte retangular sobre fundo escuro; em vez de
+   recortá-la, ela ganha um "selo" — um pequeno medalhão preto com borda
+   dourada, como um brasão — que funciona igual em modo claro ou escuro. */
+.brand-badge {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  padding: 4px 10px;
+  background: var(--stone-black);
+  border: 1px solid var(--border-strong);
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  overflow: hidden;
+}
+.brand-badge img { height: 100%; width: auto; display: block; }
+
+/* =======================================================================
+   TROCADOR DE CAMPANHA — menu para alternar entre RPG I / II / III
+   ======================================================================= */
+.campaign-switch { position: relative; }
+
+.campaign-trigger {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 8px 12px;
+  clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+.campaign-trigger:hover { color: var(--text); border-color: var(--border-strong); }
+.campaign-trigger .chevron { font-size: 0.6rem; color: var(--gold); transition: transform 0.2s ease; }
+.campaign-switch.open .campaign-trigger .chevron { transform: rotate(180deg); }
+
+.campaign-panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 280px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--gold);
+  box-shadow: 0 18px 40px rgba(10,8,4,0.35);
+  padding: 8px;
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 260;
+}
+.campaign-switch.open .campaign-panel { display: flex; }
+
+.campaign-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  transition: background 0.15s ease;
+}
+a.campaign-item:hover { background: var(--surface-2); }
+.campaign-item .campaign-thumb {
+  width: 44px; height: 44px;
+  flex: none;
+  background: var(--stone-black);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+  clip-path: polygon(5px 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%, 0 5px);
+}
+.campaign-item .campaign-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.campaign-item .campaign-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.campaign-item .campaign-name { font-family: var(--font-display); font-size: 0.92rem; color: var(--text); }
+.campaign-item .campaign-tag {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.campaign-item.is-active .campaign-tag { color: var(--gold-soft); }
+.campaign-item.is-soon .campaign-tag { color: var(--text-dim); }
+.campaign-item.is-active { background: color-mix(in srgb, var(--gold) 10%, transparent); }
+
+.nav-links {
+  display: none;
+  gap: 4px;
+  list-style: none;
+  margin: 0; padding: 0;
+}
+@media (min-width: 860px) { .nav-links { display: flex; } }
+
+.nav-links a {
+  position: relative;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding: 8px 14px;
+  transition: color 0.2s ease;
+}
+.nav-links a::after {
+  content: "";
+  position: absolute; left: 14px; right: 14px; bottom: 4px;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-links a:hover::after, .nav-links a.active::after { transform: scaleX(1); }
+.nav-links a.active { color: var(--gold-soft); }
+
+.nav-toggle {
+  display: flex;
+  align-items: center; justify-content: center;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text);
+  width: 38px; height: 38px;
+  clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
+  font-size: 1rem;
+  cursor: pointer;
+}
+@media (min-width: 860px) { .nav-toggle { display: none; } }
+
+/* --- Botão de modo claro/escuro --------------------------------------- */
+.nav-actions { display: flex; align-items: center; gap: 10px; }
+
+.theme-toggle {
+  display: flex;
+  align-items: center; justify-content: center;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--gold);
+  width: 38px; height: 38px;
+  clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+.theme-toggle:hover { border-color: var(--gold); transform: rotate(15deg); }
+/* Mostra o ícone certo conforme o tema ativo: sol no escuro (convida a clarear),
+   lua no claro (convida a escurecer) */
+.theme-toggle .icon-sun { display: inline; }
+.theme-toggle .icon-moon { display: none; }
+html[data-theme="light"] .theme-toggle .icon-sun { display: none; }
+html[data-theme="light"] .theme-toggle .icon-moon { display: inline; }
+
+.nav-links.open {
+  display: flex;
+  position: absolute;
+  top: 67px; left: 0; right: 0;
+  flex-direction: column;
+  background: color-mix(in srgb, var(--bg) 97%, transparent);
+  border-bottom: 1px solid var(--border);
+  padding: 6px 20px 20px;
+}
+.nav-links.open a { padding: 12px 4px; }
+.nav-links.open a::after { display: none; }
+
+/* =======================================================================
+   HERO
+   ======================================================================= */
+.hero {
+  min-height: calc(92vh - 67px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  text-align: left;
+  padding: 64px 20px;
+  position: relative;
+  /* Removida a vinheta escura (inset blur) que apagava as cores da imagem
+     de fundo — mantém só a borda fina de definição. */
+  box-shadow: inset 0 0 0 1px var(--border-strong);
+  background:
+    linear-gradient(90deg, rgba(7,11,21,0.72) 0%, rgba(7,11,21,0.20) 48%, rgba(7,11,21,0.52) 100%),
+    linear-gradient(180deg, rgba(8,12,22,0.08) 0%, rgba(8,12,22,0.34) 100%),
+    var(--hero-img, none);
+  background-size: cover;
+  background-position: center;
+}
+@media (min-width: 860px) { .hero { padding: 88px 40px; } }
+
+/* --- Cantos de placa gravada -------------------------------------------
+   Quatro colchetes de latão nos cantos do herói, como a moldura de uma
+   chapa fotográfica antiga — o elemento de assinatura visual do site. */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  pointer-events: none;
+  border: 1px solid color-mix(in srgb, var(--gold-soft) 55%, transparent);
+  background:
+    linear-gradient(to right, var(--gold-soft) 26px, transparent 26px) top left / 100% 2px no-repeat,
+    linear-gradient(to right, var(--gold-soft) 26px, transparent 26px) bottom left / 100% 2px no-repeat,
+    linear-gradient(to left, var(--gold-soft) 26px, transparent 26px) top right / 100% 2px no-repeat,
+    linear-gradient(to left, var(--gold-soft) 26px, transparent 26px) bottom right / 100% 2px no-repeat,
+    linear-gradient(to bottom, var(--gold-soft) 26px, transparent 26px) top left / 2px 100% no-repeat,
+    linear-gradient(to bottom, var(--gold-soft) 26px, transparent 26px) top right / 2px 100% no-repeat,
+    linear-gradient(to top, var(--gold-soft) 26px, transparent 26px) bottom left / 2px 100% no-repeat,
+    linear-gradient(to top, var(--gold-soft) 26px, transparent 26px) bottom right / 2px 100% no-repeat;
+  opacity: 0.85;
+}
+
+.hero--compact { min-height: 40vh; padding: 128px 20px 48px; }
+@media (min-width: 860px) { .hero--compact { min-height: 46vh; padding: 148px 40px 64px; } }
+
+.hero .container { width: 100%; position: relative; z-index: 1; }
+
+/* O fundo do hero (foto + degradê escuro) é sempre escuro, nos dois temas —
+   então o título e o rótulo acima dele usam cores fixas (dourado + branco
+   creme, as mesmas do resto da identidade visual), em vez de var(--text)/
+   var(--gold), que no modo claro ficam escuros demais e somem contra o
+   fundo escuro da foto. A página de escolha de campanha (.hero--campaigns)
+   não tem foto — o fundo dela é var(--bg) do tema — então fica de fora
+   e continua acompanhando o tema normalmente. */
+.hero:not(.hero--campaigns) h1 { color: #eab876; }
+.hero:not(.hero--campaigns) .eyebrow { color: #f1e9d6; }
+
+/* Céu estrelado nas áreas livres do bloco História. As estrelas pequenas
+   mudam para dourado no modo claro; as oito pedras preservam suas cores. */
+.story-stars {
+  position: absolute;
+  top: 16px;
+  bottom: 16px;
+  width: min(20vw, 265px);
+  z-index: 1;
+  pointer-events: none;
+  opacity: .95;
+  background-image:
+    radial-gradient(circle, #fff 0 1px, transparent 1.6px), radial-gradient(circle, #fff 0 1.2px, transparent 1.8px), radial-gradient(circle, #fff 0 .8px, transparent 1.4px), radial-gradient(circle, #fff 0 1px, transparent 1.6px), radial-gradient(circle, #fff 0 .9px, transparent 1.5px), radial-gradient(circle, #fff 0 1px, transparent 1.6px), radial-gradient(circle, #fff 0 .8px, transparent 1.4px), radial-gradient(circle, #fff 0 1px, transparent 1.6px), radial-gradient(circle, #fff 0 .8px, transparent 1.4px), radial-gradient(circle, #fff 0 1px, transparent 1.6px), radial-gradient(circle, #fff 0 .8px, transparent 1.4px), radial-gradient(circle, #fff 0 1px, transparent 1.6px);
+  background-position: 8% 12%, 62% 8%, 28% 25%, 84% 31%, 10% 47%, 51% 55%, 92% 63%, 35% 71%, 76% 79%, 16% 88%, 59% 94%, 97% 18%;
+  background-repeat: no-repeat;
+}
+html[data-theme="light"] .story-stars { background-image:
+  radial-gradient(circle, #d9ab43 0 1px, transparent 1.6px), radial-gradient(circle, #d9ab43 0 1.2px, transparent 1.8px), radial-gradient(circle, #d9ab43 0 .8px, transparent 1.4px), radial-gradient(circle, #d9ab43 0 1px, transparent 1.6px), radial-gradient(circle, #d9ab43 0 .9px, transparent 1.5px), radial-gradient(circle, #d9ab43 0 1px, transparent 1.6px), radial-gradient(circle, #d9ab43 0 .8px, transparent 1.4px), radial-gradient(circle, #d9ab43 0 1px, transparent 1.6px), radial-gradient(circle, #d9ab43 0 .8px, transparent 1.4px), radial-gradient(circle, #d9ab43 0 1px, transparent 1.6px), radial-gradient(circle, #d9ab43 0 .8px, transparent 1.4px), radial-gradient(circle, #d9ab43 0 1px, transparent 1.6px); }
+.story-stars--left { left: 24px; }
+.story-stars--right { right: 24px; transform: scaleX(-1); }
+.stone-star { position: absolute; width: 12px; height: 12px; border-radius: 50%; background: currentColor; box-shadow: 0 0 10px currentColor, 0 0 18px currentColor; }
+.stone-star::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; background: rgba(255,255,255,.7); }
+.stone-star.blue { color: #3d8dff; left: 14%; top: 18%; }.stone-star.yellow { color: #ffdb3f; left: 76%; top: 30%; }.stone-star.green { color: #52bf74; left: 36%; top: 61%; }.stone-star.red { color: #ec4b52; left: 84%; top: 85%; }.stone-star.orange { color: #f58a38; left: 10%; top: 20%; }.stone-star.purple { color: #ae70e4; left: 71%; top: 42%; }.stone-star.black { color: #12131a; border: 1px solid #d8cfae; left: 27%; top: 74%; }.stone-star.white { color: #fff; left: 86%; top: 88%; }
+@media (max-width: 700px) { .story-stars { display: none; } }
+
+/* --- Feixes arcanos --------------------------------------------------
+   Um único momento de cor no site: um brilho sutil, nas seis cores das
+   pedras, atrás do título da capa — eco discreto dos feixes mágicos da
+   arte-conceito da campanha, sem competir com o texto. */
+.hero--arcane::after {
+  content: "";
+  position: absolute; inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: screen;
+  background:
+    radial-gradient(60% 45% at 10% 0%, color-mix(in srgb, var(--stone-blue) 55%, transparent) 0%, transparent 60%),
+    radial-gradient(45% 40% at 32% 4%, color-mix(in srgb, var(--stone-yellow) 45%, transparent) 0%, transparent 60%),
+    radial-gradient(45% 40% at 55% 0%, color-mix(in srgb, var(--stone-purple) 45%, transparent) 0%, transparent 60%),
+    radial-gradient(45% 35% at 74% 2%, color-mix(in srgb, var(--stone-green) 45%, transparent) 0%, transparent 60%),
+    radial-gradient(45% 40% at 92% 0%, color-mix(in srgb, var(--stone-red) 40%, transparent) 0%, transparent 60%);
+}
+
+/* Wallpaper principal: caminho explícito para funcionar tanto no site
+   extraído quanto ao abrir o index diretamente pelo navegador.
+   Sem gradiente por cima — a arte aparece com as cores originais.
+   A altura preenche a tela cheia (o menu, nesta página, fica escondido
+   por cima da imagem — ver .nav--over-hero abaixo — então não reserva
+   espaço no topo); e o fundo fica fixo (não rola junto com a página),
+   então ao descer a tela a imagem continua exatamente como estava. */
+.hero.hero--arcane {
+  min-height: 100vh;
+  background-image: url('../img/wallpaper-hero-original.jfif') !important;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+/* Fundo fixo é instável em vários navegadores mobile (Safari/Chrome iOS);
+   nesses casos ele volta a rolar normalmente com a página. */
+@media (max-width: 860px), (hover: none) {
+  .hero.hero--arcane { background-attachment: scroll; }
+}
+
+/* --- Menu escondido sobre o wallpaper de capa ---------------------------
+   Só nesta página (identificada pelo JS por ter um .hero--arcane): o menu
+   fica fixo (sem reservar espaço no topo) e completamente invisível — não
+   só transparente — enquanto o wallpaper preenche a tela. Ele reaparece,
+   idêntico ao menu do resto do site, assim que a parte sólida da página
+   (o bloco "Nosso Mundo" logo abaixo) começa a entrar em tela. */
+.site-nav.nav--over-hero {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  transition: opacity 0.25s ease, background 0.3s ease, border-color 0.3s ease;
+}
+.site-nav.nav--over-hero::before { transition: opacity 0.25s ease; }
+.site-nav.nav--over-hero:not(.nav--visible) {
+  opacity: 0;
+  pointer-events: none;
+  background: transparent !important;
+  border-bottom-color: transparent !important;
+}
+.site-nav.nav--over-hero:not(.nav--visible)::before { opacity: 0; }
+
+/* A página inicial de escolha de campanhas é textual: sem wallpaper. */
+.hero--campaigns {
+  min-height: calc(92vh - 67px);
+  background: var(--bg) !important;
+}
+
+/* Céu da seção História e da mesa de dados.
+   Cada estrela é gerada com "at Xpx Ypx" dentro do próprio gradiente (posição
+   fixa dentro do bloco), e o conjunto se repete em ladrilhos de 260px — assim
+   as bolinhas realmente se espalham pela área, em vez de se empilharem todas
+   no centro (o que acontecia antes, já que gradientes sem posição própria
+   ficam centralizados quando o background-size é automático). */
+.star-sky {
+  position: relative;
+  overflow: hidden;
+  /* O fundo do céu estrelado é sempre escuro (mesmo no modo claro), então
+     qualquer texto, cartão ou botão por cima usa localmente a paleta do
+     modo escuro, garantindo contraste nos dois temas. */
+  --text: #f1e9d6;
+  --text-dim: #a99d84;
+  --bg-alt: #141c2c;
+  --surface: #182234;
+  --surface-2: #202d43;
+  --border: rgba(226,196,140,0.12);
+  --border-strong: rgba(214,157,66,0.4);
+  background-color: #08101d !important;
+  background-repeat: repeat !important;
+  background-size: 260px 260px !important;
+  background-position: 0 0 !important;
+  background-image:
+    radial-gradient(1.22px 1.22px at 84.2px 39.2px, #fff, transparent 1.82px),
+    radial-gradient(0.9px 0.9px at 18.8px 139.3px, #fff, transparent 1.5px),
+    radial-gradient(0.54px 0.54px at 15.1px 131.9px, #fff, transparent 1.14px),
+    radial-gradient(0.6px 0.6px at 112.7px 18.2px, #fff, transparent 1.2px),
+    radial-gradient(0.64px 0.64px at 110.4px 215.0px, #fff, transparent 1.24px),
+    radial-gradient(1.54px 1.54px at 58.0px 163.1px, #fff, transparent 2.14px),
+    radial-gradient(1.57px 1.57px at 150.0px 103.1px, #fff, transparent 2.17px),
+    radial-gradient(0.82px 0.82px at 12.1px 223.2px, #fff, transparent 1.42px),
+    radial-gradient(0.84px 0.84px at 37.5px 30.6px, #fff, transparent 1.44px),
+    radial-gradient(1.14px 1.14px at 212.2px 47.0px, #fff, transparent 1.74px),
+    radial-gradient(1.1px 1.1px at 166.1px 96.8px, #fff, transparent 1.7px),
+    radial-gradient(0.73px 0.73px at 16.3px 15.5px, #fff, transparent 1.33px),
+    radial-gradient(0.85px 0.85px at 176.9px 111.2px, #fff, transparent 1.45px),
+    radial-gradient(0.83px 0.83px at 152.2px 117.8px, #fff, transparent 1.43px),
+    radial-gradient(0.77px 0.77px at 206.5px 181.7px, #fff, transparent 1.37px),
+    radial-gradient(1.46px 1.46px at 149.4px 136.6px, #fff, transparent 2.06px),
+    radial-gradient(1.58px 1.58px at 189.7px 74.9px, #fff, transparent 2.18px),
+    radial-gradient(1.33px 1.33px at 30.7px 108.7px, #fff, transparent 1.93px),
+    radial-gradient(0.54px 0.54px at 39.5px 127.1px, #fff, transparent 1.14px),
+    radial-gradient(1.13px 1.13px at 173.7px 198.8px, #fff, transparent 1.73px),
+    radial-gradient(1.26px 1.26px at 227.6px 81.6px, #fff, transparent 1.86px),
+    radial-gradient(1.0px 1.0px at 154.5px 150.8px, #fff, transparent 1.6px) !important;
+}
+/* Modo claro: as estrelas passam a usar o mesmo dourado do resto do site,
+   e o fundo do céu deixa de ser sempre escuro — passa a usar o mesmo
+   pergaminho claro do resto da página, com o texto/cartões por cima
+   voltando a usar a paleta clara padrão (em vez da paleta escura forçada
+   acima, pensada só para quando o fundo é realmente escuro). */
+html[data-theme="light"] .star-sky {
+  background-color: var(--bg) !important;
+  --text:      #241a0d;
+  --text-dim:  #5f5138;
+  --bg-alt:    #e2d4ac;
+  --surface:   #f6efd9;
+  --surface-2: #efe4c4;
+  --border:    rgba(43,30,10,0.16);
+  --border-strong: rgba(139,90,20,0.55);
+  background-image:
+    radial-gradient(1.22px 1.22px at 84.2px 39.2px, #e0b458, transparent 1.82px),
+    radial-gradient(0.9px 0.9px at 18.8px 139.3px, #e0b458, transparent 1.5px),
+    radial-gradient(0.54px 0.54px at 15.1px 131.9px, #e0b458, transparent 1.14px),
+    radial-gradient(0.6px 0.6px at 112.7px 18.2px, #e0b458, transparent 1.2px),
+    radial-gradient(0.64px 0.64px at 110.4px 215.0px, #e0b458, transparent 1.24px),
+    radial-gradient(1.54px 1.54px at 58.0px 163.1px, #e0b458, transparent 2.14px),
+    radial-gradient(1.57px 1.57px at 150.0px 103.1px, #e0b458, transparent 2.17px),
+    radial-gradient(0.82px 0.82px at 12.1px 223.2px, #e0b458, transparent 1.42px),
+    radial-gradient(0.84px 0.84px at 37.5px 30.6px, #e0b458, transparent 1.44px),
+    radial-gradient(1.14px 1.14px at 212.2px 47.0px, #e0b458, transparent 1.74px),
+    radial-gradient(1.1px 1.1px at 166.1px 96.8px, #e0b458, transparent 1.7px),
+    radial-gradient(0.73px 0.73px at 16.3px 15.5px, #e0b458, transparent 1.33px),
+    radial-gradient(0.85px 0.85px at 176.9px 111.2px, #e0b458, transparent 1.45px),
+    radial-gradient(0.83px 0.83px at 152.2px 117.8px, #e0b458, transparent 1.43px),
+    radial-gradient(0.77px 0.77px at 206.5px 181.7px, #e0b458, transparent 1.37px),
+    radial-gradient(1.46px 1.46px at 149.4px 136.6px, #e0b458, transparent 2.06px),
+    radial-gradient(1.58px 1.58px at 189.7px 74.9px, #e0b458, transparent 2.18px),
+    radial-gradient(1.33px 1.33px at 30.7px 108.7px, #e0b458, transparent 1.93px),
+    radial-gradient(0.54px 0.54px at 39.5px 127.1px, #e0b458, transparent 1.14px),
+    radial-gradient(1.13px 1.13px at 173.7px 198.8px, #e0b458, transparent 1.73px),
+    radial-gradient(1.26px 1.26px at 227.6px 81.6px, #e0b458, transparent 1.86px),
+    radial-gradient(1.0px 1.0px at 154.5px 150.8px, #e0b458, transparent 1.6px) !important;
+}
+/* Ladrilho menor para áreas menores (ex.: a mesa de dados) — estrelas
+   proporcionalmente menores e mais próximas entre si. */
+.star-sky--tight {
+  background-size: 130px 130px !important;
+  background-image:
+    radial-gradient(0.88px 0.88px at 33.7px 89.1px, #fff, transparent 1.48px),
+    radial-gradient(0.56px 0.56px at 110.4px 24.1px, #fff, transparent 1.16px),
+    radial-gradient(0.91px 0.91px at 19.1px 29.3px, #fff, transparent 1.51px),
+    radial-gradient(0.55px 0.55px at 16.9px 69.1px, #fff, transparent 1.15px),
+    radial-gradient(0.99px 0.99px at 38.3px 56.1px, #fff, transparent 1.59px),
+    radial-gradient(0.59px 0.59px at 79.1px 1.9px, #fff, transparent 1.19px),
+    radial-gradient(0.97px 0.97px at 19.1px 113.3px, #fff, transparent 1.57px),
+    radial-gradient(0.92px 0.92px at 104.8px 107.4px, #fff, transparent 1.52px),
+    radial-gradient(0.58px 0.58px at 123.4px 103.2px, #fff, transparent 1.18px),
+    radial-gradient(0.93px 0.93px at 110.5px 63.3px, #fff, transparent 1.53px),
+    radial-gradient(0.65px 0.65px at 73.3px 55.8px, #fff, transparent 1.25px),
+    radial-gradient(0.48px 0.48px at 55.9px 40.8px, #fff, transparent 1.08px),
+    radial-gradient(1.09px 1.09px at 106.6px 103.8px, #fff, transparent 1.69px),
+    radial-gradient(0.92px 0.92px at 89.8px 72.0px, #fff, transparent 1.52px) !important;
+}
+html[data-theme="light"] .star-sky--tight {
+  background-image:
+    radial-gradient(0.88px 0.88px at 33.7px 89.1px, #e0b458, transparent 1.48px),
+    radial-gradient(0.56px 0.56px at 110.4px 24.1px, #e0b458, transparent 1.16px),
+    radial-gradient(0.91px 0.91px at 19.1px 29.3px, #e0b458, transparent 1.51px),
+    radial-gradient(0.55px 0.55px at 16.9px 69.1px, #e0b458, transparent 1.15px),
+    radial-gradient(0.99px 0.99px at 38.3px 56.1px, #e0b458, transparent 1.59px),
+    radial-gradient(0.59px 0.59px at 79.1px 1.9px, #e0b458, transparent 1.19px),
+    radial-gradient(0.97px 0.97px at 19.1px 113.3px, #e0b458, transparent 1.57px),
+    radial-gradient(0.92px 0.92px at 104.8px 107.4px, #e0b458, transparent 1.52px),
+    radial-gradient(0.58px 0.58px at 123.4px 103.2px, #e0b458, transparent 1.18px),
+    radial-gradient(0.93px 0.93px at 110.5px 63.3px, #e0b458, transparent 1.53px),
+    radial-gradient(0.65px 0.65px at 73.3px 55.8px, #e0b458, transparent 1.25px),
+    radial-gradient(0.48px 0.48px at 55.9px 40.8px, #e0b458, transparent 1.08px),
+    radial-gradient(1.09px 1.09px at 106.6px 103.8px, #e0b458, transparent 1.69px),
+    radial-gradient(0.92px 0.92px at 89.8px 72.0px, #e0b458, transparent 1.52px) !important;
+}
+.history-section { min-height: 720px; }
+.history-section .prose { position: relative; z-index: 1; }
+.history-stones { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.history-stones .stone-star:nth-child(1) { left: 8%; top: 15%; }.history-stones .stone-star:nth-child(2) { left: 17%; top: 65%; }.history-stones .stone-star:nth-child(3) { left: 27%; top: 35%; }.history-stones .stone-star:nth-child(4) { left: 13%; top: 87%; }.history-stones .stone-star:nth-child(5) { left: 91%; top: 19%; }.history-stones .stone-star:nth-child(6) { left: 83%; top: 43%; }.history-stones .stone-star:nth-child(7) { left: 93%; top: 72%; }.history-stones .stone-star:nth-child(8) { left: 79%; top: 88%; width: 17px; height: 17px; box-shadow: 0 0 13px #fff, 0 0 28px #fff, 0 0 42px #fff; }
+html[data-theme="light"] .history-stones .stone-star:nth-child(8) { box-shadow: 0 0 13px #e0b458, 0 0 28px #e0b458, 0 0 42px #e0b458; }
+.hero.star-sky { background-position: 0 0 !important; }
+.hero.star-sky .container { z-index: 1; }
+
+/* --- Céu estrelado + pedras da mesa de dados ---------------------------
+   Agora o céu estrelado cobre toda a área vazia da seção (não só o
+   título), e as 8 pedras ficam espalhadas pelas bordas esquerda/direita
+   de TODA essa área (4 de cada lado) — não mais coladas no cartão do
+   dado. .dice-stones é filho direto da seção (irmão do .container),
+   por isso .dice-section precisa de position:relative (herdado de
+   .star-sky) para servir de referência às pedras. */
+.dice-section { padding-bottom: 48px; }
+.dice-wrap { position: relative; max-width: 420px; margin: 0 auto; z-index: 1; }
+.dice-wrap .dice-box { margin: 0; }
+.dice-stones { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.dice-stones .stone-star { width: 15px; height: 15px; }
+.dice-stones .stone-star:nth-child(1) { left: 4%; top: 7%; }
+.dice-stones .stone-star:nth-child(2) { left: 6%; top: 33%; }
+.dice-stones .stone-star:nth-child(3) { left: 2%; top: 57%; }
+.dice-stones .stone-star:nth-child(4) { left: 5%; top: 91%; }
+.dice-stones .stone-star:nth-child(5) { right: 5%; left: auto; top: 18%; }
+.dice-stones .stone-star:nth-child(6) { right: 2%; left: auto; top: 44%; }
+.dice-stones .stone-star:nth-child(7) { right: 6%; left: auto; top: 70%; }
+.dice-stones .stone-star:nth-child(8) { right: 3%; left: auto; top: 93%; }
+
+.soon-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gold-soft); background: color-mix(in srgb, var(--gold) 14%, var(--surface));
+  border: 1px solid var(--border-strong);
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  padding: 8px 16px; margin-top: 22px;
+}
+.soon-badge::before { content: "◆"; font-size: 0.7em; }
+
+.hero blockquote {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-style: italic;
+  font-size: clamp(1.05rem, 3vw, 1.5rem);
+  max-width: 640px;
+  color: var(--text-dim);
+  margin: 16px 0 0;
+  line-height: 1.5;
+}
+
+/* =======================================================================
+   SEÇÕES
+   ======================================================================= */
+section { padding: 56px 0; }
+@media (min-width: 860px) { section { padding: 96px 0; } }
+section.alt { background: var(--bg-alt); }
+
+.section-head { max-width: 640px; margin: 0 0 32px; }
+.section-head p { color: var(--text-dim); }
+@media (min-width: 860px) { .section-head { margin-bottom: 48px; } }
+
+.prose { max-width: 720px; margin: 0 auto; }
+.prose p { color: var(--text-dim); }
+.prose p + p { margin-top: 1.2em; }
+
+/* =======================================================================
+   CARDS DE NAVEGAÇÃO (home)
+   ======================================================================= */
+.nav-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@media (min-width: 640px) { .nav-cards { grid-template-columns: repeat(3, 1fr); gap: 22px; } }
+
+.nav-card {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  display: block;
+  background: var(--surface);
+}
+.nav-card img {
+  width: 100%; height: 100%; object-fit: cover;
+  /* Pátina sépia mais escura, para as fotos (mapa antigo, galeria,
+     criaturas) combinarem com a paleta azul-tinta/dourada do tema
+     escuro, em vez de aparecerem claras/"cruas" por cima dele. */
+  filter: sepia(0.4) saturate(1.05) hue-rotate(-8deg) brightness(0.5) contrast(1.12);
+  transition: transform 0.7s ease, filter 0.4s ease;
+}
+.nav-card:hover img { transform: scale(1.06); filter: sepia(0.35) saturate(1.15) hue-rotate(-8deg) brightness(0.42) contrast(1.16); }
+/* Camada 1: véu azul-tinta (var(--bg-alt)) em multiply, escurecendo e
+   "esfriando" a imagem para casar com o fundo do site. */
+.nav-card::before {
+  content: "";
+  position: absolute; inset: 0;
+  z-index: 0;
+  background: color-mix(in srgb, var(--bg-alt) 55%, transparent);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+/* Camada 2: cor por cima da imagem, na cor de destaque do site — muda
+   automaticamente entre o dourado claro (modo escuro) e o dourado
+   escurecido (modo claro) porque usa var(--gold). */
+.nav-card::after {
+  content: "";
+  position: absolute; inset: 0;
+  z-index: 0;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--gold) 38%, transparent) 0%, transparent 62%);
+  mix-blend-mode: color;
+  pointer-events: none;
+  opacity: 0.65;
+  transition: opacity 0.4s ease;
+}
+.nav-card:hover::after { opacity: 0.8; }
+.nav-card--logo img { object-fit: contain; padding: 16px; background: #070b12; filter: none; }
+.nav-card--logo:hover img { transform: scale(1.03); filter: none; }
+.nav-card--logo::after, .nav-card--logo::before { display: none; }
+
+/* --- Cartões "temáticos" (Mapa / Galeria / Criaturas) -------------------
+   Essas três artes já vêm prontas em duas versões — uma pintada para o
+   pergaminho claro, outra para a tinta escura — então, ao contrário das
+   fotos de cenário acima, elas não precisam do filtro sépia que força a
+   paleta: cada uma já nasce na cor certa para o tema em que aparece.
+   O JS não faz nada aqui — a troca é 100% CSS, baseada em qual dos dois
+   <img> (.img-light / .img-dark) fica visível conforme data-theme. */
+.nav-card--themed img { filter: none; }
+.nav-card--themed:hover img { filter: none; }
+.nav-card--themed img.img-light { display: none; }
+html[data-theme="light"] .nav-card--themed img.img-dark { display: none; }
+html[data-theme="light"] .nav-card--themed img.img-light { display: block; }
+.nav-card--themed::before { background: color-mix(in srgb, var(--bg-alt) 22%, transparent); }
+.nav-card--themed::after { opacity: 0.3; }
+.nav-card--themed:hover::after { opacity: 0.45; }
+
+/* =======================================================================
+   CARTÕES DE DOWNLOAD (página Downloads)
+   Mesma linguagem visual dos .nav-card (moldura, véu de tinta, gradiente
+   dourado), mas com legenda sempre visível — em vez de só no hover — já
+   que aqui a legenda carrega um botão de ação (baixar), não um link de
+   navegação inteiro.
+   ======================================================================= */
+.downloads-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+@media (min-width: 640px) { .downloads-grid { grid-template-columns: repeat(3, 1fr); gap: 22px; } }
+
+.download-card {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  background: var(--surface);
+}
+.download-card img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: sepia(0.35) saturate(1.1) hue-rotate(-8deg) brightness(0.62) contrast(1.1);
+  transition: transform 0.7s ease, filter 0.4s ease;
+}
+.download-card:hover img { transform: scale(1.06); filter: sepia(0.3) saturate(1.15) hue-rotate(-8deg) brightness(0.56) contrast(1.14); }
+.download-card::before {
+  content: "";
+  position: absolute; inset: 0;
+  z-index: 0;
+  background: color-mix(in srgb, var(--bg-alt) 45%, transparent);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+.download-card::after {
+  content: "";
+  position: absolute; inset: 0;
+  z-index: 0;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--gold) 34%, transparent) 0%, transparent 62%);
+  mix-blend-mode: color;
+  pointer-events: none;
+  opacity: 0.55;
+}
+.download-card-label {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  z-index: 1;
+  padding: 16px 18px 18px;
+  background: linear-gradient(0deg, rgba(10,10,13,0.92) 30%, transparent);
+  display: flex; flex-direction: column; align-items: flex-start; gap: 10px;
+}
+.download-card-label h3 { margin: 0; font-size: 1rem; color: #f1e9d6; }
+.btn-download {
+  display: inline-flex; align-items: center; gap: 8px;
+  text-decoration: none;
+}
+.btn-download::after { content: "↓"; }
+
+.downloads-pdf {
+  margin-top: 28px;
+  display: flex;
+  justify-content: center;
+}
+.nav-card .nav-card-label {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  z-index: 1;
+  padding: 18px 20px;
+  background: linear-gradient(0deg, rgba(10,10,13,0.95), transparent);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-card .nav-card-label h3 { margin: 0; font-size: 1.05rem; }
+.nav-card .nav-card-label span { color: var(--gold); font-size: 1.2rem; transition: transform 0.25s ease; }
+.nav-card:hover .nav-card-label span { transform: translateX(4px); }
+
+/* =======================================================================
+   CARTÃO DE PERSONAGEM — layout novo tipo "editorial"
+   ======================================================================= */
+.character {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 28px;
+}
+@media (min-width: 780px) {
+  .character { grid-template-columns: 420px 1fr; box-shadow: 0 12px 30px rgba(0,0,0,.13); }
+  .character:nth-child(even) { grid-template-columns: 1fr 420px; }
+  .character:nth-child(even) .portrait { order: 2; }
+}
+
+.portrait {
+  position: relative;
+  background: var(--bg-alt);
+  aspect-ratio: auto;
+  min-height: 560px;
+  overflow: hidden;
+}
+.character:hover { border-color: var(--border-strong); transform: translateY(-2px); transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease; box-shadow: 0 18px 38px rgba(0,0,0,.20); }
+.portrait-track {
+  display: flex;
+  height: 100%;
+  transition: transform 0.5s cubic-bezier(.65,.05,.36,1);
+}
+.portrait-track img { min-width: 100%; height: 100%; object-fit: contain; background: var(--bg-alt); }
+
+.portrait-btn {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: rgba(10,10,13,0.5);
+  border: 1px solid var(--border);
+  color: var(--text);
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 0.85rem;
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(4px);
+}
+.portrait-btn:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+.portrait-btn.prev { left: 10px; }
+.portrait-btn.next { right: 10px; }
+
+.portrait-dots { position: absolute; top: 12px; right: 12px; display: flex; gap: 5px; }
+.portrait-dots span { width: 5px; height: 5px; border-radius: 50%; background: rgba(242,239,232,0.35); }
+.portrait-dots span.active { background: var(--gold); }
+
+/* --- Placeholder: usado enquanto uma foto definitiva não chega ------- */
+.portrait-placeholder {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 12px;
+  background: linear-gradient(160deg, var(--surface-2), var(--bg-alt));
+}
+.portrait-placeholder .monogram {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  color: var(--gold-soft);
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  width: 76px; height: 76px;
+  display: flex; align-items: center; justify-content: center;
+}
+.portrait-placeholder span.label {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.dossier { padding: 26px 22px; }
+@media (min-width: 860px) { .dossier { padding: 34px 36px; } }
+
+.dossier h3 { margin-bottom: 2px; }
+.dossier .role {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 18px;
+  display: block;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+@media (min-width: 500px) { .stat-grid { grid-template-columns: 1fr 1fr; } }
+
+.stat-block h4 {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+.stat-block p { margin: 0 0 4px; font-size: 0.94rem; color: var(--text); }
+
+.dossier .bio { color: var(--text-dim); font-size: 0.96rem; }
+.dossier .bio.collapsed {
+  max-height: 5.6em;
+  overflow: hidden;
+  position: relative;
+  mask-image: linear-gradient(180deg, #000 60%, transparent 100%);
+}
+.bio-toggle {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: none; border: none; cursor: pointer;
+  padding: 10px 0 0;
+}
+.bio-toggle:hover { color: var(--gold-soft); text-decoration: underline; }
+
+/* Selo "conteúdo em atualização" — usado enquanto aguardamos texto novo */
+.pending-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--wine);
+  border: 1px solid rgba(138,51,72,0.4);
+  background: rgba(138,51,72,0.08);
+  padding: 4px 10px;
+  border-radius: 3px;
+  margin-bottom: 14px;
+}
+
+/* =======================================================================
+   MAPA
+   ======================================================================= */
+.map-wrap { display: grid; grid-template-columns: 1fr; gap: 18px; }
+@media (min-width: 900px) { .map-wrap { grid-template-columns: 1.5fr 1fr; align-items: start; } }
+
+.map-frame {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  background: var(--bg-alt);
+}
+.map-frame img { width: 100%; display: block; }
+
+.map-point {
+  position: absolute;
+  width: 15px; height: 15px;
+  margin: -7px 0 0 -7px;
+  border-radius: 50%;
+  background: var(--wine);
+  border: 2px solid var(--text);
+  cursor: pointer;
+  padding: 0;
+  box-shadow: 0 0 0 0 rgba(138,51,72,0.6);
+  animation: pulse 2.6s infinite;
+}
+.map-point:hover, .map-point.active { border-color: var(--gold); transform: scale(1.15); }
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(138,51,72,0.55); }
+  70% { box-shadow: 0 0 0 9px rgba(138,51,72,0); }
+  100% { box-shadow: 0 0 0 0 rgba(138,51,72,0); }
+}
+
+/* --- Cores por território --------------------------------------------
+   Paris/França, Peru, Grécia, Egito e Índia recebem cada uma sua própria
+   cor de pedra; os demais territórios mantêm o vinho neutro padrão. */
+.map-point--paris  { background: var(--stone-black); box-shadow: 0 0 0 0 rgba(5,5,7,0.6); }
+.map-point--peru   { background: var(--stone-green); box-shadow: 0 0 0 0 rgba(63,156,122,0.55); }
+.map-point--grecia { background: var(--stone-yellow); box-shadow: 0 0 0 0 rgba(216,178,60,0.55); }
+.map-point--egito  { background: var(--stone-purple); box-shadow: 0 0 0 0 rgba(143,95,194,0.55); }
+.map-point--india  { background: var(--stone-orange); box-shadow: 0 0 0 0 rgba(209,121,63,0.55); }
+
+.map-point--paris  { animation: pulseBlack 2.6s infinite; }
+.map-point--peru   { animation: pulseGreen 2.6s infinite; }
+.map-point--grecia { animation: pulseYellow 2.6s infinite; }
+.map-point--egito  { animation: pulsePurple 2.6s infinite; }
+.map-point--india  { animation: pulseOrange 2.6s infinite; }
+
+@keyframes pulseBlack  { 70% { box-shadow: 0 0 0 9px rgba(5,5,7,0); } }
+@keyframes pulseGreen  { 70% { box-shadow: 0 0 0 9px rgba(63,156,122,0); } }
+@keyframes pulseYellow { 70% { box-shadow: 0 0 0 9px rgba(216,178,60,0); } }
+@keyframes pulsePurple { 70% { box-shadow: 0 0 0 9px rgba(143,95,194,0); } }
+@keyframes pulseOrange { 70% { box-shadow: 0 0 0 9px rgba(209,121,63,0); } }
+
+.map-info {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 3px;
+  padding: 24px;
+  min-height: 200px;
+}
+.map-info .eyebrow { display: block; margin-bottom: 10px; }
+.map-info p { color: var(--text-dim); font-size: 0.96rem; }
+.map-info .map-empty { color: var(--text-dim); font-family: var(--font-mono); font-size: 0.82rem; }
+
+.map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+.map-legend-item {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+}
+.map-legend-item i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+
+/* =======================================================================
+   GALERIA — filtros por região + grade em mosaico (bento)
+   ======================================================================= */
+.gallery-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+.gallery-filter {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 8px 14px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+.gallery-filter i { width: 8px; height: 8px; border-radius: 50%; background: var(--region-color, var(--gold)); border: 1px solid var(--border-strong); flex: none; }
+.gallery-filter:hover { color: var(--text); border-color: var(--border-strong); }
+.gallery-filter.active {
+  color: var(--text);
+  border-color: var(--region-color, var(--gold));
+  background: color-mix(in srgb, var(--region-color, var(--gold)) 14%, var(--surface));
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-flow: dense;
+  gap: 10px;
+}
+@media (min-width: 640px) { .gallery-grid { grid-template-columns: repeat(4, 1fr); gap: 14px; } }
+@media (min-width: 980px) { .gallery-grid { grid-template-columns: repeat(6, 1fr); gap: 16px; } }
+
+.gallery-grid figure {
+  margin: 0;
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: 3px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  cursor: zoom-in;
+  transition: opacity 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+}
+/* Alguns quadros ganham mais destaque, criando um mosaico — não uma
+   grade repetitiva de mesmo tamanho. */
+@media (min-width: 640px) {
+  .gallery-grid figure.feat { grid-column: span 2; grid-row: span 2; aspect-ratio: 1 / 1; }
+}
+.gallery-grid figure.hide { display: none; }
+.gallery-grid img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+.gallery-grid figure:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+.gallery-grid figure:hover img { transform: scale(1.08); }
+
+.gallery-grid figcaption {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  display: flex; align-items: center; gap: 6px;
+  padding: 10px 12px;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--stone-white);
+  background: linear-gradient(0deg, rgba(5,5,7,0.85), transparent);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.gallery-grid figure:hover figcaption { opacity: 1; transform: translateY(0); }
+.gallery-grid figcaption i { width: 7px; height: 7px; border-radius: 50%; background: var(--region-color, var(--gold)); border: 1px solid rgba(255,255,255,0.4); flex: none; }
+
+.lightbox {
+  position: fixed; inset: 0; z-index: 300;
+  background: rgba(6,6,8,0.94);
+  display: none;
+  align-items: center; justify-content: center;
+  padding: 24px;
+}
+.lightbox.open { display: flex; }
+.lightbox img { max-width: 88vw; max-height: 86vh; border-radius: 6px; border: 1px solid var(--border); }
+.lightbox-close {
+  position: absolute; top: 18px; right: 18px;
+  background: none; border: 1px solid var(--border); color: var(--text);
+  width: 38px; height: 38px; border-radius: 50%; cursor: pointer; font-size: 1.1rem;
+}
+.lightbox-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: rgba(10,10,13,0.5);
+  border: 1px solid var(--border); color: var(--text);
+  width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 1.1rem;
+  backdrop-filter: blur(4px);
+}
+.lightbox-nav:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+.lightbox-nav.prev { left: 18px; }
+.lightbox-nav.next { right: 18px; }
+.lightbox-caption {
+  position: absolute; bottom: 22px; left: 0; right: 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+/* =======================================================================
+   CRIATURAS — bestiário em fichas alternadas, cada uma com seu domínio
+   ======================================================================= */
+.creatures-grid { display: flex; flex-direction: column; gap: 22px; }
+
+.creature-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 3px;
+  overflow: hidden;
+  transition: border-color 0.25s ease, transform 0.25s ease;
+}
+@media (min-width: 760px) {
+  .creature-card { grid-template-columns: 42% 1fr; min-height: 320px; }
+  .creature-card:nth-child(even) { grid-template-columns: 1fr 42%; }
+  .creature-card:nth-child(even) .creature-img { order: 2; }
+}
+.creature-card:hover { border-color: var(--domain-color, var(--border-strong)); transform: translateY(-3px); }
+
+.creature-card .creature-img { position: relative; aspect-ratio: 16 / 10; overflow: hidden; }
+@media (min-width: 760px) { .creature-card .creature-img { aspect-ratio: auto; } }
+.creature-card .creature-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s ease; }
+.creature-card:hover .creature-img img { transform: scale(1.05); }
+.creature-card .creature-img::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(0deg, rgba(5,5,7,0.35), transparent 45%);
+}
+
+.creature-domain {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--domain-color, var(--gold));
+  border: 1px solid color-mix(in srgb, var(--domain-color, var(--gold)) 45%, transparent);
+  background: color-mix(in srgb, var(--domain-color, var(--gold)) 12%, transparent);
+  padding: 5px 12px;
+  border-radius: 3px;
+  margin-bottom: 14px;
+}
+.creature-domain i { width: 7px; height: 7px; border-radius: 50%; background: var(--domain-color, var(--gold)); border: 1px solid rgba(255,255,255,0.35); }
+
+/* O domínio "Caos" usa preto puro — em vez de texto preto ilegível sobre
+   fundo escuro, o rótulo usa a cor de texto padrão e reserva o preto só
+   para o pontinho, com anel dourado sutil no cartão. */
+.creature-card[style*="--stone-black"] .creature-domain { color: var(--text); border-color: var(--border-strong); background: var(--surface-2); }
+.creature-card[style*="--stone-black"]:hover { border-color: var(--gold); }
+
+.creature-card .creature-body { padding: 26px 22px 28px; display: flex; flex-direction: column; justify-content: center; }
+@media (min-width: 860px) { .creature-card .creature-body { padding: 34px 40px; } }
+.creature-card h3 { color: var(--text); font-size: 1.4rem; margin-bottom: 6px; }
+.creature-card p { color: var(--text-dim); font-size: 0.95rem; margin: 0; }
+
+/* =======================================================================
+   PEDRAS
+   ======================================================================= */
+.video-frame { border: 1px solid var(--border); border-radius: 3px; overflow: hidden; background: #000; }
+.video-frame video { width: 100%; display: block; }
+
+.stones-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 32px; }
+@media (min-width: 640px) { .stones-grid { grid-template-columns: repeat(4, 1fr); } }
+
+.stone-card {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 3px;
+  padding: 18px 14px;
+  text-align: center;
+  transition: border-color 0.25s ease, transform 0.25s ease;
+}
+.stone-card:hover { border-color: var(--stone-color, var(--border-strong)); transform: translateY(-3px); }
+.stone-card .stone-dot {
+  width: 16px; height: 16px; border-radius: 50%; margin: 0 auto 12px;
+  background: var(--stone-color, var(--gold));
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--stone-color, var(--gold)) 20%, transparent);
+}
+.stone-card h4 { font-size: 0.9rem; margin-bottom: 4px; }
+.stone-card p { font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-dim); margin: 0; }
+
+/* =======================================================================
+   DADOS
+   ======================================================================= */
+.dice-box {
+  max-width: 420px;
+  margin: 0 auto;
+  text-align: center;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 3px;
+  padding: 40px 24px;
+}
+@media (min-width: 640px) { .dice-box { padding: 52px 32px; } }
+
+.dice-result { font-family: var(--font-display); font-size: 3.6rem; color: var(--gold-soft); min-height: 1.2em; margin-bottom: 6px; }
+@media (min-width: 640px) { .dice-result { font-size: 4.4rem; } }
+
+.dice-sides { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.1em; color: var(--text-dim); text-transform: uppercase; margin-bottom: 24px; }
+.dice-buttons { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+
+.btn {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  background: var(--bg-alt);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 11px 18px;
+  clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px);
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+.btn:hover { border-color: var(--gold); color: var(--gold-soft); }
+.btn.rolling { animation: shake 0.4s ease; }
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-3px) rotate(-2deg); }
+  75% { transform: translateX(3px) rotate(2deg); }
+}
+
+/* =======================================================================
+   FOOTER
+   ======================================================================= */
+/* O rodapé agora fecha o site com a mesma "régua rebitada" dourada que
+   abre o bloco História (.rivet-rule) — a assinatura visual do site —
+   em vez de uma foto. Isso também deixa o rodapé mais enxuto.
+   Além disso, a mesma linha dourada em degradê do topo do menu (nav)
+   reaparece no topo do rodapé, separando visualmente o conteúdo da
+   página do rodapé. */
+footer.site-footer { padding-bottom: 8px; }
+footer.site-footer::before {
+  content: "";
+  display: block;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold-soft), var(--gold) 40%, var(--wine) 100%);
+}
+footer.site-footer .footer-top { padding: 4px 20px 12px; text-align: center; display: flex; flex-direction: column; align-items: center; }
+footer.site-footer .rivet-rule { margin: 0 auto 14px; }
+footer.site-footer p { margin: 0; color: var(--text-dim); font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.04em; }
+footer.site-footer .quote { font-family: var(--font-display); font-style: italic; color: var(--text); font-size: 0.8rem; margin: 2px 0 6px; max-width: 480px; }
+
+.footer-links {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 2px;
+  list-style: none; margin: 0 0 12px; padding: 0;
+}
+.footer-links a {
+  font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--text-dim); padding: 4px 10px; border-radius: 3px; transition: color 0.2s ease, background 0.2s ease;
+}
+.footer-links a:hover { color: var(--text); background: var(--surface); }
+
+footer.site-footer .footer-credit { padding-top: 10px; border-top: 1px solid var(--border-strong); width: 100%; max-width: 480px; }
+
+#btnTopo {
+  position: fixed;
+  bottom: 20px; right: 20px;
+  width: 44px; height: 44px;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  background: var(--surface);
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: none;
+  z-index: 150;
+}
+#btnTopo.show { display: block; }

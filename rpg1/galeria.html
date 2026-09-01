@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <!-- Aplica o tema salvo (claro/escuro) ANTES da página desenhar, para não
+       piscar o tema errado por uma fração de segundo ao carregar. -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('rpg-theme');
+        if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+      } catch (e) {}
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galeria — RPG</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="container">
+      <a href="index.html" class="brand">
+        <span class="brand-badge"><img src="img/logo-rpg1.jpg" alt="RPG — Primeiro Dia"></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Início</a></li>
+        <li><a href="personagens.html">Personagens</a></li>
+        <li><a href="mapa.html">Mapa</a></li>
+        <li><a href="galeria.html">Galeria</a></li>
+        <li><a href="criaturas.html">Criaturas</a></li>
+        <li><a href="pedras.html">Pedras</a></li>
+        <li><a href="dados.html">Dados</a></li>
+      </ul>
+      <div class="nav-actions">
+        <div class="campaign-switch" id="campaignSwitch">
+          <button class="campaign-trigger" id="campaignTrigger" aria-haspopup="true" aria-expanded="false">
+            RPG I <span class="chevron">▾</span>
+          </button>
+          <div class="campaign-panel">
+            <a class="campaign-item is-active" href="index.html">
+              <span class="campaign-thumb"><img src="img/logo-rpg1.jpg" alt="RPG I"></span>
+              <span class="campaign-text">
+                <span class="campaign-name">RPG I — Primeiro Dia</span>
+                <span class="campaign-tag">Campanha atual</span>
+              </span>
+            </a>
+            <a class="campaign-item is-soon" href="../rpg2/index.html">
+              <span class="campaign-thumb"><img src="../rpg2/img/logo-rpg2.jpg" alt="RPG II"></span>
+              <span class="campaign-text">
+                <span class="campaign-name">RPG II — Dia do Julgamento Final</span>
+                <span class="campaign-tag">Em breve</span>
+              </span>
+            </a>
+            <a class="campaign-item is-soon" href="../rpg3/index.html">
+              <span class="campaign-thumb"><img src="../rpg3/img/logo-rpg3.jpg" alt="RPG III"></span>
+              <span class="campaign-text">
+                <span class="campaign-name">RPG III — Dias de um Passado Esquecido</span>
+                <span class="campaign-tag">Em breve</span>
+              </span>
+            </a>
+          </div>
+        </div>
+        <button class="theme-toggle" id="themeToggle" aria-label="Alternar modo claro/escuro">
+          <span class="icon-sun">☀</span><span class="icon-moon">☾</span>
+        </button>
+        <button class="nav-toggle" aria-label="Abrir menu">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero hero--compact">
+    <div class="container">
+      <span class="eyebrow">Registro visual</span>
+      <h1>Galeria</h1>
+    </div>
+  </header>
+
+  <section style="padding-top:12px;">
+    <div class="container">
+      <div class="section-head reveal">
+        <p>Cenários da campanha. Filtre por território ou clique em uma imagem para ampliar.</p>
+      </div>
+
+      <div class="gallery-filters reveal" id="gallery-filters">
+        <button class="gallery-filter active" data-filter="todos" style="--region-color:var(--stone-orange)"><i></i>Todos</button>
+        <button class="gallery-filter" data-filter="paris" style="--region-color:var(--stone-black)"><i></i>Paris</button>
+        <button class="gallery-filter" data-filter="londres" style="--region-color:var(--stone-blue)"><i></i>Londres</button>
+        <button class="gallery-filter" data-filter="barcelona" style="--region-color:var(--stone-white)"><i></i>Barcelona</button>
+        <button class="gallery-filter" data-filter="italia" style="--region-color:var(--stone-green)"><i></i>Itália</button>
+        <button class="gallery-filter" data-filter="alemanha" style="--region-color:var(--stone-yellow)"><i></i>Alemanha</button>
+        <button class="gallery-filter" data-filter="romenia" style="--region-color:var(--stone-red)"><i></i>Romênia</button>
+        <button class="gallery-filter" data-filter="grecia" style="--region-color:var(--stone-yellow)"><i></i>Grécia</button>
+        <button class="gallery-filter" data-filter="egito" style="--region-color:var(--stone-purple)"><i></i>Egito</button>
+        <button class="gallery-filter" data-filter="peru" style="--region-color:var(--stone-green)"><i></i>Peru</button>
+        <button class="gallery-filter" data-filter="india" style="--region-color:var(--stone-orange)"><i></i>Índia</button>
+        <button class="gallery-filter" data-filter="cenarios" style="--region-color:var(--stone-white)"><i></i>Outros cenários</button>
+      </div>
+
+      <div class="gallery-grid reveal" id="gallery-grid">
+        <figure class="feat" data-region="londres"><img src="img/londres2.jpg" alt="Londres" loading="lazy"><figcaption><i style="--region-color:var(--stone-blue)"></i>Londres</figcaption></figure>
+        <figure data-region="londres"><img src="img/londres3.jpg" alt="Londres" loading="lazy"><figcaption><i style="--region-color:var(--stone-blue)"></i>Londres</figcaption></figure>
+        <figure class="feat" data-region="paris"><img src="img/paris1.jpg" alt="Paris" loading="lazy"><figcaption><i style="--region-color:var(--stone-black)"></i>Paris</figcaption></figure>
+        <figure data-region="paris"><img src="img/paris2.jpg" alt="Paris" loading="lazy"><figcaption><i style="--region-color:var(--stone-black)"></i>Paris</figcaption></figure>
+        <figure data-region="barcelona"><img src="img/barcelona1.jpg" alt="Barcelona" loading="lazy"><figcaption><i style="--region-color:var(--stone-blue)"></i>Barcelona</figcaption></figure>
+        <figure data-region="barcelona"><img src="img/barcelona2.jpg" alt="Barcelona" loading="lazy"><figcaption><i style="--region-color:var(--stone-blue)"></i>Barcelona</figcaption></figure>
+        <figure data-region="italia"><img src="img/italia.jpg" alt="Itália" loading="lazy"><figcaption>Itália</figcaption></figure>
+        <figure data-region="italia"><img src="img/italia1.jpg" alt="Itália" loading="lazy"><figcaption>Itália</figcaption></figure>
+        <figure data-region="alemanha"><img src="img/alemanha1.jpg" alt="Alemanha" loading="lazy"><figcaption>Alemanha</figcaption></figure>
+        <figure data-region="alemanha"><img src="img/alemanha2.jpg" alt="Alemanha" loading="lazy"><figcaption>Alemanha</figcaption></figure>
+        <figure class="feat" data-region="romenia"><img src="img/romenia1.jpg" alt="Romênia" loading="lazy"><figcaption><i style="--region-color:var(--stone-red)"></i>Romênia</figcaption></figure>
+        <figure data-region="grecia"><img src="img/grecia1.jpg" alt="Grécia" loading="lazy"><figcaption><i style="--region-color:var(--stone-yellow)"></i>Grécia</figcaption></figure>
+        <figure data-region="grecia"><img src="img/grecia2.jpg" alt="Grécia" loading="lazy"><figcaption><i style="--region-color:var(--stone-yellow)"></i>Grécia</figcaption></figure>
+        <figure class="feat" data-region="egito"><img src="img/egito1.jpg" alt="Egito" loading="lazy"><figcaption><i style="--region-color:var(--stone-purple)"></i>Egito</figcaption></figure>
+        <figure data-region="egito"><img src="img/egito2.jpg" alt="Egito" loading="lazy"><figcaption><i style="--region-color:var(--stone-purple)"></i>Egito</figcaption></figure>
+        <figure data-region="peru"><img src="img/peru1.jpg" alt="Peru" loading="lazy"><figcaption><i style="--region-color:var(--stone-green)"></i>Peru</figcaption></figure>
+        <figure data-region="peru"><img src="img/peru2.jpg" alt="Peru" loading="lazy"><figcaption><i style="--region-color:var(--stone-green)"></i>Peru</figcaption></figure>
+        <figure class="feat" data-region="india"><img src="img/india1.jpg" alt="Índia" loading="lazy"><figcaption><i style="--region-color:var(--stone-orange)"></i>Índia</figcaption></figure>
+        <figure data-region="cenarios"><img src="img/g1.jpg" alt="Cenário da campanha" loading="lazy"><figcaption>Cenário</figcaption></figure>
+        <figure data-region="cenarios"><img src="img/g2.jpg" alt="Cenário da campanha" loading="lazy"><figcaption>Cenário</figcaption></figure>
+        <figure data-region="cenarios"><img src="img/g3.jpg" alt="Cenário da campanha" loading="lazy"><figcaption>Cenário</figcaption></figure>
+        <figure data-region="cenarios"><img src="img/g4.jpg" alt="Cenário da campanha" loading="lazy"><figcaption>Cenário</figcaption></figure>
+        <figure class="feat" data-region="cenarios"><img src="img/g5.jpg" alt="Cenário da campanha" loading="lazy"><figcaption>Cenário</figcaption></figure>
+        <figure data-region="cenarios"><img src="img/g6.jpg" alt="Cenário da campanha" loading="lazy"><figcaption>Cenário</figcaption></figure>
+        <figure data-region="cenarios"><img src="img/g7.jpg" alt="Cenário da campanha" loading="lazy"><figcaption>Cenário</figcaption></figure>
+        <figure data-region="cenarios"><img src="img/g8.jpg" alt="Cenário da campanha" loading="lazy"><figcaption>Cenário</figcaption></figure>
+        <figure data-region="cenarios"><img src="img/g9.jpg" alt="Cenário da campanha" loading="lazy"><figcaption>Cenário</figcaption></figure>
+        <figure data-region="cenarios"><img src="img/g10.jpg" alt="Cenário da campanha" loading="lazy"><figcaption>Cenário</figcaption></figure>
+        <figure data-region="cenarios"><img src="img/g11.jpg" alt="Cenário da campanha" loading="lazy"><figcaption>Cenário</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightbox-close" aria-label="Fechar">✕</button>
+    <button class="lightbox-nav prev" id="lightbox-prev" aria-label="Imagem anterior">&#10094;</button>
+    <img id="lightbox-img" src="" alt="">
+    <button class="lightbox-nav next" id="lightbox-next" aria-label="Próxima imagem">&#10095;</button>
+    <p class="lightbox-caption" id="lightbox-caption"></p>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container footer-top">
+      <hr class="rivet-rule">
+      <p class="quote">"Cada cidade guarda um capítulo diferente da história."</p>
+      <ul class="footer-links">
+        <li><a href="index.html">Início</a></li>
+        <li><a href="personagens.html">Personagens</a></li>
+        <li><a href="mapa.html">Mapa</a></li>
+        <li><a href="galeria.html">Galeria</a></li>
+        <li><a href="criaturas.html">Criaturas</a></li>
+        <li><a href="pedras.html">Pedras</a></li>
+        <li><a href="dados.html">Dados</a></li>
+      </ul>
+      <p class="footer-credit">RPG criado por Tio, com participação importante de SMS e Rabesco · 2024–2026</p>
+    </div>
+  </footer>
+  <button id="btnTopo" aria-label="Voltar ao topo">▲</button>
+
+  <script src="js/main.js"></script>
+  <script src="js/galeria.js"></script>
+</body>
+</html>

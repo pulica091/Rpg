@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <!-- Aplica o tema salvo (claro/escuro) ANTES da página desenhar, para não
+       piscar o tema errado por uma fração de segundo ao carregar. -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('rpg-theme');
+        if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+      } catch (e) {}
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pedras — RPG</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="container">
+      <a href="index.html" class="brand">
+        <span class="brand-badge"><img src="img/logo-rpg1.jpg" alt="RPG — Primeiro Dia"></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Início</a></li>
+        <li><a href="personagens.html">Personagens</a></li>
+        <li><a href="mapa.html">Mapa</a></li>
+        <li><a href="galeria.html">Galeria</a></li>
+        <li><a href="criaturas.html">Criaturas</a></li>
+        <li><a href="pedras.html">Pedras</a></li>
+        <li><a href="dados.html">Dados</a></li>
+      </ul>
+      <div class="nav-actions">
+        <div class="campaign-switch" id="campaignSwitch">
+          <button class="campaign-trigger" id="campaignTrigger" aria-haspopup="true" aria-expanded="false">
+            RPG I <span class="chevron">▾</span>
+          </button>
+          <div class="campaign-panel">
+            <a class="campaign-item is-active" href="index.html">
+              <span class="campaign-thumb"><img src="img/logo-rpg1.jpg" alt="RPG I"></span>
+              <span class="campaign-text">
+                <span class="campaign-name">RPG I — Primeiro Dia</span>
+                <span class="campaign-tag">Campanha atual</span>
+              </span>
+            </a>
+            <a class="campaign-item is-soon" href="../rpg2/index.html">
+              <span class="campaign-thumb"><img src="../rpg2/img/logo-rpg2.jpg" alt="RPG II"></span>
+              <span class="campaign-text">
+                <span class="campaign-name">RPG II — Dia do Julgamento Final</span>
+                <span class="campaign-tag">Em breve</span>
+              </span>
+            </a>
+            <a class="campaign-item is-soon" href="../rpg3/index.html">
+              <span class="campaign-thumb"><img src="../rpg3/img/logo-rpg3.jpg" alt="RPG III"></span>
+              <span class="campaign-text">
+                <span class="campaign-name">RPG III — Dias de um Passado Esquecido</span>
+                <span class="campaign-tag">Em breve</span>
+              </span>
+            </a>
+          </div>
+        </div>
+        <button class="theme-toggle" id="themeToggle" aria-label="Alternar modo claro/escuro">
+          <span class="icon-sun">☀</span><span class="icon-moon">☾</span>
+        </button>
+        <button class="nav-toggle" aria-label="Abrir menu">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero hero--compact">
+    <div class="container">
+      <span class="eyebrow">Relíquias</span>
+      <h1>As Pedras</h1>
+    </div>
+  </header>
+
+  <section style="padding-top:12px;">
+    <div class="container">
+      <div class="section-head reveal">
+        <p>O registro em vídeo da jornada pelas oito relíquias espalhadas pelo mundo.</p>
+      </div>
+
+      <div class="video-frame reveal">
+        <video controls preload="metadata">
+          <source src="video/pedras.mp4" type="video/mp4">
+          Seu navegador não suporta vídeo em HTML5.
+        </video>
+      </div>
+
+      <div class="stones-grid reveal">
+        <div class="stone-card" style="--stone-color:var(--stone-purple);">
+          <div class="stone-dot"></div>
+          <h4>Pedra do Poder</h4>
+          <p>Egito — As Três Pirâmides</p>
+        </div>
+        <div class="stone-card" style="--stone-color:var(--stone-red);">
+          <div class="stone-dot"></div>
+          <h4>Pedra da Realidade</h4>
+          <p>Romênia — Domínios de Drácula</p>
+        </div>
+        <div class="stone-card" style="--stone-color:var(--stone-yellow);">
+          <div class="stone-dot"></div>
+          <h4>Pedra da Mente</h4>
+          <p>Grécia — Caverna de Platão</p>
+        </div>
+        <div class="stone-card" style="--stone-color:var(--stone-green);">
+          <div class="stone-dot"></div>
+          <h4>Pedra do Tempo</h4>
+          <p>Peru — Templo do Sol</p>
+        </div>
+        <div class="stone-card" style="--stone-color:var(--stone-orange);">
+          <div class="stone-dot"></div>
+          <h4>Pedra da Alma</h4>
+          <p>Índia — Templo de Lótus</p>
+        </div>
+        <div class="stone-card" style="--stone-color:var(--stone-blue);">
+          <div class="stone-dot"></div>
+          <h4>Pedra do Espaço</h4>
+          <p>Alemanha — Forjas de Nuremberg</p>
+        </div>
+        <div class="stone-card" style="--stone-color:var(--stone-white);">
+          <div class="stone-dot"></div>
+          <h4>Pedra da Vida</h4>
+          <p>Itália — Jardins de Florença</p>
+        </div>
+        <div class="stone-card" style="--stone-color:var(--stone-black);">
+          <div class="stone-dot"></div>
+          <h4>Pedra da Morte</h4>
+          <p>Paladis — Catacumbas de Paris</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-top">
+      <hr class="rivet-rule">
+      <p class="quote">"Oito fragmentos de poder, um preço que ninguém esquece."</p>
+      <ul class="footer-links">
+        <li><a href="index.html">Início</a></li>
+        <li><a href="personagens.html">Personagens</a></li>
+        <li><a href="mapa.html">Mapa</a></li>
+        <li><a href="galeria.html">Galeria</a></li>
+        <li><a href="criaturas.html">Criaturas</a></li>
+        <li><a href="pedras.html">Pedras</a></li>
+        <li><a href="dados.html">Dados</a></li>
+      </ul>
+      <p class="footer-credit">RPG criado por Tio, com participação importante de SMS e Rabesco · 2024–2026</p>
+    </div>
+  </footer>
+  <button id="btnTopo" aria-label="Voltar ao topo">▲</button>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

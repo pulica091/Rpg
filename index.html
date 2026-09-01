@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <!-- Aplica o tema salvo (claro/escuro) ANTES da página desenhar, para não
+       piscar o tema errado por uma fração de segundo ao carregar. -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('rpg-theme');
+        if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+      } catch (e) {}
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RPG — Campanhas</title>
+  <meta name="description" content="Escolha a campanha: RPG I, RPG II ou RPG III.">
+  <link rel="stylesheet" href="rpg1/css/style.css">
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="container">
+      <a href="index.html" class="brand">
+        <span class="brand-badge"><img src="rpg1/img/logo-rpg1.jpg" alt="RPG"></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Campanhas</a></li>
+        <li><a href="downloads.html">Downloads</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Alternar modo claro/escuro">
+          <span class="icon-sun">☀</span><span class="icon-moon">☾</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero hero--campaigns">
+    <div class="container">
+      <span class="eyebrow">Três eras, um universo</span>
+      <h1>Escolha sua<br>campanha.</h1>
+      <blockquote>"Vapor, magia e um reino em jogo — e as histórias que ainda estão por vir."</blockquote>
+    </div>
+  </header>
+
+  <section>
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Campanhas</span>
+        <h2>Os três RPGs</h2>
+        <p>Escolha por qual mundo você quer entrar.</p>
+      </div>
+
+      <div class="nav-cards reveal">
+        <a class="nav-card nav-card--logo" href="rpg1/index.html">
+          <img src="rpg1/img/logo-rpg1.jpg" alt="RPG I — Primeiro Dia">
+          <div class="nav-card-label"><h3>RPG I — Primeiro Dia</h3><span>→</span></div>
+        </a>
+        <a class="nav-card nav-card--logo" href="rpg2/index.html">
+          <img src="rpg2/img/logo-rpg2.jpg" alt="RPG II — Dia do Julgamento Final">
+          <div class="nav-card-label"><h3>RPG II — Em breve</h3><span>→</span></div>
+        </a>
+        <a class="nav-card nav-card--logo" href="rpg3/index.html">
+          <img src="rpg3/img/logo-rpg3.jpg" alt="RPG III — Dias de um Passado Esquecido">
+          <div class="nav-card-label"><h3>RPG III — Em breve</h3><span>→</span></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-top">
+      <hr class="rivet-rule">
+      <p class="quote">"Entre o tilintar das espadas e o silvo das locomotivas a vapor..."</p>
+      <ul class="footer-links">
+        <li><a href="rpg1/index.html">RPG I</a></li>
+        <li><a href="rpg2/index.html">RPG II</a></li>
+        <li><a href="rpg3/index.html">RPG III</a></li>
+      </ul>
+      <p class="footer-credit">RPG criado por Tio, com participação importante de SMS e Rabesco · 2024–2026</p>
+    </div>
+  </footer>
+  <button id="btnTopo" aria-label="Voltar ao topo">▲</button>
+
+  <script src="rpg1/js/main.js"></script>
+</body>
+</html>
