@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <!-- Aplica o tema salvo (claro/escuro) ANTES da página desenhar, para não
+       piscar o tema errado por uma fração de segundo ao carregar. -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('rpg-theme');
+        if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+      } catch (e) {}
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Linha do Tempo — RPG II</title>
+  <meta name="description" content="Tudo que aconteceu entre o fim do Primeiro Dia e o Dia do Julgamento Final.">
+  <!-- style.css = esqueleto herdado; incursao.css = a identidade do RPG II.
+       A ordem importa: o segundo reescreve o primeiro. -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/incursao.css">
+</head>
+<body>
+
+  <!-- Trilho de estado: a leitura da estação, presente em todas as páginas. -->
+  <div class="status-rail" aria-hidden="true">
+    <div class="status-rail-meter"><i></i></div>
+    <span class="status-rail-text">ESTAÇÃO 616 · LEITURA CONTÍNUA</span>
+  </div>
+
+  <nav class="site-nav">
+    <div class="container">
+      <a href="index.html" class="brand">
+        <span class="brand-badge"><img src="img/logo-rpg2.jpg" alt="RPG II — Dia do Julgamento Final"></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Início</a></li>
+        <li><a href="personagens.html">Personagens</a></li>
+        <li><a href="linha-do-tempo.html" class="active">Linha do Tempo</a></li>
+        <li><a href="multiverso.html">Multiverso</a></li>
+        <li><a href="incursoes.html">Incursões</a></li>
+        <li><a href="dados.html">Dados</a></li>
+        <li><a href="ficha.html">Ficha</a></li>
+      </ul>
+      <div class="nav-actions">
+        <div class="campaign-switch" id="campaignSwitch">
+          <button class="campaign-trigger" id="campaignTrigger" aria-haspopup="true" aria-expanded="false">
+            RPG II <span class="chevron">▾</span>
+          </button>
+          <div class="campaign-panel">
+            <a class="campaign-item" href="../rpg1/index.html">
+              <span class="campaign-thumb"><img src="../rpg1/img/logo-rpg1.jpg" alt="RPG I"></span>
+              <span class="campaign-text">
+                <span class="campaign-name">RPG I — Primeiro Dia</span>
+                <span class="campaign-tag">Disponível</span>
+              </span>
+            </a>
+            <a class="campaign-item is-active" href="index.html">
+              <span class="campaign-thumb"><img src="img/logo-rpg2.jpg" alt="RPG II"></span>
+              <span class="campaign-text">
+                <span class="campaign-name">RPG II — Dia do Julgamento Final</span>
+                <span class="campaign-tag">Campanha atual</span>
+              </span>
+            </a>
+            <a class="campaign-item is-soon" href="../rpg3/index.html">
+              <span class="campaign-thumb"><img src="../rpg3/img/logo-rpg3.jpg" alt="RPG III"></span>
+              <span class="campaign-text">
+                <span class="campaign-name">RPG III — Dias de um Passado Esquecido</span>
+                <span class="campaign-tag">Em breve</span>
+              </span>
+            </a>
+          </div>
+        </div>
+        <a href="../downloads.html" class="downloads-link" aria-label="Downloads" title="Downloads">⬇</a>
+        <button class="theme-toggle" id="themeToggle" aria-label="Alternar modo claro/escuro">
+          <span class="icon-sun">☀</span><span class="icon-moon">☾</span>
+        </button>
+        <button class="nav-toggle" aria-label="Abrir menu">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero hero--compact">
+    <div class="container">
+      <span class="eyebrow">Setor TMP · sequência de eventos</span>
+      <h1 class="split-title" data-text="Linha do Tempo">Linha do Tempo</h1>
+      <p class="hero-readout">
+      <span>do encerramento do <b>Primeiro Dia</b> até agora</span>
+      <span><b>9</b> marcos registrados</span>
+      <span>leitura de cima para baixo</span>
+      </p>
+    </div>
+    <div class="ruins-strip" aria-hidden="true"></div>
+  </header>
+
+  <!-- =====================================================================
+       TEXTO PROVISÓRIO. A ESTRUTURA é a que você pediu: corre de cima
+       para baixo, com imagem em algumas entradas. Pra adicionar um marco,
+       copie um bloco <article class="tl-entry"> inteiro.
+       As três variações: sem classe (normal, verde), .tl-entry--rift
+       (roxo, coisa vinda de fora) e .tl-entry--lost (perda).
+       As imagens estão puxando da pasta do RPG I; quando tiver arte nova
+       da campanha II, é só trocar o src.
+       ===================================================================== -->
+  <section>
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Recapitulação e sequência</span>
+        <h2>Como chegamos aqui</h2>
+        <p>Do fim do Primeiro Dia até a noite de Natal em que tudo recomeça. Seis anos, contados ano a ano.</p>
+      </div>
+
+      <div class="timeline">
+
+    <article class="tl-entry reveal tl-entry--rift">
+      <span class="tl-when">Ano 0</span>
+      <h3>O fim do Primeiro Dia</h3>
+      <p>Os heróis enfrentam John Wick no Canadá e vencem. As Pedras do Infinito são destruídas na mesma
+batalha, para que ninguém volte a usá-las para provocar um colapso, e a ameaça imediata ao mundo se
+encerra ali. O problema é o que eles encontram quando voltam: o mundo que tentaram salvar já tinha
+sido atingido. Milhares de pessoas morreram, cidades e estruturas inteiras foram derrubadas,
+sistemas políticos e econômicos entraram em colapso e vários países precisaram recomeçar
+praticamente do zero.
+<br><br>
+Mesmo assim, o grupo é recebido como herói. São reconhecidos publicamente por terem impedido o
+colapso definitivo, e a Rainha Britânica — mãe de Natasha — concede a eles a maior honraria do
+Reino Unido.</p>
+      <figure class="tl-figure">
+        <img src="../rpg1/img/londres3.jpg" alt="Londres depois do confronto final" loading="lazy">
+        <figcaption>Londres depois do confronto final</figcaption>
+      </figure>
+    </article>
+
+
+    <article class="tl-entry reveal">
+      <span class="tl-when">Ano 1</span>
+      <h3>O nascimento de Lara e o começo da reconstrução</h3>
+      <p>Natasha estava nos últimos momentos da gravidez quando os heróis voltaram. Pouco depois nasce Lara,
+primeira filha dela e de Joel, e a menina vira um dos primeiros símbolos da geração que apareceu
+depois do desastre.
+<br><br>
+O primeiro grande período de reconstrução começa — e a previsão é de dois anos e meio só para o
+essencial. Londres e boa parte do Reino Unido se fecham para o mundo exterior: a prioridade passa a
+ser alimentar a população, reconstruir hospitais, restaurar infraestrutura, recuperar moradia,
+proteger quem sobrou e reorganizar economia e instituições. A Weber interrompe praticamente todos os
+seus projetos e joga recursos e gente inteira na reconstrução do país. Lá fora, os outros países
+iniciam seus próprios processos, mas a situação segue muito difícil em quase todo lugar.</p>
+      <figure class="tl-figure">
+        <img src="../rpg1/img/campo-florido.jpg" alt="O campo, no primeiro ano depois" loading="lazy">
+        <figcaption>O campo, no primeiro ano depois</figcaption>
+      </figure>
+    </article>
+
+
+    <article class="tl-entry reveal">
+      <span class="tl-when">Ano 2</span>
+      <h3>A nova geração</h3>
+      <p>Dois anos depois de Lara nasce Nathalia, segunda filha de Joel e Natasha. Lara já começa a crescer
+dentro de um mundo em obra, e não mais em ruína.
+<br><br>
+É também no segundo ano que nascem os filhos de Arlecchino e Haku e os filhos de Cass e Thorn. Aos
+poucos, uma geração inteira surge depois do desastre — crianças que vão crescer ouvindo falar do
+Primeiro Dia como quem ouve falar de uma guerra antiga.</p>
+    </article>
+
+
+    <article class="tl-entry reveal">
+      <span class="tl-when">Ano 3</span>
+      <h3>O mundo reabre</h3>
+      <p>O período mais crítico da reconstrução chega ao fim. Depois de anos praticamente isolado, o Reino
+Unido volta a abrir as fronteiras com cerca de 70% do país reerguido, e a população começa a
+recuperar alguma coisa parecida com uma vida normal.
+<br><br>
+Em casa, Lara está com 3 anos: anda, fala e já tem personalidade própria demais para o gosto de
+qualquer adulto. Nathalia está com 1 ano e aprendeu a andar antes de falar. É nesse ano que Joel e
+Natasha começam a conversar sobre ter um terceiro filho.</p>
+      <figure class="tl-figure">
+        <img src="../rpg1/img/londres2.jpg" alt="Londres com as fronteiras reabertas" loading="lazy">
+        <figcaption>Londres com as fronteiras reabertas</figcaption>
+      </figure>
+    </article>
+
+
+    <article class="tl-entry reveal">
+      <span class="tl-when">Anos 3–4</span>
+      <h3>Três anos de paz</h3>
+      <p>Depois de todo o caos, o mundo entra num período de estabilidade que dura cerca de três anos. Os
+reinos e as nações vivem uma paz longa, e a reconstrução deixa de ser uma questão de sobrevivência
+para virar uma questão de voltar a viver.</p>
+    </article>
+
+
+    <article class="tl-entry reveal">
+      <span class="tl-when">Ano 4</span>
+      <h3>Os gêmeos, e a conta da reconstrução</h3>
+      <p>Nascem Theo e Rebeca, gêmeos não idênticos. A família passa a ser quatro crianças: Lara, a
+primogênita; Nathalia, a segunda; e os gêmeos.
+<br><br>
+O Reino Unido chega a cerca de 90% reconstruído e a economia finalmente se estabiliza — os grandes
+programas emergenciais já não são necessários na mesma escala. A Weber, porém, paga a conta: gastou
+quase tudo o que tinha na reconstrução e no auxílio à população, e chega perto da falência. Com o
+país estabilizado, a empresa recomeça a mudar o foco e retoma programas de desenvolvimento
+tecnológico, pesquisa, educação e formação de jovens, reconstruindo lentamente a própria
+estrutura.</p>
+    </article>
+
+
+    <article class="tl-entry reveal">
+      <span class="tl-when">Ano 5</span>
+      <h3>Uma vida normal de novo</h3>
+      <p>Lara começa a escolinha, completamente inserida numa geração que só conheceu o mundo depois do
+desastre. Nathalia já anda, fala e acompanha tudo; os gêmeos começam a andar, falar e explorar cada
+canto da casa.
+<br><br>
+O Reino Unido chega a 100% de reconstrução. A infraestrutura volta a funcionar, a economia está
+estável e o dia a dia se parece com o de antes. O período de reconstrução termina oficialmente — e
+é criado um grande memorial para as pessoas que morreram no dia em que o mundo quase acabou. A data
+passa a se chamar <strong>O Primeiro Dia</strong>: não uma celebração das mortes, mas a marca do
+momento em que o mundo antigo terminou e outro começou. Todo ano o evento é lembrado, entre
+memória, homenagem, luto e esperança.</p>
+    </article>
+
+
+    <article class="tl-entry reveal">
+      <span class="tl-when">Ano 6</span>
+      <h3>O último ano de paz</h3>
+      <p>Seis anos depois do fim do RPG I, a família de Joel e Natasha está completamente estabelecida: Lara
+com 7 anos, Nathalia com 5, Theo e Rebeca com 3. Joel completa 31 anos, Natasha completa 32, e o
+casal comemora sete anos de casamento — vivendo uma vida que, no meio do RPG I, parecia impossível.
+<br><br>
+O Reino Unido e o Reino Paladiano atravessam cerca de um ano de paz e prosperidade. A reconstrução
+acabou, as novas gerações cresceram, as economias se estabilizaram e a população voltou a viver. Por
+um breve momento, parece mesmo que o Primeiro Dia ficou no passado.</p>
+    </article>
+
+
+    <article class="tl-entry reveal tl-entry--rift">
+      <span class="tl-when">Natal</span>
+      <h3>Seis anos depois</h3>
+      <p>Chega o Natal. É um período de paz, família e prosperidade: Joel, Natasha e os quatro filhos juntos,
+o Reino Unido e o Reino Paladiano num dos momentos mais tranquilos desde o desastre.
+<br><br>
+É nessa noite que começa o <strong>RPG II — Dia do Julgamento Final</strong>. O que parecia o início
+de uma era nova acaba sendo o começo de uma ameaça muito maior.</p>
+    </article>
+
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Barra da contagem: fica escondida e só aparece quando alguém arma a
+       bomba dimensional em incursoes.html (js/incursao.js liga isso). -->
+  <div class="incursion-hud" role="status" aria-live="polite">
+    <span class="incursion-hud-label">COLISÃO EM</span>
+    <span class="incursion-hud-clock" id="hudClock">10:00</span>
+    <a href="incursoes.html">abrir console</a>
+  </div>
+
+  <footer class="site-footer">
+    <div class="ruins-strip ruins-strip--footer" aria-hidden="true"></div>
+    <div class="container footer-top">
+      <hr class="rivet-rule">
+      <p class="quote">Cada linha aqui é um dia que não volta.</p>
+      <ul class="footer-links">
+        <li><a href="index.html">Início</a></li>
+        <li><a href="personagens.html">Personagens</a></li>
+        <li><a href="linha-do-tempo.html">Linha do Tempo</a></li>
+        <li><a href="multiverso.html">Multiverso</a></li>
+        <li><a href="incursoes.html">Incursões</a></li>
+        <li><a href="dados.html">Dados</a></li>
+        <li><a href="ficha.html">Ficha</a></li>
+      </ul>
+      <p class="footer-credit">RPG criado por Tio, com participação importante de SMS e Rabesco · 2024–2026</p>
+    </div>
+    <div class="footer-banner">
+      <img src="../rpg1/img/campo-florido.jpg" alt="O campo, hoje" loading="lazy">
+    </div>
+  </footer>
+  <button id="btnTopo" aria-label="Voltar ao topo">▲</button>
+
+  <script src="js/main.js"></script>
+  <script src="js/dust.js"></script>
+  <script src="js/incursao.js"></script>
+
+</body>
+</html>

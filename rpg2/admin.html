@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('rpg-theme');
+        if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+      } catch (e) {}
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel do mestre — RPG II</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Controle da contagem regressiva e da bomba dimensional.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/incursao.css">
+  <link rel="stylesheet" href="css/contador.css">
+  <link rel="stylesheet" href="css/universos.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="container">
+      <a href="index.html" class="brand">
+        <span class="brand-badge"><img src="img/logo-rpg2.jpg" alt="RPG II"></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Início</a></li>
+        <li><a href="incursoes.html">Incursões</a></li>
+        <li><a href="admin.html" class="active">Painel do mestre</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Alternar modo claro/escuro">
+          <span class="icon-sun">☀</span><span class="icon-moon">☾</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero hero--compact">
+    <div class="container">
+      <span class="eyebrow">Acesso restrito ao mestre</span>
+      <h1 class="split-title" data-text="Painel">Painel</h1>
+      <p class="hero-readout">
+        <span>A contagem que todos veem sai daqui</span>
+        <span class="js-contador-estado">—</span>
+      </p>
+    </div>
+  </header>
+
+  <!-- ===================== TRAVA ===================== -->
+  <section id="adminTrava">
+    <div class="container">
+      <div class="admin-trava">
+        <h2>Chave do mestre</h2>
+        <p>Só quem tem a chave muda a contagem. Todo mundo mais só vê o relógio.</p>
+        <div class="admin-linha-chave">
+          <input type="password" id="adminChave" placeholder="chave" autocomplete="current-password">
+          <button class="bd-botao" type="button" id="adminEntrar">entrar</button>
+        </div>
+        <p class="admin-erro" id="adminErro"></p>
+        <p class="admin-nota">
+          A chave fica em <code>js/admin.js</code> e vale como tranca de porta, não como
+          cofre: quando o Worker estiver de pé, é ele quem precisa conferir a chave antes
+          de gravar qualquer coisa. Enquanto isso, quem tiver a chave manda.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PAINEL ===================== -->
+  <div id="adminPainel" hidden>
+
+    <section>
+      <div class="container">
+        <div class="contador-bloco">
+          <div class="flip-case">
+            <div class="flip-case-head">
+              <h3 class="js-contador-rotulo">Contagem regressiva</h3>
+              <p>o mesmo relógio que a mesa está vendo</p>
+            </div>
+            <div id="contadorFlip"></div>
+            <div class="flip-case-foot">
+              <span><i class="flip-pulse"></i><span class="js-contador-estado">—</span></span>
+              <span id="adminLeitura">—</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="alt">
+      <div class="container">
+        <div class="admin-grade">
+
+          <!-- --- Marcha --- -->
+          <div class="admin-bloco">
+            <h3>Marcha</h3>
+            <p class="admin-ajuda">Começar, segurar e soltar o relógio. Pausado, o tempo congela para todo mundo.</p>
+            <div class="admin-botoes">
+              <button class="bd-botao" type="button" data-acao="iniciar">iniciar</button>
+              <button class="bd-botao" type="button" data-acao="pausar">pausar</button>
+              <button class="bd-botao" type="button" data-acao="continuar">continuar</button>
+              <button class="bd-botao" type="button" data-acao="reiniciar">reiniciar do começo</button>
+              <button class="bd-botao bd-botao--fraco" type="button" data-acao="zerar">zerar agora</button>
+            </div>
+          </div>
+
+          <!-- --- Velocidade --- -->
+          <div class="admin-bloco">
+            <h3>Velocidade</h3>
+            <p class="admin-ajuda">
+              Multiplica a passagem do tempo. Em 2×, uma hora real vale duas horas de história.
+              Pode trocar com a contagem correndo — ninguém perde nem ganha tempo na troca.
+            </p>
+            <div class="admin-botoes" id="adminVels">
+              <button class="bd-botao" type="button" data-vel="1">1×</button>
+              <button class="bd-botao" type="button" data-vel="2">2×</button>
+              <button class="bd-botao" type="button" data-vel="5">5×</button>
+              <button class="bd-botao" type="button" data-vel="10">10×</button>
+              <button class="bd-botao" type="button" data-vel="30">30×</button>
+              <button class="bd-botao" type="button" data-vel="60">60×</button>
+              <button class="bd-botao" type="button" data-vel="168">168× (1 semana por hora)</button>
+            </div>
+            <div class="admin-linha">
+              <label for="adminVelLivre">outra</label>
+              <input type="number" id="adminVelLivre" min="0.1" step="0.1" placeholder="ex.: 3,5">
+              <button class="bd-botao bd-botao--fraco" type="button" id="adminVelAplicar">aplicar</button>
+            </div>
+          </div>
+
+          <!-- --- Tempo --- -->
+          <div class="admin-bloco admin-bloco--largo">
+            <h3>Tempo</h3>
+            <p class="admin-ajuda">
+              Os quatro campos são o relógio inteiro. <b>Trocar o tempo restante</b> mexe só no
+              agora; <b>definir nova contagem</b> troca também o valor de fábrica, que é para onde
+              o botão “reiniciar do começo” volta.
+            </p>
+            <div class="admin-campos">
+              <label>semanas <input type="number" id="campoSemanas" min="0" max="99" value="4"></label>
+              <label>dias <input type="number" id="campoDias" min="0" max="6" value="0"></label>
+              <label>horas <input type="number" id="campoHoras" min="0" max="23" value="0"></label>
+              <label>minutos <input type="number" id="campoMinutos" min="0" max="59" value="0"></label>
+            </div>
+            <div class="admin-botoes">
+              <button class="bd-botao" type="button" id="adminDefinirTempo">trocar o tempo restante</button>
+              <button class="bd-botao" type="button" id="adminDefinirInicial">definir nova contagem</button>
+              <button class="bd-botao bd-botao--fraco" type="button" id="adminPuxarAtual">copiar o tempo atual para os campos</button>
+            </div>
+            <div class="admin-linha">
+              <label for="adminRotulo">nome que aparece em cima do relógio</label>
+              <input type="text" id="adminRotulo" maxlength="60" placeholder="Colisão da Terra-616">
+              <button class="bd-botao bd-botao--fraco" type="button" id="adminSalvarRotulo">salvar</button>
+            </div>
+          </div>
+
+          <!-- --- Universos --- -->
+          <div class="admin-bloco admin-bloco--largo">
+            <h3>Universos e incursões</h3>
+            <p class="admin-ajuda">
+              A ordem da fila e o estado de cada universo saem daqui e valem para a mesa inteira.
+              <b>Destruir o universo em incursão</b> faz duas coisas de uma vez: aquele universo passa a
+              aparecer fragmentado e apagado, e o próximo intacto da fila recebe os anéis roxos.
+              A 616 é a casa e não entra na fila.
+            </p>
+            <div class="uni-admin-lista" id="uniAdminLista"></div>
+            <div class="admin-botoes">
+              <button class="bd-botao" type="button" id="uniDestruir">destruir o universo em incursão</button>
+              <button class="bd-botao bd-botao--fraco" type="button" id="uniRestaurar">voltar a fila para o estado inicial</button>
+            </div>
+          </div>
+
+          <!-- --- Bomba --- -->
+          <div class="admin-bloco admin-bloco--largo">
+            <h3>Bomba dimensional</h3>
+            <p class="admin-ajuda">
+              Cada ativação sorteia uma semente nova, e a semente é o que gera os quatro
+              desafios. Trocar a semente troca fios, sequência, comandos e anéis de uma vez.
+            </p>
+            <p class="admin-leitura" id="adminBomba">—</p>
+            <div class="admin-botoes">
+              <button class="bd-botao" type="button" id="adminNovaAtivacao">sortear nova ativação</button>
+              <button class="bd-botao bd-botao--fraco" type="button" id="adminZerarBomba">voltar para a ativação 1</button>
+            </div>
+          </div>
+
+        </div>
+
+        <p class="admin-recado" id="adminRecado"></p>
+      </div>
+    </section>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container footer-top">
+      <hr class="rivet-rule">
+      <p class="footer-credit">Painel do mestre · RPG II</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/universos.js"></script>
+  <script src="js/contador.js"></script>
+  <script src="js/bomba.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

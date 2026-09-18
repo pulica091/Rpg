@@ -1,0 +1,251 @@
+/* =======================================================================
+   contador.css — O PAINEL DE PLACAS
+
+   Referência: os contadores de estação de trem e de aeroporto dos anos 60
+   — placas de baquelite presas a um eixo, número em creme desbotado, e um
+   estalo quando a placa cai. Nada aqui pode parecer display de LED: sem
+   brilho neon, sem borda arredondada de app, sem número fino.
+
+   Como é feito cada dígito (4 camadas empilhadas):
+     .fd-top     metade de cima, já com o número NOVO
+     .fd-bottom  metade de baixo, ainda com o número VELHO
+     .fd-leaf-top     a placa velha tombando pra frente (cobre a de cima)
+     .fd-leaf-bottom  a placa nova chegando por baixo
+   ======================================================================= */
+
+.contador-bloco {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* --- A caixa do aparelho ------------------------------------------------
+   Chapa escovada, cantos chanfrados e quatro parafusos. A caixa é o
+   suporte: quem manda na atenção são as placas. */
+.flip-case {
+  position: relative;
+  padding: 26px 18px 20px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.05), transparent 42%),
+    repeating-linear-gradient(90deg,
+      rgba(255,255,255,0.016) 0 2px, transparent 2px 5px),
+    linear-gradient(170deg, #22241d, #131510 60%, #0d0f0b);
+  border: 1px solid var(--border-strong);
+  border-top-color: rgba(255,255,255,0.09);
+  clip-path: polygon(0 14px, 14px 0, calc(100% - 14px) 0, 100% 14px,
+                     100% calc(100% - 14px), calc(100% - 14px) 100%,
+                     14px 100%, 0 calc(100% - 14px));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 22px 44px rgba(0,0,0,0.45);
+}
+
+/* Parafusos de fenda nos quatro cantos. */
+.flip-case::before,
+.flip-case::after {
+  content: "";
+  position: absolute;
+  top: 12px; bottom: 12px;
+  width: 9px;
+  background:
+    radial-gradient(circle at 50% 35%, #6b6a58, #2a2b22 70%) top center / 9px 9px no-repeat,
+    radial-gradient(circle at 50% 35%, #6b6a58, #2a2b22 70%) bottom center / 9px 9px no-repeat;
+  opacity: 0.85;
+  pointer-events: none;
+}
+.flip-case::before { left: 10px; }
+.flip-case::after  { right: 10px; }
+
+.flip-case-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 0 14px 16px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.flip-case-head h3 {
+  margin: 0;
+  font-family: var(--font-title);
+  font-size: 1.05rem;
+  color: #c9cbb8;
+}
+.flip-case-head p {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+}
+
+/* --- A fileira de unidades --------------------------------------------- */
+.flipboard {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: clamp(6px, 1.6vw, 14px);
+  padding: 22px 4px 8px;
+  --placa-h: clamp(62px, 13vw, 104px);
+  --placa-w: clamp(42px, 8.6vw, 70px);
+}
+
+.flip-group { display: grid; justify-items: center; gap: 10px; }
+.flip-digits { display: flex; gap: 4px; }
+
+.flip-label {
+  font-family: var(--font-mono);
+  font-size: clamp(0.56rem, 1.5vw, 0.68rem);
+  letter-spacing: 0.22em;
+  color: var(--text-dim);
+}
+
+/* O pino de junção entre uma unidade e outra — dois rebites, não dois
+   pontinhos de relógio digital. */
+.flip-joint {
+  align-self: flex-start;
+  width: 5px;
+  height: var(--placa-h);
+  display: grid;
+  align-content: center;
+  gap: 12px;
+}
+.flip-joint::before,
+.flip-joint::after {
+  content: "";
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #7d7c66, #2b2c23);
+}
+
+/* --- A placa ------------------------------------------------------------ */
+.flip-digit {
+  position: relative;
+  width: var(--placa-w);
+  height: var(--placa-h);
+  perspective: 480px;
+  font-family: var(--font-display);
+  font-size: calc(var(--placa-h) * 0.72);
+  line-height: 1;
+  color: #e6e2cf;
+  background: #0a0b08;
+  border-radius: 3px;
+  box-shadow: 0 2px 0 rgba(0,0,0,0.6), inset 0 0 0 1px rgba(255,255,255,0.05);
+}
+
+.fd-half {
+  position: absolute;
+  left: 0; right: 0;
+  height: 50%;
+  overflow: hidden;
+  backface-visibility: hidden;
+  background:
+    linear-gradient(180deg, #2c2e26, #1a1c16);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.045);
+}
+.fd-top {
+  top: 0;
+  border-radius: 3px 3px 0 0;
+  background: linear-gradient(180deg, #32342b, #1e201a);
+}
+.fd-bottom {
+  bottom: 0;
+  border-radius: 0 0 3px 3px;
+  background: linear-gradient(180deg, #191b15, #23251d);
+}
+
+/* O número ocupa a placa inteira; cada metade mostra o pedaço dele. */
+.fd-half span {
+  position: absolute;
+  left: 0; width: 100%;
+  height: var(--placa-h);
+  line-height: var(--placa-h);
+  text-align: center;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.7);
+}
+.fd-top span { top: 0; }
+.fd-bottom span { bottom: 0; }
+
+/* A fresta do eixo, bem no meio. */
+.fd-seam {
+  position: absolute;
+  left: 0; right: 0; top: 50%;
+  height: 2px;
+  margin-top: -1px;
+  background: linear-gradient(180deg, rgba(0,0,0,0.85), rgba(255,255,255,0.07));
+  z-index: 6;
+  pointer-events: none;
+}
+
+/* --- A queda ------------------------------------------------------------ */
+.fd-leaf { display: none; z-index: 5; }
+.flip-digit.is-flipping .fd-leaf { display: block; }
+
+.flip-digit.is-flipping .fd-leaf-top {
+  transform-origin: 50% 100%;
+  animation: placaCai 0.28s cubic-bezier(0.5, 0, 0.9, 0.55) forwards;
+}
+.flip-digit.is-flipping .fd-leaf-bottom {
+  transform-origin: 50% 0;
+  transform: rotateX(90deg);
+  animation: placaAssenta 0.3s cubic-bezier(0.15, 0.6, 0.35, 1.25) 0.27s forwards;
+}
+
+@keyframes placaCai {
+  0%   { transform: rotateX(0deg);   filter: brightness(1); }
+  100% { transform: rotateX(-90deg); filter: brightness(0.55); }
+}
+@keyframes placaAssenta {
+  0%   { transform: rotateX(90deg); filter: brightness(0.5); }
+  85%  { transform: rotateX(-4deg); filter: brightness(1.04); }
+  100% { transform: rotateX(0deg);  filter: brightness(1); }
+}
+
+/* Estados do aparelho. Parado: as placas perdem contraste, como painel
+   sem energia. Acelerado: o verde de sinal encosta nos números. */
+.flipboard.is-parado .flip-digit { color: #9a9a8a; filter: saturate(0.6) brightness(0.86); }
+.flipboard.is-acelerado .flip-digit { color: color-mix(in srgb, var(--signal-soft) 55%, #e6e2cf); }
+.flipboard.is-zerado .flip-digit { color: color-mix(in srgb, var(--loss) 65%, #e6e2cf); }
+
+/* Rodapé do aparelho: o que o mestre configurou, em letra de plaqueta. */
+.flip-case-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 14px 14px 2px;
+  margin-top: 6px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+}
+.flip-pulse {
+  display: inline-block;
+  width: 7px; height: 7px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: var(--signal);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--signal) 60%, transparent);
+  vertical-align: middle;
+}
+body.contador-rodando .flip-pulse { animation: pulsoContador 1s steps(1) infinite; }
+body.contador-pausado .flip-pulse { background: var(--text-dim); box-shadow: none; }
+body.contador-zerado  .flip-pulse { background: var(--loss); box-shadow: none; }
+@keyframes pulsoContador { 0%, 60% { opacity: 1; } 61%, 100% { opacity: 0.25; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .flip-digit.is-flipping .fd-leaf-top,
+  .flip-digit.is-flipping .fd-leaf-bottom { animation-duration: 0.01ms; }
+  body.contador-rodando .flip-pulse { animation: none; }
+}
+
+/* Tema claro: a chapa vira esmalte claro, os números continuam escuros. */
+:root[data-theme="light"] .flip-case {
+  background:
+    linear-gradient(180deg, rgba(0,0,0,0.04), transparent 40%),
+    linear-gradient(170deg, #d8d4c6, #c3bfb0);
+}
+:root[data-theme="light"] .flip-digit { color: #1d1f19; background: #b9b5a6; }
+:root[data-theme="light"] .fd-top    { background: linear-gradient(180deg, #e3dfd0, #cdc9ba); }
+:root[data-theme="light"] .fd-bottom { background: linear-gradient(180deg, #c5c1b2, #d6d2c3); }
+:root[data-theme="light"] .fd-half span { text-shadow: 0 1px 0 rgba(255,255,255,0.5); }

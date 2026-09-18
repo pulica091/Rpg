@@ -1,0 +1,189 @@
+/* =======================================================================
+   resultados.css — PAINEL DE RESULTADOS
+
+   Aqui a regra é o contrário do resto do RPG II: o painel precisa ser
+   LEGÍVEL antes de ser bonito. Então nada de placa torta, canto arrancado
+   ou ruído por cima do gráfico — os blocos são retos, o fundo é calmo e a
+   cor só aparece onde carrega informação (verde = sucesso, vinho = falha,
+   roxo = tendência). O clima da campanha fica nos rótulos e na tipografia.
+   ======================================================================= */
+
+.res-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.res-filtros label {
+  display: grid;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.14em;
+  color: var(--text-dim);
+}
+.res-filtros select {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 9px 12px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  min-width: 180px;
+}
+.res-filtros select:disabled { opacity: 0.45; }
+.res-filtros .btn { margin-left: auto; }
+
+.res-aviso {
+  margin: 14px 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  line-height: 1.7;
+  color: var(--text-dim);
+  border-left: 2px solid var(--rift);
+  padding-left: 12px;
+}
+.res-aviso code { color: var(--signal-soft); }
+
+/* --- Resumo: seis leituras curtas -------------------------------------- */
+.res-resumo {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 24px;
+}
+@media (min-width: 640px) { .res-resumo { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 980px) { .res-resumo { grid-template-columns: repeat(6, 1fr); } }
+
+.res-cartao {
+  display: grid;
+  gap: 4px;
+  padding: 16px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--signal);
+}
+.res-cartao strong {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 4vw, 2.1rem);
+  line-height: 1;
+  color: var(--text);
+  font-weight: 400;
+}
+.res-cartao span {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  color: var(--text-dim);
+}
+
+/* --- Os gráficos -------------------------------------------------------- */
+.res-grade {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@media (min-width: 900px) {
+  .res-grade { grid-template-columns: 1fr 1fr; }
+  .grafico--largo { grid-column: 1 / -1; }
+}
+
+.grafico {
+  padding: 20px 18px 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+.grafico h3 { margin: 0 0 4px; font-size: 1.05rem; color: var(--text); }
+.grafico-sub {
+  margin: 0 0 14px;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  line-height: 1.7;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+}
+.grafico canvas { display: block; width: 100%; }
+
+/* Estado vazio: o gráfico some e sobra a explicação do porquê. Nunca
+   desenhamos barra de mentira só pra preencher o espaço. */
+.grafico-vazio {
+  display: none;
+  margin: 0;
+  padding: 26px 16px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  line-height: 1.8;
+  color: var(--text-dim);
+  border: 1px dashed var(--border);
+}
+.grafico.is-vazia canvas { display: none; }
+.grafico.is-vazia .grafico-sub { display: none; }
+.grafico.is-vazia .grafico-vazio { display: block; }
+
+.chave {
+  display: inline-block;
+  width: 9px; height: 9px;
+  margin: 0 6px 0 14px;
+  background: var(--cor, var(--signal));
+  vertical-align: baseline;
+}
+.chave:first-child { margin-left: 0; }
+.chave--vazia { background: transparent; border: 1px solid var(--border); }
+
+/* --- Tabela ------------------------------------------------------------- */
+.res-tabela-rolo { overflow-x: auto; }
+.res-tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+}
+.res-tabela th {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-strong);
+  color: var(--text-dim);
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  font-size: 0.62rem;
+  white-space: nowrap;
+}
+.res-tabela td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+.res-tabela tr:hover td { background: var(--surface); color: var(--text); }
+.td-forte { color: var(--text); font-size: 0.85rem; }
+.tabela-vazia { text-align: center; padding: 30px 12px; }
+
+.is-sucesso { color: var(--signal); }
+.is-falha   { color: color-mix(in srgb, var(--loss) 60%, #d99); }
+
+/* --- Sem conta ---------------------------------------------------------- */
+.res-sem-conta {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 36px 26px;
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--rift);
+}
+.res-sem-conta h2 { font-size: clamp(1.4rem, 5vw, 2rem); margin-bottom: 10px; }
+.res-sem-conta p { color: var(--text-dim); margin-bottom: 20px; }
+
+/* --- Complementos na Ficha e nos Dados ---------------------------------- */
+.account-bar-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.char-edit-btn--fraco {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  text-align: center;
+  text-decoration: none;
+}
+.char-edit-btn--fraco:hover { color: var(--text); border-color: var(--border-strong); }

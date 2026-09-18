@@ -1,0 +1,253 @@
+/* =======================================================================
+   universos.css — O CAMPO DE UNIVERSOS
+
+   Quatro aparências, e cada uma precisa dizer o estado SEM legenda:
+
+   principal  a 616: inteira, quente, estável. É a única com luz própria.
+   intacto    corpo apagado, contorno limpo. Está ali, não é a vez dele.
+   incursao   anéis roxos ao redor, feito anel de Saturno visto de frente
+              — o que dá a leitura de ALVO. Eles tremem e falham de
+              propósito: é instabilidade dimensional, não enfeite.
+   destruido  não é um planeta escurecido: é um planeta PARTIDO. Os cacos
+              ficam separados, tortos e sem brilho nenhum.
+   ======================================================================= */
+
+.universo-campo {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+@media (min-width: 680px) { .universo-campo { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1040px) { .universo-campo { grid-template-columns: repeat(3, 1fr); } }
+
+.uni {
+  --cor-uni: var(--text-dim);
+  display: grid;
+  gap: 14px;
+  padding: 24px 20px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--cor-uni);
+  clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%);
+}
+
+.uni-palco {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 190px;
+}
+
+/* --- O corpo do universo ------------------------------------------------ */
+.uni-corpo {
+  position: relative;
+  width: 108px;
+  height: 108px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 34% 30%, color-mix(in srgb, var(--cor-uni) 55%, #d8d6c8), var(--cor-uni) 58%, #0a0b07 100%);
+  box-shadow: inset -12px -10px 26px rgba(0,0,0,0.7);
+}
+/* Faixa fina de atmosfera — some no destruído. */
+.uni-corpo::after {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--cor-uni) 40%, transparent);
+  opacity: 0.55;
+}
+
+/* --- PRINCIPAL: a 616 --------------------------------------------------- */
+.uni--principal { --cor-uni: var(--signal); border-top-width: 3px; }
+.uni--principal .uni-corpo {
+  width: 124px; height: 124px;
+  box-shadow: inset -12px -10px 26px rgba(0,0,0,0.7),
+              0 0 44px color-mix(in srgb, var(--signal) 35%, transparent);
+}
+
+/* --- INTACTO ------------------------------------------------------------ */
+.uni--intacto { --cor-uni: color-mix(in srgb, var(--text-dim) 80%, var(--signal)); }
+
+/* --- INCURSÃO: os anéis roxos ------------------------------------------- */
+.uni--incursao { --cor-uni: var(--rift); border-top-width: 3px; }
+.uni--incursao .uni-corpo {
+  box-shadow: inset -12px -10px 26px rgba(0,0,0,0.7),
+              0 0 36px color-mix(in srgb, var(--rift) 45%, transparent);
+}
+
+.uni-aneis {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+.uni-aneis i {
+  position: absolute;
+  border: 1px solid var(--rift);
+  border-radius: 50%;
+  /* Anel de Saturno visto quase de frente: achatado o suficiente pra ter
+     perspectiva, redondo o suficiente pra ler como alvo. */
+  transform: rotateX(62deg);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--rift) 55%, transparent);
+  animation: anelTrepida 3.4s ease-in-out infinite;
+}
+.uni-aneis i:nth-child(1) { width: 150px; height: 150px; opacity: 0.95; animation-delay: 0s; }
+.uni-aneis i:nth-child(2) { width: 186px; height: 186px; opacity: 0.7;  animation-delay: 0.4s; border-style: dashed; }
+.uni-aneis i:nth-child(3) { width: 224px; height: 224px; opacity: 0.5;  animation-delay: 0.9s; }
+.uni-aneis i:nth-child(4) { width: 262px; height: 262px; opacity: 0.3;  animation-delay: 1.3s; border-style: dotted; }
+
+@keyframes anelTrepida {
+  0%, 100% { transform: rotateX(62deg) scale(1);      filter: none; }
+  42%      { transform: rotateX(62deg) scale(1.025);  filter: brightness(1.25); }
+  46%      { transform: rotateX(62deg) scale(0.995) translateX(2px); filter: brightness(0.6); }
+  48%      { transform: rotateX(62deg) scale(1.01) translateX(-2px); }
+  70%      { transform: rotateX(62deg) scale(1.004);  filter: none; }
+}
+
+/* A falha: uma fatia da imagem escorrega por alguns quadros, como sinal
+   de vídeo com defeito. Curta e irregular — se repetir bonitinho, vira
+   animação decorativa e perde o efeito de instabilidade. */
+.uni-falha {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(0deg,
+      color-mix(in srgb, var(--rift) 22%, transparent) 0 1px,
+      transparent 1px 5px);
+  mix-blend-mode: screen;
+  opacity: 0;
+  animation: falhaDimensional 5.5s steps(1) infinite;
+}
+@keyframes falhaDimensional {
+  0%, 62%, 100% { opacity: 0; transform: none; clip-path: none; }
+  63% { opacity: 0.85; transform: translateX(-7px); clip-path: inset(38% 0 48% 0); }
+  64% { opacity: 0.5;  transform: translateX(5px);  clip-path: inset(12% 0 72% 0); }
+  65% { opacity: 0.9;  transform: translateX(-3px); clip-path: inset(62% 0 22% 0); }
+  66% { opacity: 0; }
+  88% { opacity: 0.7;  transform: translateX(4px);  clip-path: inset(24% 0 60% 0); }
+  89% { opacity: 0; }
+}
+
+/* --- DESTRUÍDO: o planeta partido --------------------------------------- */
+.uni--destruido { --cor-uni: #3a3a34; opacity: 0.92; }
+.uni--destruido .uni-ficha h3,
+.uni--destruido .uni-ficha p { color: var(--text-dim); }
+
+.uni-corpo--roto {
+  background: none;
+  box-shadow: none;
+  width: 130px; height: 130px;
+}
+.uni-corpo--roto::after { display: none; }
+.uni-corpo--roto .caco {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, #2a2a25, #101009 70%);
+  filter: grayscale(1) brightness(0.55);
+}
+/* Cada caco é uma fatia do mesmo círculo, deslocada pra fora. Juntos
+   ainda dá pra reconhecer que aquilo já foi um planeta. */
+.caco--1 { clip-path: polygon(50% 50%, 0 0, 48% 0); transform: translate(-13px, -11px) rotate(-8deg); }
+.caco--2 { clip-path: polygon(50% 50%, 52% 0, 100% 0, 100% 34%); transform: translate(12px, -8px) rotate(6deg); }
+.caco--3 { clip-path: polygon(50% 50%, 100% 38%, 100% 100%, 62% 100%); transform: translate(15px, 10px) rotate(11deg); }
+.caco--4 { clip-path: polygon(50% 50%, 58% 100%, 8% 100%); transform: translate(-4px, 16px) rotate(-5deg); }
+.caco--5 { clip-path: polygon(50% 50%, 4% 100%, 0 40%, 0 4%); transform: translate(-16px, 6px) rotate(9deg); }
+
+/* Poeira do que sobrou */
+.uni--destruido .uni-palco::after {
+  content: "";
+  position: absolute;
+  width: 190px; height: 190px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(120,120,110,0.09), transparent 62%);
+}
+
+/* --- A ficha ao lado do corpo ------------------------------------------- */
+.uni-ficha { position: relative; display: grid; gap: 4px; }
+.uni-ordem {
+  position: absolute;
+  top: -2px; right: 0;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  line-height: 1;
+  color: color-mix(in srgb, var(--cor-uni) 60%, transparent);
+}
+.uni-ficha h3 { margin: 0; font-size: 1.22rem; color: var(--text); }
+.uni-codigo {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  color: var(--cor-uni);
+}
+.uni-ficha p {
+  margin: 6px 0 10px;
+  font-size: 0.86rem;
+  line-height: 1.65;
+  color: var(--text-dim);
+  max-width: 34ch;
+}
+.uni-selo {
+  justify-self: start;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.16em;
+  padding: 5px 10px;
+  border: 1px solid currentColor;
+  color: var(--cor-uni);
+}
+.uni--incursao .uni-selo { animation: hudBlink 1.6s steps(1) infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .uni-aneis i, .uni-falha, .uni--incursao .uni-selo { animation: none; }
+  .uni-falha { opacity: 0.25; }
+}
+
+/* --- Controle no painel do mestre --------------------------------------- */
+.uni-admin-lista { display: grid; gap: 8px; margin-bottom: 16px; }
+.uni-admin-linha {
+  display: grid;
+  grid-template-columns: 26px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: #14160f;
+  border: 1px solid #0b0d08;
+}
+.uni-admin-linha b { font-family: var(--font-title); font-weight: 600; color: var(--text); }
+.uni-admin-linha small {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+}
+.uni-admin-linha .uni-admin-ordem {
+  font-family: var(--font-display);
+  color: var(--text-dim);
+  text-align: center;
+}
+.uni-admin-acoes { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.uni-admin-acoes select {
+  background: #0d0f09;
+  color: var(--text);
+  border: 1px solid #0a0c07;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  padding: 6px 8px;
+}
+.uni-admin-linha[data-estado="incursao"] { border-left: 3px solid var(--rift); }
+.uni-admin-linha[data-estado="destruido"] { border-left: 3px solid var(--loss); opacity: 0.7; }
+.uni-admin-linha[data-estado="principal"] { border-left: 3px solid var(--signal); }
+
+/* --- Fichas do Multiverso ----------------------------------------------
+   Mesmo dado, outra forma: aqui não há planeta desenhado, só o registro.
+   A cor da borda repete o estado para não precisar ler o rótulo. */
+.uni-ficha-cartao--principal { --u-color: var(--signal); }
+.uni-ficha-cartao--incursao  { --u-color: var(--rift); }
+.uni-ficha-cartao--destruido { --u-color: var(--loss); filter: grayscale(0.55); opacity: 0.8; }
+.uni-ficha-cartao--intacto   { --u-color: var(--text-dim); }
+.uni-ficha-cartao--incursao .universe-id { animation: hudBlink 1.8s steps(1) infinite; }

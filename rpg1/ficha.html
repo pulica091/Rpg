@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <!-- Aplica o tema salvo (claro/escuro) ANTES da página desenhar, para não
+       piscar o tema errado por uma fração de segundo ao carregar. -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('rpg-theme');
+        if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+      } catch (e) {}
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ficha — RPG</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="container">
+      <a href="index.html" class="brand">
+        <span class="brand-badge"><img src="img/logo-rpg1.jpg" alt="RPG — Primeiro Dia"></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Início</a></li>
+        <li><a href="personagens.html">Personagens</a></li>
+        <li><a href="mapa.html">Mapa</a></li>
+        <li><a href="galeria.html">Galeria</a></li>
+        <li><a href="criaturas.html">Criaturas</a></li>
+        <li><a href="pedras.html">Pedras</a></li>
+        <li><a href="dados.html">Dados</a></li>
+        <li><a href="ficha.html" class="active">Ficha</a></li>
+      </ul>
+      <div class="nav-actions">
+        <div class="campaign-switch" id="campaignSwitch">
+          <button class="campaign-trigger" id="campaignTrigger" aria-haspopup="true" aria-expanded="false">
+            RPG I <span class="chevron">▾</span>
+          </button>
+          <div class="campaign-panel">
+            <a class="campaign-item is-active" href="index.html">
+              <span class="campaign-thumb"><img src="img/logo-rpg1.jpg" alt="RPG I"></span>
+              <span class="campaign-text">
+                <span class="campaign-name">RPG I — Primeiro Dia</span>
+                <span class="campaign-tag">Campanha atual</span>
+              </span>
+            </a>
+            <a class="campaign-item" href="../rpg2/index.html">
+              <span class="campaign-thumb"><img src="../rpg2/img/logo-rpg2.jpg" alt="RPG II"></span>
+              <span class="campaign-text">
+                <span class="campaign-name">RPG II — Dia do Julgamento Final</span>
+                <span class="campaign-tag">Disponível</span>
+              </span>
+            </a>
+            <a class="campaign-item is-soon" href="../rpg3/index.html">
+              <span class="campaign-thumb"><img src="../rpg3/img/logo-rpg3.jpg" alt="RPG III"></span>
+              <span class="campaign-text">
+                <span class="campaign-name">RPG III — Dias de um Passado Esquecido</span>
+                <span class="campaign-tag">Em breve</span>
+              </span>
+            </a>
+          </div>
+        </div>
+        <a href="../downloads.html" class="downloads-link" aria-label="Downloads" title="Downloads">⬇</a>
+        <button class="theme-toggle" id="themeToggle" aria-label="Alternar modo claro/escuro">
+          <span class="icon-sun">☀</span><span class="icon-moon">☾</span>
+        </button>
+        <button class="nav-toggle" aria-label="Abrir menu">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero hero--compact">
+    <div class="container">
+      <span class="eyebrow">Mesa de jogo</span>
+      <h1>Ficha de Personagem</h1>
+    </div>
+  </header>
+
+  <!-- =====================================================================
+       LOGIN / CADASTRO — só aparece pra quem ainda não está logado.
+       Tudo salvo localmente neste navegador (ver aviso em js/auth.js).
+       ===================================================================== -->
+  <section id="authSection" style="padding-top:12px;">
+    <div class="container">
+      <div class="auth-box reveal">
+        <div class="auth-tabs">
+          <button class="auth-tab is-active" data-tab="login">Entrar</button>
+          <button class="auth-tab" data-tab="cadastro">Criar conta</button>
+        </div>
+
+        <form id="formLogin" class="auth-form" novalidate>
+          <p class="field-label">Nome de usuário</p>
+          <input type="text" id="loginUsuario" autocomplete="username" required>
+          <p class="field-label">Senha</p>
+          <input type="password" id="loginSenha" autocomplete="current-password" required>
+          <p class="auth-msg" id="loginMsg"></p>
+          <button type="submit" class="btn btn-gold">Entrar</button>
+        </form>
+
+        <form id="formCadastro" class="auth-form" style="display:none;" novalidate>
+          <p class="field-label">Escolha um nome de usuário</p>
+          <input type="text" id="cadUsuario" autocomplete="username" required>
+          <p class="field-label">Crie uma senha</p>
+          <input type="password" id="cadSenha" autocomplete="new-password" required>
+          <p class="auth-hint">Simples mesmo — é só pra você e o outro jogador não mexerem na ficha um do outro. Não é um sistema com back-end ainda, então isso fica salvo só neste navegador.</p>
+          <p class="auth-msg" id="cadMsg"></p>
+          <button type="submit" class="btn btn-gold">Criar conta</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       ÁREA LOGADA
+       ===================================================================== -->
+  <section id="appSection" style="padding-top:12px; display:none;">
+    <div class="container">
+
+      <div class="account-bar reveal">
+        <p class="account-hello">Logado como <strong id="helloUsuario">—</strong></p>
+        <button class="btn" id="btnAbrirMenu">☰ Menu da conta</button>
+      </div>
+
+      <div class="section-head reveal">
+        <span class="eyebrow">Seus personagens</span>
+        <h2>Selecione quem vai jogar</h2>
+        <p>Toque na foto pra marcar quem está em jogo agora (pode escolher mais de um). Toque em "Editar ficha" pra preencher os atributos.</p>
+      </div>
+
+      <div class="char-grid reveal" id="charGrid">
+        <!-- preenchido via JS -->
+        <p class="char-grid-empty" id="charGridEmpty">Você ainda não vinculou nenhum personagem à sua conta. Abra o menu (☰) pra vincular um.</p>
+      </div>
+
+      <div class="sheet-card reveal" id="sheetCard" style="display:none;">
+        <div class="sheet-head">
+          <div>
+            <span class="eyebrow" id="sheetEyebrow">Editando ficha</span>
+            <h3 id="sheetNome">—</h3>
+          </div>
+          <span class="attr-counter" id="attrCounter">0/25</span>
+        </div>
+
+        <div class="attr-rows" id="attrRows"></div>
+
+        <div class="sheet-actions">
+          <button class="btn btn-gold" id="btnSalvarFicha">Salvar ficha</button>
+          <button class="btn" id="btnFecharFicha">Voltar</button>
+          <span class="sheet-msg" id="sheetMsg"></span>
+        </div>
+        <p class="sheet-limit-note">Distribua os pontos entre as perícias com os botões +/– — no total, no máximo 25 pontos por personagem.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       MENU DA CONTA — gaveta lateral, aberta pelo botão "☰ Menu da conta".
+       Contém o menu do site + o gerenciamento de conta/personagens.
+       ===================================================================== -->
+  <div class="acc-overlay" id="accOverlay"></div>
+  <aside class="acc-drawer" id="accDrawer" aria-hidden="true">
+    <div class="acc-drawer-head">
+      <h3>Menu</h3>
+      <button class="acc-close" id="btnFecharMenu" aria-label="Fechar menu">✕</button>
+    </div>
+
+    <div class="acc-drawer-body">
+      <div class="acc-block">
+        <p class="acc-block-title">Navegação do site</p>
+        <ul class="acc-nav-list">
+          <li><a href="index.html">Início</a></li>
+          <li><a href="personagens.html">Personagens</a></li>
+          <li><a href="mapa.html">Mapa</a></li>
+          <li><a href="galeria.html">Galeria</a></li>
+          <li><a href="criaturas.html">Criaturas</a></li>
+          <li><a href="pedras.html">Pedras</a></li>
+          <li><a href="dados.html">Dados</a></li>
+          <li><a href="ficha.html" class="active">Ficha</a></li>
+        </ul>
+      </div>
+
+      <div class="acc-block">
+        <p class="acc-block-title">Sua conta</p>
+        <p class="acc-account-name" id="drawerUsuario">—</p>
+        <div class="acc-block-actions">
+          <a class="btn" href="dashboard.html">Dashboard</a>
+          <button class="btn" id="btnSair">Sair da conta</button>
+        </div>
+      </div>
+
+      <div class="acc-block">
+        <p class="acc-block-title">Vincular um personagem</p>
+        <p class="acc-block-hint">Escolha um personagem da lista pra vincular à sua conta. Um personagem só pode estar vinculado a uma conta por vez.</p>
+        <div class="acc-link-row">
+          <select id="selectVincular"></select>
+          <button class="btn" id="btnVincular">Vincular</button>
+        </div>
+        <p class="auth-msg" id="vincularMsg"></p>
+      </div>
+
+      <div class="acc-block">
+        <p class="acc-block-title">Meus personagens vinculados</p>
+        <ul class="acc-linked-list" id="linkedList"></ul>
+      </div>
+
+      <div class="acc-block">
+        <button class="acc-toggle-form" id="btnMostrarCadastro" type="button">+ Cadastrar um personagem novo</button>
+        <form id="formNovoPersonagem" class="acc-new-char-form" style="display:none;">
+          <p class="field-label">Nome do personagem</p>
+          <input type="text" id="novoNome" required>
+          <p class="field-label">Caminho da foto (opcional)</p>
+          <input type="text" id="novaImg" placeholder="img/exemplo.jpg">
+          <p class="acc-block-hint">A foto precisa já estar na pasta <code>img/</code> do site — isso só cadastra o nome e o link dela, não faz upload.</p>
+          <p class="auth-msg" id="novoMsg"></p>
+          <button type="submit" class="btn btn-gold">Cadastrar personagem</button>
+        </form>
+      </div>
+    </div>
+  </aside>
+
+  <footer class="site-footer">
+    <div class="container footer-top">
+      <hr class="rivet-rule">
+      <p class="quote">"Toda lenda começa com uma ficha em branco."</p>
+      <ul class="footer-links">
+        <li><a href="index.html">Início</a></li>
+        <li><a href="personagens.html">Personagens</a></li>
+        <li><a href="mapa.html">Mapa</a></li>
+        <li><a href="galeria.html">Galeria</a></li>
+        <li><a href="criaturas.html">Criaturas</a></li>
+        <li><a href="pedras.html">Pedras</a></li>
+        <li><a href="dados.html">Dados</a></li>
+        <li><a href="ficha.html">Ficha</a></li>
+      </ul>
+      <p class="footer-credit">RPG criado por Tio, com participação importante de SMS e Rabesco · 2024–2026</p>
+    </div>
+  </footer>
+  <button id="btnTopo" aria-label="Voltar ao topo">▲</button>
+
+  <script src="js/main.js"></script>
+  <script src="js/roster-data.js"></script>
+  <script src="js/skills-data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ficha.js"></script>
+</body>
+</html>

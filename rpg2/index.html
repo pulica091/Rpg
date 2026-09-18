@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <!-- Aplica o tema salvo (claro/escuro) ANTES da página desenhar, para não
+       piscar o tema errado por uma fração de segundo ao carregar. -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('rpg-theme');
+        if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+      } catch (e) {}
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RPG II — Dia do Julgamento Final</title>
+  <meta name="description" content="RPG II — Dia do Julgamento Final: cinco universos colidem com a Terra-616 e a contagem já começou.">
+  <!-- style.css = esqueleto herdado; incursao.css = a identidade do RPG II.
+       A ordem importa: o segundo reescreve o primeiro. -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/incursao.css">
+  <link rel="stylesheet" href="css/contador.css">
+</head>
+<body>
+
+  <!-- Trilho de estado: a leitura da estação, presente em todas as páginas. -->
+  <div class="status-rail" aria-hidden="true">
+    <div class="status-rail-meter"><i></i></div>
+    <span class="status-rail-text">ESTAÇÃO 616 · LEITURA CONTÍNUA</span>
+  </div>
+
+  <nav class="site-nav">
+    <div class="container">
+      <a href="index.html" class="brand">
+        <span class="brand-badge"><img src="img/logo-rpg2.jpg" alt="RPG II — Dia do Julgamento Final"></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Início</a></li>
+        <li><a href="personagens.html">Personagens</a></li>
+        <li><a href="linha-do-tempo.html">Linha do Tempo</a></li>
+        <li><a href="multiverso.html">Multiverso</a></li>
+        <li><a href="incursoes.html">Incursões</a></li>
+        <li><a href="dados.html">Dados</a></li>
+        <li><a href="ficha.html">Ficha</a></li>
+      </ul>
+      <div class="nav-actions">
+        <div class="campaign-switch" id="campaignSwitch">
+          <button class="campaign-trigger" id="campaignTrigger" aria-haspopup="true" aria-expanded="false">
+            RPG II <span class="chevron">▾</span>
+          </button>
+          <div class="campaign-panel">
+            <a class="campaign-item" href="../rpg1/index.html">
+              <span class="campaign-thumb"><img src="../rpg1/img/logo-rpg1.jpg" alt="RPG I"></span>
+              <span class="campaign-text">
+                <span class="campaign-name">RPG I — Primeiro Dia</span>
+                <span class="campaign-tag">Disponível</span>
+              </span>
+            </a>
+            <a class="campaign-item is-active" href="index.html">
+              <span class="campaign-thumb"><img src="img/logo-rpg2.jpg" alt="RPG II"></span>
+              <span class="campaign-text">
+                <span class="campaign-name">RPG II — Dia do Julgamento Final</span>
+                <span class="campaign-tag">Campanha atual</span>
+              </span>
+            </a>
+            <a class="campaign-item is-soon" href="../rpg3/index.html">
+              <span class="campaign-thumb"><img src="../rpg3/img/logo-rpg3.jpg" alt="RPG III"></span>
+              <span class="campaign-text">
+                <span class="campaign-name">RPG III — Dias de um Passado Esquecido</span>
+                <span class="campaign-tag">Em breve</span>
+              </span>
+            </a>
+          </div>
+        </div>
+        <a href="../downloads.html" class="downloads-link" aria-label="Downloads" title="Downloads">⬇</a>
+        <button class="theme-toggle" id="themeToggle" aria-label="Alternar modo claro/escuro">
+          <span class="icon-sun">☀</span><span class="icon-moon">☾</span>
+        </button>
+        <button class="nav-toggle" aria-label="Abrir menu">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ======================= CAPA — NÃO MEXER =======================
+       Continua exatamente como estava: o wallpaper ocupa a tela toda,
+       o título já vem desenhado na arte e o menu some por cima dela.
+       ================================================================ -->
+  <header class="hero hero--arcane" aria-label="RPG II — Dia do Julgamento Final"></header>
+
+  <!-- ======================= ABERTURA =======================
+       TEXTO PROVISÓRIO: escrevi uma ambientação que fecha com o que
+       você descreveu (pós-RPG I, multiverso, incursões). Troque pelo
+       texto oficial quando ele estiver pronto — a estrutura aguenta
+       qualquer tamanho de texto.
+       ======================================================== -->
+  <section>
+    <div class="container">
+      <div class="section-head reveal" style="max-width:none;">
+        <span class="eyebrow">Registro de abertura · Terra-616</span>
+        <h1 class="split-title" data-text="Dia do Julgamento Final">Dia do Julgamento Final</h1>
+      </div>
+
+      <div class="prose reveal">
+        <p>
+          Seis anos depois do Primeiro Dia, uma noite de Natal marca o começo de tudo. Durante a
+          celebração na Mansão Weber Miller, pessoas começam a desaparecer: viram partículas na
+          frente de quem estava do lado. E não é só ali — milhares de pessoas somem no mundo inteiro
+          naquela mesma noite.
+        </p>
+        <p>
+          Investigando, o grupo descobre que os desaparecidos não foram mortos. Foram enviados para
+          outra realidade — um universo desconhecido, depois identificado como
+          <strong>Universo 000 Origins</strong>. Para chegar até lá, eles precisam reunir recursos,
+          encontrar algumas das maiores mentes disponíveis e desenvolver uma tecnologia capaz de
+          atravessar a barreira entre universos. Depois de muito trabalho, o portal dimensional fica
+          de pé.
+        </p>
+        <p>
+          A equipe passa a viajar entre o 616 e o 000, tentando entender por que os dois universos
+          estão ligados. Conhecem versões alternativas de gente que já conheciam, encontram
+          diferenças entre as duas realidades e percebem que a existência de outros universos é
+          muito maior e mais complicada do que imaginavam.
+        </p>
+        <p>
+          Até a última viagem ao 000. Hela aparece — e não está sozinha. Junto dela surge uma
+          entidade que ninguém sabe nomear, de origem e objetivo desconhecidos. No confronto, Hela é
+          derrotada: a entidade destrói o corpo dela e, em seguida, vira a atenção para o próprio
+          universo. O Universo 000 Origins é destruído.
+        </p>
+        <p>
+          Enquanto aquela realidade desaparece, quem estava lá dentro é puxado de volta para o 616
+          pelo resto da equipe. Na fuga, Arlecchino perde o anel de viagem multiversal e fica
+          gravemente ferida; Natasha doa parte dos próprios poderes para mantê-la viva por um
+          tratamento experimental — o mesmo caminho usado com Joel, adoecido pelas viagens
+          repetidas entre os dois universos. Todos voltam. O portal, não: é destruído no processo.
+        </p>
+        <p>
+          O grupo reconstrói o portal para continuar a investigação e descobre uma verdade muito
+          maior. O que aconteceu com o Universo 000 não foi um caso isolado: o multiverso inteiro
+          está entrando em colapso, e as realidades começaram a colidir umas com as outras através
+          de um fenômeno chamado <strong>Incursão</strong>. O Universo 616 está em rota de colisão
+          com outras quatro realidades.
+        </p>
+        <p>
+          Para impedir que tudo seja destruído, eles têm quatro semanas. Quatro semanas, quatro
+          universos, e uma ameaça capaz de consumir incontáveis realidades. A próxima missão leva o
+          grupo a uma realidade com uma história completamente diferente da nossa:
+          <strong>Terra-424</strong>.
+        </p>
+        <p>
+          O relógio começou a correr.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="ruins-strip" aria-hidden="true"></div>
+
+  <!-- ======================= O QUE MUDOU ======================= -->
+  <section class="alt">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Contexto · o que mudou desde o Primeiro Dia</span>
+        <h2>O mundo depois da primeira campanha</h2>
+        <p>Três coisas que todo mundo na mesa precisa saber antes de sentar.</p>
+      </div>
+
+      <div class="universe-grid">
+        <article class="plate reveal" data-dust>
+          <span class="plate-tag">01 · A ORDEM ANTIGA</span>
+          <h3>As relíquias não voltaram para o lugar</h3>
+          <p>
+            Seis anos de reconstrução, três famílias estabelecidas e uma geração inteira de
+            crianças que nasceu depois do desastre. O mundo tinha acabado de voltar ao normal
+            quando o Natal desfez tudo.
+          </p>
+        </article>
+
+        <article class="plate plate--rift reveal" data-dust>
+          <span class="plate-tag">02 · A DESCOBERTA</span>
+          <h3>Existem outros de nós</h3>
+          <p>
+            O portal dimensional foi construído, destruído e reconstruído. Do outro lado havia o
+            Universo 000 Origins — e, depois dele, a descoberta de que o multiverso inteiro está
+            colidindo consigo mesmo.
+          </p>
+        </article>
+
+        <article class="plate plate--lost reveal" data-dust>
+          <span class="plate-tag">03 · O PREÇO</span>
+          <h3>Uma já foi apagada</h3>
+          <p>
+            O Origins 000 não existe mais. Uma entidade desconhecida derrotou Hela e apagou aquela
+            realidade inteira com a equipe ainda lá dentro. Arlecchino saiu de lá sem o anel e quase
+            sem vida.
+          </p>
+        </article>
+
+        <article class="plate reveal" data-dust>
+          <span class="plate-tag">04 · AGORA</span>
+          <h3>A contagem é real</h3>
+          <p>
+            Quatro semanas para impedir quatro colisões. A contagem corre igual para a mesa
+            inteira, e quem está em rota de colisão agora é a Terra-424.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= SETORES (o painel de acesso) ======================= -->
+  <section>
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Setores da estação</span>
+        <h2>Onde procurar o quê</h2>
+      </div>
+
+      <div class="sector-list reveal">
+        <a class="sector" href="personagens.html" data-dust>
+          <span class="sector-code">PSG</span>
+          <span>
+            <span class="sector-name">Personagens</span>
+            <p class="sector-desc">As três famílias, seus filhos e quem sobrou de cada uma.</p>
+          </span>
+          <span class="sector-state">ESTÁVEL</span>
+        </a>
+
+        <a class="sector" href="linha-do-tempo.html" data-dust>
+          <span class="sector-code">TMP</span>
+          <span>
+            <span class="sector-name">Linha do Tempo</span>
+            <p class="sector-desc">Tudo que aconteceu do fim do Primeiro Dia até agora.</p>
+          </span>
+          <span class="sector-state">ATUALIZANDO</span>
+        </a>
+
+        <a class="sector sector--rift" href="multiverso.html" data-dust>
+          <span class="sector-code">MTV</span>
+          <span>
+            <span class="sector-name">Multiverso</span>
+            <p class="sector-desc">As seis realidades catalogadas, uma a uma.</p>
+          </span>
+          <span class="sector-state">INSTÁVEL</span>
+        </a>
+
+        <a class="sector sector--rift" href="incursoes.html" data-dust>
+          <span class="sector-code">INC</span>
+          <span>
+            <span class="sector-name">Incursões</span>
+            <p class="sector-desc">As colisões com a Terra-616 e o console da bomba.</p>
+          </span>
+          <span class="sector-state">CRÍTICO</span>
+        </a>
+
+        <a class="sector" href="dados.html" data-dust>
+          <span class="sector-code">DDS</span>
+          <span>
+            <span class="sector-name">Dados</span>
+            <p class="sector-desc">Rolar na mesa, somando as perícias da ficha.</p>
+          </span>
+          <span class="sector-state">ESTÁVEL</span>
+        </a>
+
+        <a class="sector" href="ficha.html" data-dust>
+          <span class="sector-code">FCH</span>
+          <span>
+            <span class="sector-name">Ficha</span>
+            <p class="sector-desc">Sua conta, seus personagens e a distribuição de pontos.</p>
+          </span>
+          <span class="sector-state">ESTÁVEL</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= CONTADOR REGRESSIVO =======================
+       Estado vindo do banco (tabela contador). Só o mestre altera, em
+       admin.html; aqui a página só desenha o que o banco devolveu. -->
+  <section class="alt">
+    <div class="container">
+      <div class="section-head reveal" style="margin-left:auto; margin-right:auto; text-align:center;">
+        <span class="eyebrow eyebrow--lost">Tempo que sobra</span>
+        <h2>Quanto falta</h2>
+      </div>
+      <div class="contador-bloco reveal">
+        <div class="flip-case">
+          <div class="flip-case-head">
+            <h3 class="js-contador-rotulo">Colisão da Terra-616</h3>
+            <p>ESTAÇÃO 616 · MEDIÇÃO CONTÍNUA</p>
+          </div>
+          <div id="contadorFlip"></div>
+          <div class="flip-case-foot">
+            <span><i class="flip-pulse"></i><span class="js-contador-estado">—</span></span>
+            <span><a href="incursoes.html" style="color:inherit;">abrir o console</a></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Barra da contagem: fica escondida e só aparece quando alguém arma a
+       bomba dimensional em incursoes.html (js/incursao.js liga isso). -->
+  <div class="incursion-hud" role="status" aria-live="polite">
+    <span class="incursion-hud-label">COLISÃO EM</span>
+    <span class="incursion-hud-clock" id="hudClock">10:00</span>
+    <a href="incursoes.html">abrir console</a>
+  </div>
+
+  <footer class="site-footer">
+    <div class="ruins-strip ruins-strip--footer" aria-hidden="true"></div>
+    <div class="container footer-top">
+      <hr class="rivet-rule">
+      <p class="quote">Dois universos não cabem no mesmo lugar.</p>
+      <ul class="footer-links">
+        <li><a href="index.html">Início</a></li>
+        <li><a href="personagens.html">Personagens</a></li>
+        <li><a href="linha-do-tempo.html">Linha do Tempo</a></li>
+        <li><a href="multiverso.html">Multiverso</a></li>
+        <li><a href="incursoes.html">Incursões</a></li>
+        <li><a href="dados.html">Dados</a></li>
+        <li><a href="ficha.html">Ficha</a></li>
+      </ul>
+      <p class="footer-credit">RPG criado por Tio, com participação importante de SMS e Rabesco · 2024–2026</p>
+    </div>
+    <div class="footer-banner">
+      <img src="../rpg1/img/campo-florido.jpg" alt="O campo, hoje" loading="lazy">
+    </div>
+  </footer>
+  <button id="btnTopo" aria-label="Voltar ao topo">▲</button>
+
+  <script src="js/main.js"></script>
+  <script src="js/dust.js"></script>
+  <script src="js/incursao.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/contador.js"></script>
+
+</body>
+</html>

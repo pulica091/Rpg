@@ -1,0 +1,167 @@
+/* =======================================================================
+   personagens.css — A PÁGINA DE PERSONAGENS DO RPG II
+
+   Duas correções de rumo em relação ao que estava antes:
+
+   1. RETRATO GRANDE. O RPG I dá 420px de coluna e 560px de altura para a
+      foto, e é isso que faz o dossiê parecer dossiê. O RPG II tinha
+      encolhido para 300px num quadro 4:5 e as pessoas ficavam pequenas
+      demais. Aqui a medida volta a ser a do RPG I.
+
+   2. FILHOS COM RETRATO. Antes eram cartõezinhos com a inicial do nome.
+      Agora cada criança tem UMA foto (é o que existe de cada uma) num
+      cartão alto, com a idade carimbada na própria foto e o texto dividido
+      em blocos curtos — quem é, do que gosta, o que já consegue fazer.
+
+   O que muda de estética em relação ao RPG I: a moldura aqui não é uma
+   placa de latão centralizada, é um registro de arquivo. A foto sangra até
+   a borda, o nome encosta na régua da família e cada bloco de texto tem um
+   rótulo próprio, como campo de formulário preenchido à máquina.
+   ======================================================================= */
+
+/* --- 1. Retrato no tamanho do RPG I ------------------------------------- */
+@media (min-width: 780px) {
+  .character { grid-template-columns: 420px 1fr; }
+  .character:nth-child(even) { grid-template-columns: 1fr 420px; }
+}
+.portrait {
+  aspect-ratio: auto;
+  min-height: 560px;
+}
+.portrait-track img {
+  min-width: 100%;
+  height: 100%;
+  object-fit: contain;      /* a pessoa inteira, sem corte na cabeça */
+  background: var(--bg-alt);
+}
+@media (max-width: 779px) {
+  .portrait { min-height: 440px; }
+}
+
+/* O dossiê ganha ar: o texto do RPG II é mais longo que o do RPG I. */
+.dossier { padding: 26px 24px 28px; }
+@media (min-width: 780px) { .dossier { padding: 34px 32px; } }
+
+/* --- 2. Cartões dos filhos ---------------------------------------------- */
+.kid-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+  margin-bottom: 26px;
+}
+@media (min-width: 720px)  { .kid-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1100px) { .kid-grid { grid-template-columns: repeat(2, 1fr); } }
+
+.kid {
+  display: grid;
+  grid-template-columns: 1fr;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--fam-color, var(--signal));
+  overflow: hidden;
+}
+@media (min-width: 520px) { .kid { grid-template-columns: 230px 1fr; } }
+
+.kid-foto {
+  position: relative;
+  background: var(--bg-alt);
+  min-height: 300px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.kid-foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 22%;   /* rosto acima do centro: é o que importa */
+  filter: grayscale(0.25) contrast(1.04);
+  transition: filter 0.45s ease, transform 0.45s ease;
+}
+.kid:hover .kid-foto img { filter: none; transform: scale(1.015); }
+
+.kid-mono {
+  font-family: var(--font-display);
+  font-size: 3.4rem;
+  color: color-mix(in srgb, var(--fam-color, var(--signal)) 55%, transparent);
+}
+
+/* A idade carimbada na foto, como etiqueta de arquivo. */
+.kid-idade {
+  position: absolute;
+  left: 0; bottom: 14px;
+  padding: 6px 12px 6px 14px;
+  background: var(--fam-color, var(--signal));
+  color: #10120c;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  white-space: nowrap;
+}
+
+.kid-texto { padding: 22px 20px 20px; }
+.kid-texto h4 {
+  margin: 0 0 10px;
+  font-size: clamp(1.1rem, 3vw, 1.35rem);
+  color: var(--text);
+  line-height: 1.15;
+}
+
+.kid-linhas {
+  list-style: none;
+  margin: 0 0 16px;
+  padding: 0 0 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+}
+.kid-linhas li {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+}
+.kid-linhas li + li::before {
+  content: "·";
+  margin-right: 14px;
+  color: color-mix(in srgb, var(--fam-color, var(--signal)) 60%, transparent);
+}
+
+.kid-blocos { display: grid; gap: 14px; }
+.kid-bloco h5 {
+  margin: 0 0 4px;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  color: var(--fam-color, var(--signal));
+  text-transform: uppercase;
+  font-weight: 400;
+}
+.kid-bloco p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.68;
+  color: var(--text-dim);
+  max-width: 58ch;
+}
+
+/* --- Nota de família ----------------------------------------------------- */
+.family-nota {
+  margin: 0 0 30px;
+  padding: 18px 20px;
+  background: var(--bg-alt);
+  border-left: 2px solid color-mix(in srgb, var(--fam-color, var(--signal)) 70%, transparent);
+  font-size: 0.94rem;
+  line-height: 1.75;
+  color: var(--text-dim);
+  max-width: 72ch;
+}
+.family-nota strong { color: var(--text); font-weight: 500; }
+
+/* --- Rótulo de grupo com mais presença ---------------------------------- */
+.group-label {
+  margin: 38px 0 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}

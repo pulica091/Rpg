@@ -1,0 +1,127 @@
+/* =======================================================================
+   admin.css — PAINEL DO MESTRE
+   Mesa de operação, não app de configurações: blocos de chapa parafusada,
+   botões com curso (afundam quando apertados) e leitura em letra de
+   painel. Reaproveita os botões da bomba (.bd-botao) de propósito — é o
+   mesmo aparelho, visto do outro lado.
+   ======================================================================= */
+
+.admin-trava {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 30px 26px;
+  background: linear-gradient(168deg, #2a2d24, #14160f);
+  border: 2px solid #0b0d08;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,0.06), 0 18px 40px rgba(0,0,0,0.5);
+  text-align: center;
+}
+.admin-trava h2 { font-size: clamp(1.4rem, 5vw, 2rem); margin-bottom: 8px; }
+.admin-trava p { color: var(--text-dim); font-size: 0.92rem; }
+
+.admin-linha-chave {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin: 20px 0 10px;
+  flex-wrap: wrap;
+}
+
+.admin-trava input,
+.admin-linha input,
+.admin-campos input {
+  background: #0d0f09;
+  color: var(--text);
+  border: 1px solid #0a0c07;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.7);
+  padding: 10px 12px;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+}
+.admin-trava input { width: 220px; }
+
+.admin-erro { color: color-mix(in srgb, var(--loss) 65%, #e99); font-family: var(--font-mono); font-size: 0.74rem; min-height: 1.4em; }
+.admin-nota {
+  margin-top: 16px;
+  font-size: 0.76rem;
+  line-height: 1.7;
+  color: var(--text-dim);
+  text-align: left;
+}
+.admin-nota code { font-family: var(--font-mono); color: var(--signal-soft); }
+
+/* --- Blocos ------------------------------------------------------------- */
+.admin-grade {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 860px) {
+  .admin-grade { grid-template-columns: 1fr 1fr; }
+  .admin-bloco--largo { grid-column: 1 / -1; }
+}
+
+.admin-bloco {
+  padding: 22px 20px;
+  background: linear-gradient(168deg, #23261e, #14160f);
+  border: 1px solid #0b0d08;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+}
+.admin-bloco h3 { margin: 0 0 6px; color: var(--text); }
+.admin-ajuda {
+  margin: 0 0 16px;
+  font-size: 0.84rem;
+  line-height: 1.7;
+  color: var(--text-dim);
+  max-width: 62ch;
+}
+.admin-ajuda b { color: var(--signal-soft); font-weight: 500; }
+
+.admin-botoes { display: flex; flex-wrap: wrap; gap: 8px; }
+.admin-botoes .bd-botao.is-ativo {
+  color: #17190f;
+  background: linear-gradient(180deg, var(--signal-soft), var(--signal));
+}
+
+.admin-linha {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+.admin-linha label {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+}
+.admin-linha input[type="number"] { width: 110px; }
+.admin-linha input[type="text"] { flex: 1; min-width: 200px; }
+
+.admin-campos {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+@media (min-width: 640px) { .admin-campos { grid-template-columns: repeat(4, 1fr); } }
+.admin-campos label {
+  display: grid;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+}
+
+.admin-leitura,
+.admin-recado {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+}
+.admin-leitura { margin: 0 0 14px; }
+.admin-recado { margin-top: 18px; text-align: center; min-height: 1.5em; }
+.admin-recado.is-boa { color: var(--signal); }
+.admin-recado.is-ma  { color: color-mix(in srgb, var(--loss) 60%, #e99); }

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <!-- Aplica o tema salvo (claro/escuro) ANTES da página desenhar, para não
+       piscar o tema errado por uma fração de segundo ao carregar. -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('rpg-theme');
+        if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+      } catch (e) {}
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Downloads — RPG</title>
+  <meta name="description" content="Baixe os wallpapers oficiais das campanhas RPG I, RPG II e RPG III.">
+  <link rel="stylesheet" href="rpg1/css/style.css">
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="container">
+      <a href="index.html" class="brand">
+        <span class="brand-badge"><img src="rpg1/img/logo-rpg1.jpg" alt="RPG"></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Campanhas</a></li>
+        <li><a href="downloads.html" class="active">Downloads</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Alternar modo claro/escuro">
+          <span class="icon-sun">☀</span><span class="icon-moon">☾</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero hero--compact">
+    <div class="container">
+      <span class="eyebrow">Materiais oficiais</span>
+      <h1>Downloads</h1>
+    </div>
+  </header>
+
+  <section style="padding-top:12px;">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Wallpapers</span>
+        <h2>As três campanhas</h2>
+        <p>As artes de capa de cada campanha, em alta resolução, prontas para o seu computador ou celular.</p>
+      </div>
+
+      <div class="downloads-grid reveal">
+        <div class="download-card">
+          <img src="rpg1/img/wallpaper-hero.jpg" alt="Wallpaper — RPG I: Primeiro Dia" loading="lazy">
+          <div class="download-card-label">
+            <h3>RPG I — Primeiro Dia</h3>
+            <button type="button" class="btn btn-download" data-wallpaper="rpg1" data-filename="rpg-i-primeiro-dia-wallpaper.jpg">Baixar wallpaper</button>
+          </div>
+        </div>
+        <div class="download-card">
+          <img src="rpg2/img/wallpaper-hero.jpg" alt="Wallpaper — RPG II: Dia do Julgamento Final" loading="lazy">
+          <div class="download-card-label">
+            <h3>RPG II — Dia do Julgamento Final</h3>
+            <button type="button" class="btn btn-download" data-wallpaper="rpg2" data-filename="rpg-ii-dia-do-julgamento-final-wallpaper.jpg">Baixar wallpaper</button>
+          </div>
+        </div>
+        <div class="download-card">
+          <img src="rpg3/img/wallpaper-hero.jpg" alt="Wallpaper — RPG III: Dias de um Passado Esquecido" loading="lazy">
+          <div class="download-card-label">
+            <h3>RPG III — Dias de um Passado Esquecido</h3>
+            <button type="button" class="btn btn-download" data-wallpaper="rpg3" data-filename="rpg-iii-dias-de-um-passado-esquecido-wallpaper.jpg">Baixar wallpaper</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="downloads-pdf reveal">
+        <span class="soon-badge">Em breve · PDF</span>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-top">
+      <hr class="rivet-rule">
+      <p class="quote">"Entre o tilintar das espadas e o silvo das locomotivas a vapor..."</p>
+      <ul class="footer-links">
+        <li><a href="index.html">Campanhas</a></li>
+        <li><a href="downloads.html">Downloads</a></li>
+      </ul>
+      <p class="footer-credit">RPG criado por Tio, com participação importante de SMS e Rabesco · 2024–2026</p>
+    </div>
+  </footer>
+  <button id="btnTopo" aria-label="Voltar ao topo">▲</button>
+
+  <script src="rpg1/js/main.js"></script>
+  <script src="js/downloads-data.js"></script>
+  <script src="js/downloads.js"></script>
+</body>
+</html>

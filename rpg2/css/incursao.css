@@ -1,0 +1,1398 @@
+/* =======================================================================
+   RPG II — DIA DO JULGAMENTO FINAL
+   incursao.css — CAMADA DE IDENTIDADE PRÓPRIA (v1)
+
+   Este arquivo carrega DEPOIS de style.css e reescreve a aparência do
+   RPG II inteiro. A ideia é que o style.css continue sendo só a
+   "estrutura" (grades, componentes, o esqueleto herdado do RPG I) e
+   que TODA a personalidade visual do RPG II more aqui — assim dá pra
+   mexer no clima da campanha sem risco de quebrar o site.
+
+   DIREÇÃO DE DESIGN
+   O RPG I era uma placa de latão gravada: quente, monumental, estável.
+   O RPG II é o oposto — é um POSTO DE OBSERVAÇÃO durante o fim do
+   mundo. A página se comporta como um painel de monitoramento que
+   está sendo atingido junto com a realidade que ele mede: leituras de
+   integridade, códigos de registro, linhas de fratura atravessando as
+   seções, e pedaços da interface virando pó.
+
+   - Tipografia: Anton (títulos — condensada, pesada, gritada, nada a
+     ver com a Cinzel gravada do RPG I), Barlow Condensed (nomes e
+     subtítulos), Barlow (corpo) e Share Tech Mono (leituras de
+     painel). Nenhuma delas aparece no RPG I.
+   - Cor: os MESMOS tons que a campanha já tinha (cinza, verde tóxico,
+     roxo corrompido) — nada de vermelho novo. O verde é "sinal, ainda
+     vivo"; o roxo é "outro universo, invadindo"; o vinho seco é
+     "perda". Nunca os três com força ao mesmo tempo.
+   - Geometria: nada é retangular e centralizado. As placas têm cantos
+     arrancados em ângulos diferentes, ficam levemente tortas e se
+     apoiam numa régua de fratura em vez de uma linha.
+   - Movimento: a ousadia é gasta em UM lugar só — a desintegração.
+     Botões e blocos marcados viram pó (js/dust.js). Quando a contagem
+     de uma incursão está ativa (body.is-incursion), a página inteira
+     degrada junto: tremor, ruído, pó com mais frequência.
+
+   O QUE ESTE ARQUIVO NÃO TOCA (de propósito):
+   a capa — .hero, .hero--arcane, .hero::before/::after e o menu que
+   some sobre o wallpaper continuam exatamente como estavam.
+   ======================================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Barlow:ital,wght@0,400;0,500;0,600;1,400&family=Barlow+Condensed:wght@500;600;700&family=Share+Tech+Mono&display=swap');
+
+/* =======================================================================
+   1. TOKENS
+   Reaproveita as variáveis que já existem (--gold verde, --jewel roxo,
+   --wine vinho) e acrescenta só os apelidos que fazem sentido nesta
+   campanha, pra o CSS abaixo ficar legível: "sinal", "fenda", "perda".
+   ======================================================================= */
+:root {
+  --font-display: 'Anton', 'Barlow Condensed', sans-serif;
+  --font-title:   'Barlow Condensed', sans-serif;
+  --font-body:    'Barlow', sans-serif;
+  --font-mono:    'Share Tech Mono', monospace;
+
+  --signal: var(--gold);       /* verde tóxico — o que ainda responde  */
+  --signal-soft: var(--gold-soft);
+  --rift:   var(--jewel);      /* roxo — o que vem de fora             */
+  --loss:   var(--wine);       /* vinho seco — o que já foi perdido    */
+
+  --plate-cut: 18px;           /* canto arrancado das placas           */
+  --hud-line: color-mix(in srgb, var(--signal) 30%, transparent);
+  --grain-opacity: 0.05;
+  --tremor: 0px;               /* amplitude do tremor global (JS mexe) */
+}
+
+/* =======================================================================
+   2. BASE
+   ======================================================================= */
+body {
+  font-family: var(--font-body);
+  letter-spacing: 0.005em;
+  overflow-x: hidden;
+}
+
+/* Grão + varredura por cima de tudo. Discreto no estado normal; quando
+   a contagem está rodando (body.is-incursion) fica bem mais presente. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  background-image:
+    repeating-linear-gradient(0deg,
+      rgba(255,255,255,0.06) 0px,
+      rgba(255,255,255,0.06) 1px,
+      transparent 1px,
+      transparent 3px),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+  transition: opacity 0.6s ease;
+}
+
+h1, h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: -0.005em;
+  line-height: 0.94;
+}
+h1 { font-size: clamp(2.6rem, 11vw, 6.2rem); }
+h2 { font-size: clamp(1.9rem, 6vw, 3.4rem); }
+h3, h4 {
+  font-family: var(--font-title);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+h3 { font-size: clamp(1.25rem, 3.2vw, 1.6rem); line-height: 1.15; }
+
+p { line-height: 1.72; }
+
+/* Linhas de texto de leitura confortável (menos de 80 caracteres).
+   Alinhado à esquerda, como os títulos — o RPG I centralizava. */
+.prose { max-width: 62ch; margin: 0; }
+.prose p { color: var(--text-dim); font-size: 1.02rem; }
+
+/* --- Rótulo de painel ---------------------------------------------------
+   No RPG I a .eyebrow era decorativa ("Explore"). Aqui ela carrega
+   informação de verdade: designação do registro, estado da leitura.
+   Vem sempre com um marcador que pisca devagar. */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  color: var(--signal);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.eyebrow::before {
+  content: "";
+  width: 6px; height: 6px;
+  background: var(--signal);
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+  animation: hudBlink 2.6s steps(1) infinite;
+}
+@keyframes hudBlink { 0%, 70% { opacity: 1; } 71%, 100% { opacity: 0.2; } }
+
+.eyebrow--rift { color: var(--rift); }
+.eyebrow--rift::before { background: var(--rift); }
+.eyebrow--lost { color: var(--loss); }
+.eyebrow--lost::before { background: var(--loss); animation: none; opacity: 0.45; }
+
+/* =======================================================================
+   3. RÉGUA DE FRATURA
+   Substitui a "régua rebitada" do RPG I em todas as páginas: uma trinca
+   correndo pela largura, não uma peça de metal bem-acabada.
+   ======================================================================= */
+.rivet-rule,
+.fracture {
+  width: min(320px, 70%);
+  height: 12px;
+  border: none;
+  margin: 20px auto;
+  background: none;
+  position: relative;
+  overflow: visible;
+}
+.rivet-rule::before,
+.fracture::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--signal);
+  opacity: 0.75;
+  clip-path: polygon(
+    0 48%, 8% 42%, 14% 55%, 23% 38%, 31% 60%, 38% 44%,
+    47% 52%, 55% 35%, 63% 58%, 71% 41%, 80% 56%, 88% 45%, 96% 54%, 100% 47%,
+    100% 53%, 96% 60%, 88% 51%, 80% 62%, 71% 47%, 63% 64%, 55% 41%,
+    47% 58%, 38% 50%, 31% 66%, 23% 44%, 14% 61%, 8% 48%, 0 54%
+  );
+}
+/* A segunda camada (roxa) repete o mesmo recorte deslocado 2px — é o que
+   dá a impressão de que a trinca chegou duplicada, de dois universos.
+   Atenção: o polígono precisa ser repetido aqui; clip-path: inherit não
+   funciona em ::after (ele herdaria do elemento, que não tem recorte). */
+.rivet-rule::after,
+.fracture::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--rift);
+  opacity: 0.5;
+  transform: translateX(2px);
+  clip-path: polygon(
+    0 48%, 8% 42%, 14% 55%, 23% 38%, 31% 60%, 38% 44%,
+    47% 52%, 55% 35%, 63% 58%, 71% 41%, 80% 56%, 88% 45%, 96% 54%, 100% 47%,
+    100% 53%, 96% 60%, 88% 51%, 80% 62%, 71% 47%, 63% 64%, 55% 41%,
+    47% 58%, 38% 50%, 31% 66%, 23% 44%, 14% 61%, 8% 48%, 0 54%
+  );
+}
+.rivet-rule--left, .fracture--left { margin: 20px 0; width: 180px; }
+
+/* =======================================================================
+   4. PLACA (o contêiner de conteúdo do RPG II)
+   Canto arrancado em dois cantos opostos, sempre desiguais, com uma
+   marca de dano no canto superior direito. Nada de card redondo.
+   ======================================================================= */
+.plate {
+  position: relative;
+  background:
+    linear-gradient(150deg,
+      color-mix(in srgb, var(--surface) 92%, var(--rift)) 0%,
+      var(--surface) 40%,
+      var(--bg-alt) 100%);
+  border: 1px solid var(--border);
+  border-left: 2px solid color-mix(in srgb, var(--signal) 50%, transparent);
+  padding: 26px 22px;
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--plate-cut)) 0,
+    100% var(--plate-cut),
+    100% 100%,
+    var(--plate-cut) 100%,
+    0 calc(100% - var(--plate-cut))
+  );
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+@media (min-width: 860px) { .plate { padding: 34px 32px; } }
+
+.plate--rift { border-left-color: color-mix(in srgb, var(--rift) 70%, transparent); }
+.plate--lost {
+  border-left-color: color-mix(in srgb, var(--loss) 70%, transparent);
+  filter: grayscale(0.5);
+}
+.plate--lost:hover { filter: grayscale(0.2); }
+
+/* Código de registro carimbado no canto da placa.
+   Fica DENTRO do recorte de propósito: o clip-path da placa corta tudo
+   que passa da borda, então uma etiqueta "por cima" da borda sumiria
+   pela metade. */
+.plate-tag {
+  position: absolute;
+  top: 0; left: 0;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.16em;
+  color: var(--text-dim);
+  background: var(--bg-alt);
+  padding: 5px 12px 4px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.plate { padding-top: 48px; }
+@media (min-width: 860px) { .plate { padding-top: 56px; } }
+
+/* =======================================================================
+   5. TÍTULO PARTIDO
+   O título principal de cada página aparece com duas cópias deslocadas —
+   uma verde, uma roxa — como um sinal que chegou duplicado de dois
+   universos. Fica parado; só desalinha de vez em quando.
+   ======================================================================= */
+.split-title {
+  position: relative;
+  display: inline-block;
+  color: var(--text);
+}
+.split-title::before,
+.split-title::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.split-title::before {
+  color: var(--signal);
+  mix-blend-mode: screen;
+  transform: translate(-2px, 1px);
+  opacity: 0.45;
+  animation: splitDrift 7s steps(1) infinite;
+}
+.split-title::after {
+  color: var(--rift);
+  mix-blend-mode: screen;
+  transform: translate(2px, -1px);
+  opacity: 0.45;
+  animation: splitDrift 7s steps(1) 0.12s infinite reverse;
+}
+@keyframes splitDrift {
+  0%, 88%  { transform: translate(-2px, 1px); clip-path: none; }
+  90%      { transform: translate(-11px, 1px); clip-path: inset(18% 0 46% 0); }
+  92%      { transform: translate(6px, -2px); clip-path: inset(62% 0 12% 0); }
+  94%      { transform: translate(-7px, 2px); clip-path: inset(34% 0 38% 0); }
+  96%, 100%{ transform: translate(-2px, 1px); clip-path: none; }
+}
+
+/* =======================================================================
+   6. TRILHO DE ESTADO (desktop)
+   Uma coluna fina grudada na lateral esquerda com a leitura da estação.
+   É o elemento que amarra o site todo: está em todas as páginas e é
+   onde a contagem de incursão aparece primeiro.
+   ======================================================================= */
+.status-rail {
+  display: none;
+  position: fixed;
+  left: 0; top: 0; bottom: 0;
+  width: 34px;
+  z-index: 120;
+  border-right: 1px solid var(--border);
+  background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--rift) 8%, transparent));
+  pointer-events: none;
+}
+@media (min-width: 1100px) { .status-rail { display: block; } }
+
+.status-rail-text {
+  position: absolute;
+  bottom: 24px; left: 50%;
+  transform: translateX(-50%) rotate(180deg);
+  writing-mode: vertical-rl;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.24em;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+.status-rail-meter {
+  position: absolute;
+  top: 96px; left: 50%;
+  transform: translateX(-50%);
+  width: 2px; height: 140px;
+  background: var(--border);
+}
+.status-rail-meter i {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: var(--integrity, 86%);
+  background: linear-gradient(180deg, var(--rift), var(--signal));
+  transition: height 1s ease;
+}
+
+/* =======================================================================
+   7. NAV
+   Mesmo esqueleto, roupa nova: leitura de terminal em vez de menu de
+   revista. A marca ganha um selo cortado e os links um traço que
+   aparece por baixo como um risco de giz.
+   ======================================================================= */
+.site-nav.scrolled {
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid color-mix(in srgb, var(--signal) 22%, transparent);
+}
+.brand-badge {
+  clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
+  border: 1px solid color-mix(in srgb, var(--signal) 40%, transparent);
+  border-radius: 0;
+  filter: grayscale(0.35) contrast(1.1);
+}
+.nav-links a,
+.campaign-trigger,
+.footer-links a {
+  font-family: var(--font-mono);
+  letter-spacing: 0.08em;
+}
+.nav-links a { font-size: 0.78rem; }
+.nav-links a::after {
+  height: 2px;
+  background: var(--signal);
+  clip-path: polygon(0 0, 30% 0, 34% 100%, 64% 100%, 68% 0, 100% 0, 100% 100%, 0 100%);
+}
+.nav-links a.active { color: var(--signal-soft); }
+.campaign-trigger { border-radius: 0; }
+.campaign-panel {
+  border-radius: 0;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-alt);
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+}
+.campaign-item .campaign-thumb { border-radius: 0; filter: grayscale(0.4); }
+.campaign-item.is-active .campaign-thumb { filter: none; }
+.campaign-item .campaign-name { font-family: var(--font-title); font-size: 1rem; }
+.theme-toggle, .downloads-link {
+  border-radius: 0;
+  clip-path: polygon(5px 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%, 0 5px);
+}
+
+/* =======================================================================
+   8. CABEÇALHO DE PÁGINA INTERNA
+   As páginas internas não usam wallpaper: usam uma faixa de "leitura"
+   com o título partido por cima de um campo de ruído roxo.
+   (A CAPA — .hero--arcane, na index — continua intocada.)
+   ======================================================================= */
+.hero--compact {
+  background:
+    radial-gradient(120% 90% at 8% 0%, color-mix(in srgb, var(--rift) 26%, transparent) 0%, transparent 62%),
+    linear-gradient(180deg, var(--bg-alt) 0%, var(--bg) 100%);
+  box-shadow: none;
+  border-bottom: 1px solid var(--border);
+  min-height: 46vh;
+  justify-content: flex-end;
+}
+.hero--compact::before {
+  inset: 0;
+  border: none;
+  background:
+    repeating-linear-gradient(90deg,
+      color-mix(in srgb, var(--signal) 8%, transparent) 0 1px,
+      transparent 1px 64px);
+  opacity: 1;
+}
+.hero--compact .container { padding-bottom: 8px; }
+.hero--compact .eyebrow { margin-bottom: 14px; }
+.hero--compact h1 { margin-bottom: 0.15em; }
+.hero-readout {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 22px;
+  margin: 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  max-width: 720px;
+}
+.hero-readout b { color: var(--signal-soft); font-weight: 400; }
+
+/* =======================================================================
+   9. SEÇÕES
+   ======================================================================= */
+section { position: relative; }
+section.alt {
+  background:
+    linear-gradient(180deg, var(--bg-alt), color-mix(in srgb, var(--bg-alt) 88%, var(--rift)));
+}
+/* Uma trinca fina separando as seções — a "costura" do site. */
+section.alt::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg,
+    transparent 0%, var(--signal) 12%, transparent 22%,
+    var(--rift) 48%, transparent 58%, var(--signal) 82%, transparent 100%);
+  opacity: 0.5;
+}
+
+.section-head { max-width: 58ch; }
+.section-head h2 { margin-bottom: 0.3em; }
+.section-head p { color: var(--text-dim); }
+
+/* =======================================================================
+   10. BOTÕES
+   Cantos arrancados, tipografia de terminal e — o detalhe da campanha —
+   a borda vira pó quando o ponteiro chega perto (js/dust.js cuida do
+   efeito completo; aqui fica o estado de repouso e o de perigo).
+   ======================================================================= */
+.btn {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.1em;
+  background: var(--surface);
+  border: 1px solid color-mix(in srgb, var(--signal) 32%, transparent);
+  color: var(--text);
+  padding: 12px 22px;
+  border-radius: 0;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+  position: relative;
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+}
+.btn:hover {
+  background: color-mix(in srgb, var(--signal) 14%, var(--surface));
+  border-color: var(--signal);
+  color: var(--signal-soft);
+}
+.btn-gold {
+  background: color-mix(in srgb, var(--signal) 20%, var(--surface));
+  border-color: var(--signal);
+  color: var(--signal-soft);
+}
+.btn-rift {
+  background: color-mix(in srgb, var(--rift) 22%, var(--surface));
+  border-color: var(--rift);
+  color: color-mix(in srgb, var(--rift) 30%, var(--text));
+}
+.btn-rift:hover { background: color-mix(in srgb, var(--rift) 38%, var(--surface)); color: var(--text); }
+.btn[disabled] { opacity: 0.35; cursor: not-allowed; filter: grayscale(1); }
+
+#btnTopo {
+  border-radius: 0;
+  border-color: color-mix(in srgb, var(--signal) 45%, transparent);
+  background: var(--bg-alt);
+  color: var(--signal);
+  font-family: var(--font-mono);
+}
+
+/* =======================================================================
+   11. DESINTEGRAÇÃO  ("virar pó")
+   O efeito assinatura. js/dust.js adiciona .is-dusting no elemento e
+   solta as partículas; aqui ficam a máscara que come o elemento da
+   direita pra esquerda e o campo de partículas.
+   ======================================================================= */
+.is-dusting {
+  animation: dustAway var(--dust-time, 1100ms) cubic-bezier(.4,0,.6,1) forwards;
+  pointer-events: none;
+}
+@keyframes dustAway {
+  0% {
+    -webkit-mask-image: linear-gradient(80deg, #000 0 100%, transparent 140%);
+            mask-image: linear-gradient(80deg, #000 0 100%, transparent 140%);
+    -webkit-mask-size: 300% 100%; mask-size: 300% 100%;
+    -webkit-mask-position: 100% 0; mask-position: 100% 0;
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+  100% {
+    -webkit-mask-image: linear-gradient(80deg, #000 0 100%, transparent 140%);
+            mask-image: linear-gradient(80deg, #000 0 100%, transparent 140%);
+    -webkit-mask-size: 300% 100%; mask-size: 300% 100%;
+    -webkit-mask-position: 0% 0; mask-position: 0% 0;
+    opacity: 0;
+    transform: translate(14px, -8px);
+  }
+}
+/* Volta: o bloco se remonta de baixo pra cima, mais rápido do que caiu. */
+.is-reforming { animation: dustBack 620ms ease-out forwards; }
+@keyframes dustBack {
+  0%   { opacity: 0; transform: translate(6px, 6px); filter: blur(3px); }
+  100% { opacity: 1; transform: none; filter: none; }
+}
+
+.dust-field {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 5;
+}
+.dust-mote {
+  position: absolute;
+  width: 2px; height: 2px;
+  background: var(--mote-color, var(--signal-soft));
+  opacity: 0;
+  animation: moteDrift var(--mote-life, 1200ms) ease-out var(--mote-delay, 0ms) forwards;
+}
+@keyframes moteDrift {
+  0%   { opacity: 0.9; transform: translate(0, 0) scale(1); }
+  100% { opacity: 0; transform: translate(var(--mote-x, 30px), var(--mote-y, -26px)) scale(0.2); }
+}
+
+/* Botões perdem pó na borda quando o ponteiro encosta — sem sumir. */
+.btn[data-dust]:hover { border-color: var(--signal); }
+
+/* =======================================================================
+   12. ESTADO DE INCURSÃO (body.is-incursion)
+   Quando a bomba é armada e a contagem começa, o site inteiro sabe.
+   ======================================================================= */
+body.is-incursion { --grain-opacity: 0.14; }
+body.is-incursion::after { animation: veilPulse 4s ease-in-out infinite; }
+@keyframes veilPulse { 0%, 100% { opacity: 0.11; } 50% { opacity: 0.2; } }
+
+body.is-incursion .status-rail {
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--loss) 22%, transparent),
+    color-mix(in srgb, var(--rift) 26%, transparent));
+  border-right-color: color-mix(in srgb, var(--loss) 60%, transparent);
+}
+body.is-incursion section { animation: tremor 5.5s ease-in-out infinite; }
+@keyframes tremor {
+  0%, 92%, 100% { transform: translate(0, 0); }
+  93% { transform: translate(-1.5px, 1px); }
+  95% { transform: translate(2px, -1px); }
+  97% { transform: translate(-1px, -1.5px); }
+}
+/* Nos 60 segundos finais o tremor deixa de ser sutil. */
+body.is-incursion.is-critical section { animation-duration: 1.6s; }
+body.is-incursion.is-critical { --grain-opacity: 0.22; }
+
+/* Barra de contagem fixa no topo — aparece em QUALQUER página do RPG II
+   enquanto a incursão estiver correndo. */
+.incursion-hud {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 400;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 10px 16px;
+  background: color-mix(in srgb, var(--bg) 88%, var(--loss));
+  border-top: 2px solid var(--loss);
+  backdrop-filter: blur(4px);
+  font-family: var(--font-mono);
+}
+body.is-incursion .incursion-hud { display: flex; }
+.incursion-hud-label {
+  font-size: 0.66rem;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+}
+.incursion-hud-clock {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 5vw, 2rem);
+  line-height: 1;
+  color: var(--signal-soft);
+  letter-spacing: 0.04em;
+}
+body.is-incursion.is-critical .incursion-hud-clock {
+  color: color-mix(in srgb, var(--loss) 45%, var(--text));
+  animation: hudBlink 1s steps(1) infinite;
+}
+.incursion-hud a { color: var(--signal); font-size: 0.7rem; letter-spacing: 0.1em; text-decoration: underline; }
+
+/* =======================================================================
+   13. PAINEL DE ACESSO (início)
+   Substitui os "nav-cards" com foto do RPG I. Aqui cada área é uma
+   entrada de registro numa lista de setores — e um dos setores está
+   sempre se desfazendo.
+   ======================================================================= */
+.sector-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2px;
+  border: 1px solid var(--border);
+  background: var(--border);
+}
+@media (min-width: 720px) { .sector-list { grid-template-columns: 1fr 1fr; } }
+
+.sector {
+  position: relative;
+  display: grid;
+  grid-template-columns: 54px 1fr auto;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 18px;
+  background: var(--surface);
+  transition: background 0.25s ease, color 0.25s ease;
+  overflow: hidden;
+}
+.sector:hover { background: color-mix(in srgb, var(--signal) 12%, var(--surface)); }
+.sector-code {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--signal);
+  border: 1px solid var(--border);
+  padding: 6px 0;
+  text-align: center;
+}
+.sector-name { font-family: var(--font-title); font-weight: 600; font-size: 1.22rem; color: var(--text); line-height: 1.1; }
+.sector-desc { font-size: 0.86rem; color: var(--text-dim); margin: 2px 0 0; }
+.sector-state {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+}
+.sector:hover .sector-state { color: var(--signal-soft); }
+.sector--rift .sector-code { color: var(--rift); border-color: color-mix(in srgb, var(--rift) 45%, transparent); }
+.sector--rift:hover { background: color-mix(in srgb, var(--rift) 16%, var(--surface)); }
+
+/* =======================================================================
+   14. LINHA DO TEMPO
+   Corre de cima pra baixo por uma coluna só (inclusive no desktop): é
+   uma queda, não uma galeria. A linha vertical é uma trinca que vai
+   escurecendo conforme os eventos se aproximam do presente.
+   ======================================================================= */
+.timeline {
+  position: relative;
+  max-width: 860px;
+  margin: 0 auto;
+  padding-left: 34px;
+}
+@media (min-width: 860px) { .timeline { padding-left: 56px; } }
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 9px; top: 6px; bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, var(--signal), var(--rift) 60%, var(--loss));
+  opacity: 0.55;
+}
+@media (min-width: 860px) { .timeline::before { left: 19px; } }
+
+.tl-entry { position: relative; padding-bottom: 46px; }
+.tl-entry::before {
+  content: "";
+  position: absolute;
+  left: -30px; top: 8px;
+  width: 12px; height: 12px;
+  background: var(--bg);
+  border: 2px solid var(--signal);
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+}
+@media (min-width: 860px) { .tl-entry::before { left: -44px; width: 14px; height: 14px; } }
+.tl-entry--rift::before { border-color: var(--rift); }
+.tl-entry--lost::before { border-color: var(--loss); background: var(--loss); }
+
+.tl-when {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  color: var(--signal);
+  display: block;
+  margin-bottom: 4px;
+}
+.tl-entry--rift .tl-when { color: var(--rift); }
+.tl-entry--lost .tl-when { color: var(--loss); }
+.tl-entry h3 { margin-bottom: 8px; }
+.tl-entry p { color: var(--text-dim); max-width: 58ch; font-size: 0.98rem; }
+
+.tl-figure { margin: 16px 0 0; }
+.tl-figure img {
+  width: 100%;
+  max-height: 340px;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  filter: grayscale(0.55) contrast(1.08) brightness(0.8);
+  clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
+  transition: filter 0.4s ease;
+}
+.tl-figure:hover img { filter: grayscale(0.15) contrast(1.05) brightness(0.95); }
+.tl-figure figcaption {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  padding-top: 8px;
+}
+
+/* =======================================================================
+   15. MULTIVERSO
+   Seis fichas de universo. A do 616 é a única "estável"; as outras
+   ficam levemente tortas e dessaturadas, como registros de segunda mão.
+   ======================================================================= */
+.universe-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+@media (min-width: 760px) { .universe-grid { grid-template-columns: 1fr 1fr; gap: 24px; } }
+
+.universe {
+  position: relative;
+  padding: 28px 24px 26px;
+  background:
+    radial-gradient(90% 70% at 100% 0%, color-mix(in srgb, var(--u-color, var(--signal)) 18%, transparent) 0%, transparent 65%),
+    var(--surface);
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--u-color, var(--signal));
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 22px), calc(100% - 22px) 100%, 0 100%);
+  transition: transform 0.35s ease, border-color 0.3s ease;
+}
+.universe:nth-child(even) { transform: rotate(0.25deg); }
+.universe:nth-child(odd)  { transform: rotate(-0.2deg); }
+.universe:hover { transform: none; }
+
+.universe-id {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6vw, 3rem);
+  line-height: 0.9;
+  color: var(--u-color, var(--signal));
+  opacity: 0.9;
+}
+.universe h3 { margin: 6px 0 2px; color: var(--text); }
+.universe-sub {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  display: block;
+  margin-bottom: 16px;
+}
+.universe p { color: var(--text-dim); font-size: 0.95rem; }
+.universe-facts {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 14px 0 0;
+  border-top: 1px solid var(--border);
+  display: grid;
+  gap: 6px;
+}
+.universe-facts li {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 10px;
+  font-size: 0.86rem;
+  color: var(--text);
+}
+.universe-facts b {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  font-weight: 400;
+  padding-top: 3px;
+}
+.universe--base { border-width: 2px; clip-path: none; transform: none !important; }
+.universe--gone { filter: grayscale(0.75); opacity: 0.72; }
+.universe--gone:hover { filter: grayscale(0.4); opacity: 1; }
+
+/* =======================================================================
+   16. INCURSÕES + MINIGAME DA BOMBA
+   ======================================================================= */
+.incursion-list { display: grid; grid-template-columns: 1fr; gap: 14px; }
+@media (min-width: 820px) { .incursion-list { grid-template-columns: 1fr 1fr; } }
+
+.incursion-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--u-color, var(--rift));
+}
+.incursion-row .clash {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--u-color, var(--rift));
+  line-height: 1;
+}
+.incursion-row h4 { margin: 0 0 2px; font-size: 1.05rem; color: var(--text); }
+.incursion-row p { margin: 0; font-size: 0.82rem; color: var(--text-dim); font-family: var(--font-mono); letter-spacing: 0.06em; }
+.incursion-status {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.12em;
+  padding: 5px 10px;
+  border: 1px solid currentColor;
+  color: var(--signal);
+  white-space: nowrap;
+}
+.incursion-status--gone { color: var(--loss); }
+.incursion-status--now  { color: var(--rift); animation: hudBlink 1.6s steps(1) infinite; }
+.incursion-row--gone { filter: grayscale(0.7); opacity: 0.7; }
+
+/* --- Console da bomba --------------------------------------------------- */
+.bomb {
+  position: relative;
+  max-width: 720px;
+  margin: 0 auto;
+  background:
+    radial-gradient(120% 90% at 50% 0%, color-mix(in srgb, var(--rift) 20%, transparent), transparent 60%),
+    var(--bg-alt);
+  border: 1px solid var(--border-strong);
+  clip-path: polygon(0 24px, 24px 0, calc(100% - 24px) 0, 100% 24px, 100% calc(100% - 24px), calc(100% - 24px) 100%, 24px 100%, 0 calc(100% - 24px));
+  padding: 30px 22px 34px;
+}
+@media (min-width: 720px) { .bomb { padding: 40px 44px 44px; } }
+
+.bomb-head { text-align: center; margin-bottom: 26px; }
+.bomb-head h3 { margin-bottom: 4px; }
+.bomb-head p { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.1em; color: var(--text-dim); margin: 0; }
+
+.bomb-steps { display: flex; justify-content: center; gap: 8px; margin-bottom: 26px; }
+.bomb-step-dot {
+  width: 44px; height: 4px;
+  background: var(--border);
+}
+.bomb-step-dot.is-done { background: var(--signal); }
+.bomb-step-dot.is-now  { background: var(--rift); animation: hudBlink 1.2s steps(1) infinite; }
+
+.bomb-stage { display: none; }
+.bomb-stage.is-active { display: block; animation: dustBack 500ms ease-out; }
+
+.bomb-instruction {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  text-align: center;
+  margin-bottom: 22px;
+  min-height: 2.6em;
+}
+.bomb-instruction b { color: var(--signal-soft); font-weight: 400; }
+
+/* Etapa 1 — três frequências pra alinhar */
+.freq-row { display: grid; gap: 18px; margin-bottom: 22px; }
+.freq {
+  display: grid;
+  grid-template-columns: 78px 1fr 64px;
+  align-items: center;
+  gap: 12px;
+}
+.freq label { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; color: var(--text-dim); }
+.freq input[type="range"] {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 3px;
+  background: var(--border);
+  outline: none;
+}
+.freq input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 16px; height: 26px;
+  background: var(--signal);
+  cursor: grab;
+  clip-path: polygon(0 0, 100% 0, 100% 72%, 50% 100%, 0 72%);
+}
+.freq input[type="range"]::-moz-range-thumb {
+  width: 16px; height: 26px; border: none;
+  background: var(--signal); cursor: grab;
+  clip-path: polygon(0 0, 100% 0, 100% 72%, 50% 100%, 0 72%);
+}
+.freq-read {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--loss);
+  text-align: right;
+}
+.freq.is-locked .freq-read { color: var(--signal); }
+.freq.is-locked input[type="range"]::-webkit-slider-thumb { background: var(--signal-soft); }
+
+/* Etapa 2 — sequência de detonadores */
+.seq-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 22px; }
+.seq-key {
+  aspect-ratio: 1;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  cursor: pointer;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  transition: background 0.12s ease, color 0.12s ease;
+}
+.seq-key.is-lit { background: var(--signal); color: var(--bg); }
+.seq-key.is-wrong { background: var(--loss); color: var(--text); }
+.seq-key:disabled { cursor: default; }
+.seq-trace { display: flex; justify-content: center; gap: 6px; margin-bottom: 18px; }
+.seq-trace i { width: 26px; height: 3px; background: var(--border); }
+.seq-trace i.is-on { background: var(--signal); }
+
+/* Etapa 3 — as duas chaves */
+.keys-row { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+.keyhold {
+  width: 148px; height: 148px;
+  background: radial-gradient(circle at 50% 40%, var(--surface-2), var(--bg));
+  border: 2px solid var(--border-strong);
+  border-radius: 50%;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+.keyhold.is-held { border-color: var(--signal); color: var(--signal-soft); }
+.keyhold::after {
+  content: "";
+  position: absolute; inset: 8px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: var(--signal);
+  opacity: 0;
+}
+.keyhold.is-held::after { opacity: 1; animation: keySpin 0.9s linear infinite; }
+@keyframes keySpin { to { transform: rotate(360deg); } }
+.hold-meter { height: 4px; background: var(--border); max-width: 330px; margin: 0 auto 20px; }
+.hold-meter i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--rift), var(--signal)); transition: width 0.1s linear; }
+
+/* Mensagem de estado do console */
+.bomb-msg {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  text-align: center;
+  min-height: 1.6em;
+  color: var(--text-dim);
+}
+.bomb-msg.is-bad  { color: var(--loss); }
+.bomb-msg.is-good { color: var(--signal); }
+
+/* Relógio grande, depois de armada */
+.bomb-clock { text-align: center; }
+.bomb-clock-digits {
+  font-family: var(--font-display);
+  font-size: clamp(3.4rem, 18vw, 8rem);
+  line-height: 0.9;
+  color: var(--signal-soft);
+  letter-spacing: 0.02em;
+}
+body.is-critical .bomb-clock-digits { color: color-mix(in srgb, var(--loss) 50%, var(--text)); }
+.bomb-clock-note { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.1em; color: var(--text-dim); }
+
+/* =======================================================================
+   17. PERSONAGENS POR FAMÍLIA
+   ======================================================================= */
+.family-switch {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2px;
+  margin-bottom: 40px;
+  border: 1px solid var(--border);
+  background: var(--border);
+}
+@media (min-width: 720px) { .family-switch { grid-template-columns: repeat(3, 1fr); } }
+
+.family-btn {
+  background: var(--surface);
+  border: none;
+  color: var(--text-dim);
+  padding: 20px 18px;
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--font-title);
+  transition: background 0.25s ease, color 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+.family-btn:hover { background: var(--surface-2); color: var(--text); }
+.family-btn.is-active {
+  background: color-mix(in srgb, var(--fam-color, var(--signal)) 16%, var(--surface));
+  color: var(--text);
+  box-shadow: inset 3px 0 0 var(--fam-color, var(--signal));
+}
+.family-btn .fam-name { display: block; font-size: 1.16rem; font-weight: 600; line-height: 1.15; }
+.family-btn .fam-meta {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  margin-top: 6px;
+}
+.family-btn.is-active .fam-meta { color: var(--fam-color, var(--signal)); }
+
+.family-panel { display: none; }
+.family-panel.is-active { display: block; }
+
+.family-intro {
+  border-left: 2px solid var(--fam-color, var(--signal));
+  padding-left: 20px;
+  margin-bottom: 36px;
+  max-width: 62ch;
+}
+.family-intro h2 { margin-bottom: 0.2em; }
+.family-intro p { color: var(--text-dim); }
+
+.group-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  color: var(--text-dim);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+  margin: 44px 0 22px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.group-label span { color: var(--fam-color, var(--signal)); }
+
+/* Ficha de personagem — reaproveita .character/.dossier do style.css,
+   mas com a moldura e o ritmo do RPG II. */
+.character {
+  border-radius: 0;
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--fam-color, var(--signal));
+  background: var(--surface);
+  overflow: hidden;
+}
+.character + .character { margin-top: 22px; }
+.portrait { border-radius: 0; }
+.portrait img { filter: grayscale(0.4) contrast(1.06) brightness(0.9); transition: filter 0.4s ease; }
+.character:hover .portrait img { filter: grayscale(0.05) contrast(1.02) brightness(1); }
+.portrait-btn { border-radius: 0; }
+.dossier .role { color: var(--fam-color, var(--signal)); font-family: var(--font-mono); }
+.dossier h3 { font-size: clamp(1.3rem, 3.6vw, 1.75rem); }
+
+/* Cartão curto — usado pros filhos e familiares, que ainda não têm
+   dossiê completo. Mais leve que a ficha inteira. */
+.kin-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+@media (min-width: 680px) { .kin-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 980px) { .kin-grid { grid-template-columns: repeat(4, 1fr); } }
+
+.kin {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-bottom: 2px solid color-mix(in srgb, var(--fam-color, var(--signal)) 55%, transparent);
+  padding: 18px 16px 16px;
+  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+  transition: background 0.25s ease;
+}
+.kin:hover { background: var(--surface-2); }
+.kin-mono {
+  width: 42px; height: 42px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--fam-color, var(--signal));
+  border: 1px solid color-mix(in srgb, var(--fam-color, var(--signal)) 40%, transparent);
+  margin-bottom: 12px;
+}
+.kin h4 { margin: 0 0 3px; font-size: 1rem; color: var(--text); }
+.kin p { margin: 0; font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.06em; color: var(--text-dim); line-height: 1.5; }
+
+/* Selo "registro incompleto" — herda .pending-badge do style.css */
+.pending-badge { border-radius: 0; font-family: var(--font-mono); }
+
+/* =======================================================================
+   18. DADOS / FICHA (páginas de mesa)
+   ======================================================================= */
+.dice-box {
+  border-radius: 0;
+  background:
+    radial-gradient(100% 80% at 50% 0%, color-mix(in srgb, var(--rift) 18%, transparent), transparent 62%),
+    var(--surface);
+  border: 1px solid var(--border-strong);
+  clip-path: polygon(0 22px, 22px 0, calc(100% - 22px) 0, 100% 22px, 100% calc(100% - 22px), calc(100% - 22px) 100%, 22px 100%, 0 calc(100% - 22px));
+}
+.dice-result { font-family: var(--font-display); color: var(--signal-soft); }
+.auth-box, .sheet-card, .account-bar, .acc-drawer, .dice-extra {
+  border-radius: 0 !important;
+}
+.auth-box, .sheet-card, .dice-extra {
+  border-left: 2px solid color-mix(in srgb, var(--signal) 45%, transparent);
+}
+input, select, textarea { border-radius: 0 !important; font-family: var(--font-body); }
+
+/* =======================================================================
+   19. RODAPÉ
+   ======================================================================= */
+footer.site-footer::before {
+  background: linear-gradient(90deg, var(--loss), var(--rift) 45%, var(--signal));
+  height: 2px;
+}
+footer.site-footer .quote {
+  font-family: var(--font-title);
+  font-style: normal;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+}
+
+/* =======================================================================
+   20. ACESSIBILIDADE / MOVIMENTO REDUZIDO
+   Quem pediu menos movimento no sistema não recebe tremor, pó nem
+   piscada — só o visual parado. A contagem continua funcionando.
+   ======================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  .split-title::before, .split-title::after { animation: none; }
+  .is-dusting, .is-reforming { animation: none; opacity: 1; }
+  .dust-field { display: none; }
+  body.is-incursion section { animation: none; }
+  body::after { animation: none; }
+}
+
+/* =======================================================================
+   21. SOBRAS DE ESTRUTURA
+   Duas regras que moravam no style.css do RPG I e a página de Dados
+   ainda usa, mais um retrato vazio (pros personagens que ainda não têm
+   foto catalogada). Ficam aqui pra não mexer no arquivo herdado.
+   ======================================================================= */
+.dice-section { position: relative; padding-bottom: 48px; }
+.dice-wrap { position: relative; max-width: 420px; margin: 0 auto; z-index: 1; }
+.dice-wrap .dice-box { margin: 0; }
+
+.portrait-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 260px;
+  background:
+    repeating-linear-gradient(135deg,
+      transparent 0 9px,
+      color-mix(in srgb, var(--fam-color, var(--signal)) 7%, transparent) 9px 10px),
+    var(--surface-2);
+  border-right: 1px solid var(--border);
+}
+.portrait-placeholder .monogram {
+  font-family: var(--font-display);
+  font-size: 3.4rem;
+  line-height: 1;
+  color: var(--fam-color, var(--signal));
+  opacity: 0.8;
+}
+.portrait-placeholder .label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+/* =======================================================================
+   22. FRATURAS DE PÁGINA
+   O pedido era "a página se destruindo". A poeira (js/dust.js) cuida do
+   movimento; estas trincas cuidam da cicatriz que fica. Uma por seção
+   .alt, atravessando na diagonal, quase invisível em repouso — e bem
+   marcada enquanto a contagem corre.
+   ======================================================================= */
+section.alt::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.18;
+  background:
+    linear-gradient(104deg, transparent 0 32%,
+      color-mix(in srgb, var(--rift) 70%, transparent) 32% 32.15%,
+      transparent 32.15% 61%,
+      color-mix(in srgb, var(--signal) 55%, transparent) 61% 61.1%,
+      transparent 61.1%);
+  transition: opacity 0.8s ease;
+}
+body.is-incursion section.alt::after { opacity: 0.5; }
+body.is-incursion.is-critical section.alt::after { opacity: 0.85; }
+
+@media (prefers-reduced-motion: reduce) {
+  section.alt::after { opacity: 0.12; }
+}
+
+/* =======================================================================
+   23. RUÍNAS — silhueta de cidade destruída
+   Pedido: mais traços de destruição, silhueta de skyline arruinado, em
+   preto sólido. Implementado como uma MÁSCARA (mask-image): o SVG só
+   define a FORMA (prédios quebrados, entulho, um guindaste caído); a cor
+   continua sendo uma propriedade normal de CSS por baixo da máscara —
+   por isso funciona igual no claro e no escuro sem duplicar a regra.
+   Atrás da silhueta fica um brilho baixo nos tons da campanha (verde
+   sinal / roxo fenda), só para o preto não desaparecer contra um fundo
+   já escuro — o "horizonte aceso" de uma cidade queimando ao longe.
+   A peça (400×160) se repete horizontalmente (mask-repeat: repeat-x),
+   então funciona em qualquer largura de tela.
+   ======================================================================= */
+.ruins-strip {
+  position: relative;
+  width: 100%;
+  height: clamp(60px, 9vw, 108px);
+  overflow: hidden;
+  pointer-events: none;
+}
+.ruins-strip::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg,
+      transparent 0%,
+      color-mix(in srgb, var(--rift) 20%, transparent) 55%,
+      color-mix(in srgb, var(--signal) 15%, transparent) 100%);
+  opacity: 0.85;
+}
+.ruins-strip::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #050403;
+  opacity: 0.94;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 160'%3E%3Cpath d='M0,160 L0,60 L12,60 L12,40 L28,40 L28,80 L40,80 L40,160 Z M40,160 L70,160 L55,128 Z M80,160 L80,20 L95,20 L95,45 L105,45 L105,15 L120,15 L120,160 Z M120,160 L140,160 L130,144 Z M150,160 L165,40 L190,50 L180,160 Z M205,160 L211,160 L211,55 L205,55 Z M205,62 L224,62 L224,90 L230,90 L230,62 L260,58 L260,50 L205,60 Z M270,160 L270,70 L300,70 L300,55 L310,55 L310,160 Z M310,160 L335,160 L322,138 Z M345,160 L345,30 L360,30 L360,50 L372,50 L372,25 L390,25 L390,160 Z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 160'%3E%3Cpath d='M0,160 L0,60 L12,60 L12,40 L28,40 L28,80 L40,80 L40,160 Z M40,160 L70,160 L55,128 Z M80,160 L80,20 L95,20 L95,45 L105,45 L105,15 L120,15 L120,160 Z M120,160 L140,160 L130,144 Z M150,160 L165,40 L190,50 L180,160 Z M205,160 L211,160 L211,55 L205,55 Z M205,62 L224,62 L224,90 L230,90 L230,62 L260,58 L260,50 L205,60 Z M270,160 L270,70 L300,70 L300,55 L310,55 L310,160 Z M310,160 L335,160 L322,138 Z M345,160 L345,30 L360,30 L360,50 L372,50 L372,25 L390,25 L390,160 Z'/%3E%3C/svg%3E");
+  -webkit-mask-repeat: repeat-x;
+  mask-repeat: repeat-x;
+  -webkit-mask-position: bottom left;
+  mask-position: bottom left;
+  -webkit-mask-size: 220px 100%;
+  mask-size: 220px 100%;
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--signal) 40%, transparent));
+}
+@media (min-width: 720px) {
+  .ruins-strip::after { -webkit-mask-size: 340px 100%; mask-size: 340px 100%; }
+}
+
+/* Faixa do rodapé: entra no fluxo normal, acima da citação. */
+.ruins-strip--footer { height: clamp(52px, 6vw, 84px); }
+
+/* Faixa dos cabeçalhos internos: grudada no rodapé do próprio header,
+   por cima do gradiente que já existe ali (não mexe no ::before, que é
+   o "scanline" das réguas verticais). */
+.hero--compact .ruins-strip {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: clamp(46px, 7vw, 80px);
+}
+.hero--compact .ruins-strip::before { opacity: 0.5; }
+
+/* Respiro sutil — a cidade "arde" bem devagar. Sem tremor, só o brilho
+   por trás variando. Nunca compete com o pulso de body.is-incursion. */
+@keyframes ruinsGlow { 0%, 100% { opacity: 0.85; } 50% { opacity: 1; } }
+.ruins-strip::before { animation: ruinsGlow 8s ease-in-out infinite; }
+body.is-incursion .ruins-strip::after {
+  filter: drop-shadow(0 0 14px color-mix(in srgb, var(--loss) 55%, transparent));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ruins-strip::before { animation: none; }
+}
+
+/* =======================================================================
+   24. TERRAS — leitura orbital (incursoes.html)
+   Seis esferas entre "quem está encostando na gente" e o console da
+   bomba: a Terra-616 (casa) e as cinco que colidem com ela. A primeira
+   da fileira — Terra-077, O Ermo — já foi apagada pelo Destino, então
+   aparece rachada, cinza e com destroços à deriva, coerente com o que a
+   página já contava mais acima.
+   ======================================================================= */
+.earth-field {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 34px 28px;
+  padding: 10px 0 4px;
+}
+
+.earth-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 128px;
+  text-align: center;
+}
+
+.earth {
+  position: relative;
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 33% 28%,
+      color-mix(in srgb, var(--e-color) 65%, white 12%) 0%,
+      var(--e-color) 42%,
+      color-mix(in srgb, var(--e-color) 45%, black) 78%,
+      color-mix(in srgb, var(--e-color) 30%, black) 100%);
+  box-shadow:
+    inset -16px -12px 26px rgba(0,0,0,0.55),
+    inset 10px 8px 18px rgba(255,255,255,0.06),
+    0 0 26px color-mix(in srgb, var(--e-color) 40%, transparent);
+}
+/* Continentes — só uma textura, não um mapa de verdade. */
+.earth::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  opacity: 0.5;
+  background:
+    radial-gradient(circle at 60% 65%, color-mix(in srgb, var(--text) 20%, transparent) 0 14%, transparent 15%),
+    radial-gradient(circle at 30% 70%, color-mix(in srgb, var(--text) 16%, transparent) 0 10%, transparent 11%),
+    radial-gradient(circle at 68% 30%, color-mix(in srgb, var(--text) 14%, transparent) 0 9%, transparent 10%);
+  mix-blend-mode: overlay;
+}
+
+.earth-unit--base .earth {
+  outline: 2px solid color-mix(in srgb, var(--signal) 60%, transparent);
+  outline-offset: 6px;
+}
+
+/* --- Terra destruída (Terra-077 · O Ermo) -----------------------------
+   Dessatura o globo, corta uma rachadura em cruz por cima (mask) e
+   solta três pedaços à deriva, saindo lentamente da órbita. */
+.earth--gone {
+  filter: grayscale(0.75) brightness(0.6);
+}
+.earth--gone::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: #030302;
+  opacity: 0.92;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M0,42 L28,38 L34,50 L20,58 L38,64 L46,52 L58,58 L52,74 L70,68 L64,86 L100,80 L100,100 L0,100 Z M46,0 L52,18 L38,26 L44,40 L30,34 L20,44 L0,30 L0,0 Z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M0,42 L28,38 L34,50 L20,58 L38,64 L46,52 L58,58 L52,74 L70,68 L64,86 L100,80 L100,100 L0,100 Z M46,0 L52,18 L38,26 L44,40 L30,34 L20,44 L0,30 L0,0 Z'/%3E%3C/svg%3E");
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+.earth-debris { position: absolute; inset: 0; pointer-events: none; }
+.earth-debris i {
+  position: absolute;
+  width: 6px; height: 6px;
+  background: color-mix(in srgb, var(--loss) 70%, var(--text-dim));
+  clip-path: polygon(0 20%, 60% 0, 100% 60%, 40% 100%);
+  animation: earthDrift 6s ease-in-out infinite;
+}
+.earth-debris i:nth-child(1) { top: 6%;  left: -10%; width: 9px; height: 9px; animation-delay: 0s; }
+.earth-debris i:nth-child(2) { top: 62%; left: 98%;  animation-delay: 1.4s; }
+.earth-debris i:nth-child(3) { top: 88%; left: 18%;  width: 5px; height: 5px; animation-delay: 2.6s; }
+@keyframes earthDrift {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.85; }
+  50%      { transform: translate(-9px, -7px) rotate(35deg); opacity: 0.4; }
+}
+
+.earth-name { font-family: var(--font-title); font-size: 0.9rem; font-weight: 600; color: var(--text); line-height: 1.15; }
+.earth-code { font-family: var(--font-mono); font-size: 0.64rem; letter-spacing: 0.1em; color: var(--e-color); display: block; margin-bottom: 2px; }
+.earth-tag { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.12em; color: var(--text-dim); }
+.earth-unit--gone .earth-tag { color: var(--loss); }
+.earth-unit--now .earth-code,
+.earth-unit--now .earth-tag { color: var(--rift); animation: hudBlink 1.6s steps(1) infinite; }
+
+/* Linha de órbita fina atrás da fileira inteira — a trajetória comum
+   que todas elas compartilham até a Terra-616. */
+.earth-field { position: relative; }
+.earth-field::before {
+  content: "";
+  position: absolute;
+  left: 6%; right: 6%; top: 44px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-strong) 12%, var(--border-strong) 88%, transparent);
+  z-index: -1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .earth-debris i { animation: none; opacity: 0.6; }
+}

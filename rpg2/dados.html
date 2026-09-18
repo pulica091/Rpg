@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <!-- Aplica o tema salvo (claro/escuro) ANTES da página desenhar, para não
+       piscar o tema errado por uma fração de segundo ao carregar. -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('rpg-theme');
+        if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+      } catch (e) {}
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dados — RPG II</title>
+  <meta name="description" content="Rolar dados da campanha II, somando as perícias da ficha.">
+  <!-- style.css = esqueleto herdado; incursao.css = a identidade do RPG II.
+       A ordem importa: o segundo reescreve o primeiro. -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/incursao.css">
+  <link rel="stylesheet" href="css/resultados.css">
+</head>
+<body>
+
+  <!-- Trilho de estado: a leitura da estação, presente em todas as páginas. -->
+  <div class="status-rail" aria-hidden="true">
+    <div class="status-rail-meter"><i></i></div>
+    <span class="status-rail-text">ESTAÇÃO 616 · LEITURA CONTÍNUA</span>
+  </div>
+
+  <nav class="site-nav">
+    <div class="container">
+      <a href="index.html" class="brand">
+        <span class="brand-badge"><img src="img/logo-rpg2.jpg" alt="RPG II — Dia do Julgamento Final"></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Início</a></li>
+        <li><a href="personagens.html">Personagens</a></li>
+        <li><a href="linha-do-tempo.html">Linha do Tempo</a></li>
+        <li><a href="multiverso.html">Multiverso</a></li>
+        <li><a href="incursoes.html">Incursões</a></li>
+        <li><a href="dados.html" class="active">Dados</a></li>
+        <li><a href="ficha.html">Ficha</a></li>
+      </ul>
+      <div class="nav-actions">
+        <div class="campaign-switch" id="campaignSwitch">
+          <button class="campaign-trigger" id="campaignTrigger" aria-haspopup="true" aria-expanded="false">
+            RPG II <span class="chevron">▾</span>
+          </button>
+          <div class="campaign-panel">
+            <a class="campaign-item" href="../rpg1/index.html">
+              <span class="campaign-thumb"><img src="../rpg1/img/logo-rpg1.jpg" alt="RPG I"></span>
+              <span class="campaign-text">
+                <span class="campaign-name">RPG I — Primeiro Dia</span>
+                <span class="campaign-tag">Disponível</span>
+              </span>
+            </a>
+            <a class="campaign-item is-active" href="index.html">
+              <span class="campaign-thumb"><img src="img/logo-rpg2.jpg" alt="RPG II"></span>
+              <span class="campaign-text">
+                <span class="campaign-name">RPG II — Dia do Julgamento Final</span>
+                <span class="campaign-tag">Campanha atual</span>
+              </span>
+            </a>
+            <a class="campaign-item is-soon" href="../rpg3/index.html">
+              <span class="campaign-thumb"><img src="../rpg3/img/logo-rpg3.jpg" alt="RPG III"></span>
+              <span class="campaign-text">
+                <span class="campaign-name">RPG III — Dias de um Passado Esquecido</span>
+                <span class="campaign-tag">Em breve</span>
+              </span>
+            </a>
+          </div>
+        </div>
+        <a href="../downloads.html" class="downloads-link" aria-label="Downloads" title="Downloads">⬇</a>
+        <button class="theme-toggle" id="themeToggle" aria-label="Alternar modo claro/escuro">
+          <span class="icon-sun">☀</span><span class="icon-moon">☾</span>
+        </button>
+        <button class="nav-toggle" aria-label="Abrir menu">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero hero--compact">
+    <div class="container">
+      <span class="eyebrow">Setor DDS · mesa de jogo</span>
+      <h1 class="split-title" data-text="Dados">Dados</h1>
+      <p class="hero-readout">
+      <span>d6 · d12 · d20 · d100</span>
+      <span>soma a perícia do personagem vinculado</span>
+      <span>entre na <b>Ficha</b> para liberar a soma</span>
+      </p>
+    </div>
+    <div class="ruins-strip" aria-hidden="true"></div>
+  </header>
+
+  <section class="dice-section" style="padding-top:40px;">
+    <div class="container">
+      <div class="dice-wrap">
+        <div class="dice-box reveal">
+          <div class="dice-result" id="dado">◆</div>
+          <div class="dice-sides" id="dado-sides">Escolha um dado</div>
+          <div class="dice-buttons">
+            <button class="btn" data-sides="6" data-dust="hover">D6</button>
+            <button class="btn" data-sides="12" data-dust="hover">D12</button>
+            <button class="btn" data-sides="20" data-dust="hover">D20</button>
+            <button class="btn" data-sides="100" data-dust="hover">D100</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Personagem + perícia: só aparece pra quem está logado na Ficha
+           e tem pelo menos um personagem marcado como "jogando agora". -->
+      <div class="dice-extra reveal" id="diceCharPanel" style="display:none;">
+        <p class="dice-extra-title">Rolar com personagem</p>
+        <div class="dice-extra-row">
+          <p class="field-label">Personagem</p>
+          <button type="button" class="btn dice-char-picker" id="btnEscolherPersonagemDado" aria-haspopup="true">
+            <span class="dice-char-picker-avatar" id="diceCharPickerAvatar"></span>
+            <span class="dice-char-picker-name" id="diceCharPickerName">Escolher personagem</span>
+            <span class="dice-char-picker-chevron">☰</span>
+          </button>
+        </div>
+        <div class="dice-extra-row">
+          <p class="field-label">Perícia</p>
+          <select id="diceAttrSelect">
+            <option value="">Nenhuma perícia</option>
+          </select>
+        </div>
+        <div class="dice-extra-row">
+          <p class="field-label">Dificuldade (CD)</p>
+          <input type="number" id="diceDC" min="1" max="99" placeholder="opcional — ex.: 15">
+        </div>
+        <div class="dice-breakdown" id="diceBreakdown" style="display:none;"></div>
+        <p class="dice-saved" id="diceSaved">
+          Cada rolagem com personagem escolhido entra no histórico e aparece em
+          <a href="resultados.html">Resultados dos dados</a>.
+        </p>
+      </div>
+      <p class="dice-login-hint" id="diceLoginHint">
+        Quer somar o valor de uma perícia ao dado?
+        <a href="ficha.html" style="color:var(--signal-soft); text-decoration:underline;">Entre na sua ficha</a>
+        e vincule um personagem à sua conta.
+      </p>
+    </div>
+  </section>
+
+  <!-- Gaveta lateral: escolher, entre os personagens "jogando agora",
+       qual vai rolar o dado (ver js/dados.js). -->
+  <div class="acc-overlay" id="diceCharOverlay"></div>
+  <aside class="acc-drawer" id="diceCharDrawer" aria-hidden="true">
+    <div class="acc-drawer-head">
+      <h3>Escolher personagem</h3>
+      <button class="acc-close" id="btnFecharDiceDrawer" aria-label="Fechar menu">✕</button>
+    </div>
+    <div class="acc-drawer-body">
+      <p class="acc-block-hint">Selecione com qual dos seus personagens vinculados você quer rodar o dado.</p>
+      <div class="dice-char-drawer-grid" id="diceCharDrawerGrid"><!-- preenchido via JS --></div>
+    </div>
+  </aside>
+
+  <!-- Barra da contagem: fica escondida e só aparece quando alguém arma a
+       bomba dimensional em incursoes.html (js/incursao.js liga isso). -->
+  <div class="incursion-hud" role="status" aria-live="polite">
+    <span class="incursion-hud-label">COLISÃO EM</span>
+    <span class="incursion-hud-clock" id="hudClock">10:00</span>
+    <a href="incursoes.html">abrir console</a>
+  </div>
+
+  <footer class="site-footer">
+    <div class="ruins-strip ruins-strip--footer" aria-hidden="true"></div>
+    <div class="container footer-top">
+      <hr class="rivet-rule">
+      <p class="quote">A sorte também está sendo puxada de outro universo.</p>
+      <ul class="footer-links">
+        <li><a href="index.html">Início</a></li>
+        <li><a href="personagens.html">Personagens</a></li>
+        <li><a href="linha-do-tempo.html">Linha do Tempo</a></li>
+        <li><a href="multiverso.html">Multiverso</a></li>
+        <li><a href="incursoes.html">Incursões</a></li>
+        <li><a href="dados.html">Dados</a></li>
+        <li><a href="ficha.html">Ficha</a></li>
+      </ul>
+      <p class="footer-credit">RPG criado por Tio, com participação importante de SMS e Rabesco · 2024–2026</p>
+    </div>
+    <div class="footer-banner">
+      <img src="../rpg1/img/campo-florido.jpg" alt="O campo, hoje" loading="lazy">
+    </div>
+  </footer>
+  <button id="btnTopo" aria-label="Voltar ao topo">▲</button>
+
+  <script src="js/main.js"></script>
+  <script src="js/dust.js"></script>
+  <script src="js/incursao.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/roster-data.js"></script>
+  <script src="js/skills-data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/dados.js"></script>
+</body>
+</html>
